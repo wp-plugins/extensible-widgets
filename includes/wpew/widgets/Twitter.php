@@ -61,9 +61,11 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 		parent::beforeOutput();
 		// Add the data to the view params added by the parent class, this way you can access the data extracted in the view!
 		require_once(dirname(__FILE__).'/../../xf/webservices/Twitter.php');
-		$twitter = new xf_webservices_Twitter($this->settings['username'], $this->settings['password']);
-		$this->settings['view_params']['twitter'] = $twitter;
-		$this->settings['view_params']['tweets'] = $twitter->getUserTimeline( $this->settings['limit'] );
+		if( !empty($this->settings['username']) && !empty($this->settings['password']) ) {
+			$twitter = new xf_webservices_Twitter($this->settings['username'], $this->settings['password']);
+			$this->settings['view_params']['twitter'] = $twitter;
+			$this->settings['view_params']['tweets'] = $twitter->getUserTimeline( $this->settings['limit'] );
+		}
 	}
 	
 	/**
@@ -95,8 +97,10 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 				$html .= '<small><strong>' . htmlentities($status['user']['screen_name']) . '</strong> &#45 ' . xf_utils_Misc::getTimeAgo( $timestamp ) . ', ' . date("m.d.y", $timestamp) . '</small></li>';
 			}
 			echo $html;
-		} else {
+		} else if( is_object($this->settings['view_params']['twitter']) ) {
 			echo $this->settings['view_params']['twitter']->username . ' has no tweets!';
+		} else {
+			echo 'Not even information to access Twitter!';
 		}
 		// END DEFAULT
 	}

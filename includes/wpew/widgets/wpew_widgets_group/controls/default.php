@@ -24,7 +24,7 @@ $count = count( $widgets );
 ?>
 
 <fieldset class="setting_group toggle">
-	<legend><span class="widget-top"><strong>Contains <?=$count?> Widget<?php if($count!=1) echo 's'; ?> &raquo; <a class="button" href="<?=wpew_widgets_Group::getEditURI( $this )?>" title="Order/Remove/Add Widgets">Edit Widgets</a></strong><a class="handle widget-action hide-if-no-js" href="#"></a></span></legend>
+	<legend><span class="widget-top"><strong>Contains <?php echo $count; ?> Widget<?php if($count!=1) echo 's'; ?> &raquo; <a class="button" href="<?php echo wpew_widgets_Group::getEditURI( $this ); ?>" title="Order/Remove/Add Widgets">Edit Widgets</a></strong><a class="handle widget-action hide-if-no-js" href="#"></a></span></legend>
 	<div class="content">
 	<p><label>Group Name:<input class="widefat" name="<?php echo $this->get_field_name('group_name'); ?>" type="text" value="<?php echo $group_name; ?>" /></label></p>
 	

@@ -14,7 +14,7 @@ Includes extremely useful widgets for developers and users alike, and is a syste
 
 In addition to adding numerous extremely useful widgets for developers and users alike, this plugin is a system written on a PHP 5 object oriented structure. In short, it is built for modification and extension. It wraps the WordPress Widget API to allow for an alternative, and in my opinion more robust method to hook into and use it. Widgets are WordPress's version of user interface modules. They already support an administrative and client-side view. This system simply leverages that with a higher potential in mind.
 
-This plugin started as a collection of widgets that I developed over time and used in numerous projects. I eventually merged them into one conglomerate which is now known as the Extensible Widgets plugin. Currently I do not have extensive documentation on the plugin functionality and code-base yet, which is why I mentioned that I intend to update this post regularly.
+This plugin started as a collection of widgets that I developed over time and used in numerous projects. I eventually merged them into one conglomerate which is now known as the Extensible Widgets plugin. Currently I do not have extensive documentation on the plugin functionality and code-base yet.
 
 A Quick summary is that this plugin in its current state is a PHP widget class manager, as well as a collection of useful widget classes that build on each other for extended functionality. When the plugin is first activated, the widget classes included are not registered automatically, and will not appear within your WordPress widgets administration page. To activate your desired widgets you must go to the Extensible Widgets Registration page. From there you can read a short description before registering anything.
 
@@ -61,6 +61,13 @@ Once you start using this plugin, you will notice that widgets will become a maj
 Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ "screenshots") of this plugin's administration.
 
 == Changelog ==
+
+= 0.7.1 =
+* The first maintenance release of this plugin, even though it is still in beta
+* Fixed fatal error with the widget directory not using the correct path or structure (This should fix the Windows server issues)
+* Removed all uses of PHP shorttags for better server compatablility
+* Fixed error with twitter plugin to hide vital information when no user or password is supplied
+* Fixed minor css admin issues with the multiple select
 
 = 0.7 =
 * The first release of this plugin. It is beta and I have already received some bug reports regarding Windows servers.

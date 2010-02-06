@@ -122,7 +122,7 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	/**
 	 * @var string $dirWidgets Where widgets are located within the pluginRoot
 	 */
-	public $dirWidgets = 'wpew/widgets';
+	public $dirWidgets;
 	
 	/**
 	 * @ignore
@@ -145,6 +145,7 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	 */
 	public function init() {
 		// Add Hooks
+		$this->dirWidgets = xf_system_Path::join('wpew','widgets');
 		$this->addAction( 'widgets_init' );
 	}
 	

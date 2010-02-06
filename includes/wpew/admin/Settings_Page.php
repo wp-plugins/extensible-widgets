@@ -2,6 +2,7 @@
 
 require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
 require_once(dirname(__FILE__).'/../../xf/wp/AAdminPage.php');
+require_once(dirname(__FILE__).'/../../xf/system/Path.php');
 require_once(dirname(__FILE__).'/../../wpew.php');
 
 /**

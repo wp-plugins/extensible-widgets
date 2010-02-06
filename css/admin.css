@@ -2,6 +2,7 @@ select.multiple,
 select[multiple="multiple"] {
 	width: auto;
 	height: auto !important;
+	overflow: auto;
 	}
 
 .widget {

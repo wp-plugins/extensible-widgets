@@ -16,7 +16,7 @@ require_once('xf/wp/APluggable.php');
 require_once('xf/wp/ASingleton.php');
 
 // Debugging purposes only
-xf_errors_Error::setDebug(true);
+//xf_errors_Error::setDebug(true);
 
 /**
  * Main Application class for the WordPress Plugin Extensible Widgets
@@ -83,7 +83,7 @@ class wpew extends xf_wp_ASingleton {
 		
 		// Instantiate extension
 		require_once('xf/source/Loader.php');
-		$this->extend->loader = new xf_source_Loader( xf_system_Path::join( WP_PLUGIN_DIR, 'wpew', 'includes' ) );
+		$this->extend->loader = new xf_source_Loader( dirname(__FILE__) );
 		
 		// Instantiate extension
 		require_once('wpew/Widgets.php');

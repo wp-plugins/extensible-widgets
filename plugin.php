@@ -4,15 +4,15 @@ Plugin Name: Extensible Widgets
 Plugin URI: http://jidd.jimisaacs.com/archives/863
 Description: In addition to adding numerous extremely useful widgets for developers and users alike, this plugin is a system written on a PHP 5 object oriented structure. In short, it is built for modification and extension. It wraps the WordPress Widget API to allow for an alternative, and in my opinion more robust method to hook into and use it. Widgets are WordPress's version of user interface modules. They already support an administrative and client-side view. This system simply leverages that with a higher potential in mind.
 Author: Jim Isaacs
-Version: 0.7
+Version: 0.7.1
 Author URI: http://jidd.jimisaacs.com/
 */
 
 // Debugging purposes for this file only
-// X Framework has it's only debugging mechanism within the class xf_errers_Error
-ini_set( 'display_errors', 1 );
+// X Framework has it's one debugging mechanism within the class xf_errers_Error, but this must be set to debug this file specifically
+/*ini_set( 'display_errors', 1 );
 ini_set( 'display_startup_errors', 1 );
-error_reporting( E_ALL & ~E_NOTICE );
+error_reporting( E_ALL & ~E_NOTICE );*/
 
 /**
  * Class holding the Extensible Widgets plugin hooks for WordPress.
