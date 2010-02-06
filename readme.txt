@@ -22,7 +22,7 @@ This plugin also comes with an Export and Import page. You will notice this func
 
 == Installation ==
 
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
+1. Upload the `extensible-widgets` directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Go to the Extensible Widgets administration page to configure settings and to register desired widgets
 
