@@ -1,0 +1,165 @@
+select.multiple,
+select[multiple="multiple"] {
+	width: auto;
+	height: auto !important;
+	}
+
+.widget {
+	position: relative;
+	}
+.widget .updated {
+	position: absolute;
+	left: 10px;
+	right: 10px;
+	bottom: 8px;
+	padding: 4px;
+	margin: 0;
+	text-align: center;
+	}
+
+.widget[id*="wpew"] .widget-top .widget-title {
+	background: url("../../../../wp-admin/images/generic.png") no-repeat 4px center;
+	}
+.widget[id*="wpew"] .widget-top .widget-title h4 {
+	text-indent: 16px;
+	}
+
+.toggle .handle {
+	cursor:pointer !important;
+	}
+	
+.setting_group,
+.setting_group.toggle .content {
+	display: block;
+	clear: both;
+	padding: 10px 10px 0 10px;
+	margin-bottom: 10px;
+	background: #F9F9F9;
+	border: 1px solid #DFDFDF;
+	}
+		
+	.setting_group .setting_group,
+	.setting_group.toggle .content .setting_group.toggle .content {
+		background: #FFF;
+		}
+	
+.setting_group p {
+	margin: 0 0 10px 0;
+	}
+
+#edit_level {
+	margin: 0 22px 0 10px;
+	}
+	#edit_level .setting_group {
+		background: #F1F1F1;
+		border-color: #DDD;
+		padding: 8px;
+		line-height: 0;
+		font-size: 12px;
+		line-height: 0;
+		font-weight: bold;
+		}
+	#edit_level .description {
+		font-weight: normal;
+		margin: 0;
+		}
+
+.setting_group.toggle {
+	z-index: 0;
+	padding:0;
+	position: relative;
+	border: none;
+	min-height: 26px;
+	}
+	.setting_group.toggle legend {
+		z-index: 2;
+		display:block;
+		float:left;
+		width: 100%;
+		position: relative;
+		margin: 0;
+		line-height: 0;
+		height: 26px;
+		}
+	.setting_group.toggle legend .widget-action {
+		position: absolute;
+		top: 0;
+		right: 0;
+		background: url("../../../../wp-admin/images/menu-bits.gif") no-repeat scroll 0 -110px;
+		}
+	.setting_group.toggle legend span {
+		display:block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		line-height: 26px;
+		height: 26px;
+		text-align: center;
+		border: 1px solid #DFDFDF;
+		white-space: nowrap;
+	}
+	.setting_group.toggle legend span.widget-top {
+		cursor: inherit;
+		}
+	.setting_group.toggle .content {
+		position: relative;
+		z-index: 1;
+		margin: 0;
+		margin-top: 26px;
+		right: 0;
+		}
+
+.setting_group,
+.setting_group.toggle.closed legend span,
+.setting_group.toggle .content {
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-khtml-border-bottom-right-radius: 6px;
+	-khtml-border-bottom-left-radius: 6px;
+	}
+
+.setting_group,
+.setting_group.toggle legend span {
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+	-moz-border-radius-topright: 6px;
+	-moz-border-radius-topleft: 6px;
+	-webkit-border-top-right-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-khtml-border-top-right-radius: 6px;
+	-khtml-border-top-left-radius: 6px;
+	}
+
+.ajax-loader {
+	background: url("../../../../wp-admin/images/wpspin_light.gif") no-repeat center center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	min-height: 16px;
+	min-width: 16px;
+	}
+
+.strikeout {
+	text-decoration: line-through;
+	}
+
+.wpew .renderflag {
+	color: green;
+	}
+.wpew .renderflag.strikeout {
+	color: red;
+	}
+	
+.wpew.plugins .desc ul, .wpew.plugins .desc li {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+	}
