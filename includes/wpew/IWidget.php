@@ -48,7 +48,7 @@ interface wpew_IWidget extends wpew_IWP_Widget {
 	 * @param object $obj the current object instance of the widget class
 	 * @return void
 	 */
-	public static function renderAdmin( &$obj );
+	//public static function renderAdmin( &$obj );
 	
 	/**
 	 * Called from the form() method this is intended to be anything needed 

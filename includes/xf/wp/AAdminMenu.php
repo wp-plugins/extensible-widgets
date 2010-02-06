@@ -78,7 +78,7 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 		do {
 			$child =& current($this->_pages);
 			self::addToMenu( $this, $child, false );
-			if( $child->pageName == $this->currentPage ) $pn = key($this->_pages);
+			if( $this->currentPageName == $child->pageName ) $pn = key($this->_pages);
 		} while( next($this->_pages) !== false );
 		$this->doLocalAction( 'buildComplete' );
 		
@@ -95,14 +95,15 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 	// RESERVED PROPERTIES
 	
 	/**
-	 * @property-read xf_wp_AAdminPage $currentPage Get's the current page name, which is set as 'page' as a GET varaible if on the admin page
+	 * @property-read string $currentPageName Get's the current page name set as 'page' as GET varaible if within the admin page
 	 *
 	 * It is retrieved as the POST varaible 'option_page' from the options.php file.
 	 * This input is set as a hidden variable by the settings_fields() function.
 	 */
-	public function get__currentPage() {
-		if( isset( $_GET['page'] ) ) return $_GET['page'];
-		return $_POST['option_page'];
+	public function &get__currentPageName() {
+		if( !empty($_GET['page']) ) return $_GET['page'];
+		if( !empty($_POST['page']) ) return $_POST['page'];
+		return null;
 	}
 }
 ?>

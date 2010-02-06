@@ -51,23 +51,6 @@ class wpew_widgets_QueryPosts extends wpew_widgets_View {
 		$obj->settings['query'] = array_filter( $vars );
 	}
 	
-	/**
-	 * @see wpew_IWidget::renderAdmin()
-	 */
-	public static function renderAdmin( &$obj ) {
-		$query = esc_attr( urldecode( http_build_query( $obj->settings['query'] ) ) ); ?>
-		
-		<fieldset class="setting_group">
-			<legend>Query parameters used to retrieved entries:</legend>
-			<p><label for="<?php echo $obj->get_field_id('query'); ?>">Parameters:</label>
-			<textarea class="widefat" rows="5" id="<?php echo $obj->get_field_id('query'); ?>" name="<?php echo $obj->get_field_name('query'); ?>"><?php echo $query; ?></textarea></p>
-			
-			<p><small class="description">Access in custom view with <code>$wp_query</code> using <a href="http://codex.wordpress.org/The_Loop" target="wpew_window">The Loop</a>.</small></p>
-			
-		</fieldset>
-		
-	<?php }
-	
 	// INSTANCE MEMBERS
 	
 	// CONSTRUCTOR

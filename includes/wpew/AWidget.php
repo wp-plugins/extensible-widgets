@@ -76,6 +76,13 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	}
 	
 	/**
+	 * @see wpew_IWidget::loadTemplate()
+	 */
+	final public function loadTemplate( $template ) {
+		include( $template );
+	}
+	
+	/**
 	 * @see wpew_IWidget::setManager()
 	 */
 	final public function setManager( &$mngr ) {
@@ -194,7 +201,16 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 			$cssclass = strtolower( $class );
 			if($this->tabular) $cssclass .= ' tabs-panel';
 			echo '<div class="' . $cssclass . '">';
-			call_user_func( array( $class, 'renderAdmin' ), $this );
+			if( is_callable(array( $class, 'renderAdmin' )) ) {
+				$output = call_user_func( array( $class, 'renderAdmin' ), $this );
+				if( $output === false ) {
+					$this->loadTemplate( 'widgets/'.strtolower($class).'/controls/default.php' );
+				} else if( !empty($output) ) {
+					echo $output;
+				}
+			} else {
+				$this->loadTemplate( 'widgets/'.strtolower($class).'/controls/default.php' );
+			}
 			do_action( $class . '_renderAdmin' );
 			echo '</div>';
 			// get and finish the form buffer and string

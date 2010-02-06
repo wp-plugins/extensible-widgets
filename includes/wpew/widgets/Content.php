@@ -37,24 +37,6 @@ class wpew_widgets_Content extends wpew_widgets_View {
 		$obj->settings['content'] = $new_settings['content']; // no sanitizing on this variable
 	}
 	
-	/**
-	 * @see wpew_IWidget::renderAdmin()
-	 */
-	public static function renderAdmin( &$obj ) {
-		$content = esc_attr( $obj->settings['content'] ); ?>
-		
-		<fieldset class="setting_group">
-			<legend class="description">Special View Parameter:</legend>
-			
-			<p><label for="<?php echo $obj->get_field_id('content'); ?>">Content:</label> 
-			<textarea class="widefat" rows="10" id="<?php echo $obj->get_field_id('content'); ?>" name="<?php echo $obj->get_field_name('content'); ?>"><?php echo $content; ?></textarea></p>
-			
-			<p><small class="description">Access in custom view with <code>$content</code>.</small></p>
-			
-		</fieldset>
-		
-	<?php }
-	
 	// INSTANCE MEMBERS
 	
 	// CONSTRUCTOR
