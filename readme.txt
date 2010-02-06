@@ -46,11 +46,11 @@ Yes, and no. They do depend on each other, but this is on the PHP side of things
 
 = Is Extensible Widgets right for me? =
 
-Honestly this is a pretty advanced plugin that I would say is mostly for developers. Though it is in the process of, and I am trying to make it easier for developers to control the capabilities of the Extensible Widgets to make it less developer centric on a per user basis.
+Honestly this is a pretty advanced plugin that I would say is mostly for developers. Though I am trying to make it easier for developers to control the capabilities of the widget included with Extensible Widgets to make it less developer centric on a per user basis (role/capability level).
 
 = Is Extensible Widgets right for my site? =
 
-Numerous times I need a way to put the same content in different places around my site. This content is usually represented as posts, pages, or basically anything. I developed this plugin as answer to this problem, using the already built WordPress Widgets framework. Widgets made sense to use because of their very nature. If you are looking to answer a lot of these same kinds of problems, then this plugin will serve you well.
+Numerous times I need a way to put the same content in different places around my site. This content is usually represented as posts, pages, or basically anything. I developed this plugin as the answer to this problem, using the already built WordPress Widgets framework. Widgets made sense to use because of their very nature. If you are looking to answer a lot of these same problems I was having, then this plugin will serve you well.
 
 = What about the data? =
 
@@ -58,7 +58,7 @@ Once you start using this plugin, you will notice that widgets will become a maj
 
 == Screenshots ==
 
-Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ "screenshots") of this plugin's administration.
+Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ "Screenshots") of this plugin's administration.
 
 == Changelog ==
 
