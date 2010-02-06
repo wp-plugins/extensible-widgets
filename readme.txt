@@ -20,6 +20,12 @@ A Quick summary is that this plugin in its current state is a PHP widget class m
 
 This plugin also comes with an Export and Import page. You will notice this functionality is very useful in backing up your current data of all your widgets and 'Extensible Widgets' settings. I felt this was a major necessity since while using 'Extensible Widgets' these little pieces of data suddenly turn into major aspects in the whole of your website. I needed to give an acceptable method of retrieving, backing up, and restoring that data if something bad happens.
 
+A quick summary of the most useful of the widgets included:
+
+* Widget Group: Use this widget to create a new widget group, as a widget? Yes... this is where it gets interesting.
+* Query Posts: A Widget than can create and use a sub-query or use the current global query and output the results in a view template.
+* Context: More basic options that would be good for any widget, but this widget is specifically used for controlling where widgets appear.
+
 == Installation ==
 
 1. Upload the `extensible-widgets` directory to the `/wp-content/plugins/` directory
@@ -32,17 +38,17 @@ This plugin also comes with an Export and Import page. You will notice this func
 
 This is what the codebase is written for, it is not going to change. Sorry, welcome to the future.
 
-= What exactly is an E'xtensible Widget'? =
+= What exactly is an extensible widget'? =
 
 It is a PHP widget class built within the parameters of the 'Extensible Widgets' framework for widgets. Any extensible widget can be extended, but retain the functionality of all the parent classes that it may extend. 'Extensible Widgets' also provides administration to allow for users to control this functionality within the UI of that widget.
 
 = What is widget registration? =
 
-A registered widget is not necessary what is added to a widgetized area. Instead this is like the blue-print for those instances. When you register a widget, what you are doing is allowing for instances of that widget to be created and added to your areas from that registered blue-print. Beware! When you unregister a widget, all instances that were added across all widgetized areas automatically disappear. You can get them back, but I don't suggest unregistering something unless you are really sure you want to.
+The term 'registered widget' is not necessarily what is added to your widgetized areas. Instead this is like the blue-print for those instances. When you register a widget, what you are doing is allowing for instances of that widget to be created and added to your areas from that registered blue-print. Beware! When you unregister a widget, all instances that were added across all widgetized areas automatically disappear. You can get them back, but I don't suggest unregistering something unless you are really sure you want to.
 
 = Do the widgets depend on each other, do I need to activate one with another? =
 
-Yes, and no. They do depend on each other, but this is on the PHP side of things, and in no way important to the registration of the widgets in the administration pages. Basically you can register the "Widget Group" widget, without having to register the "Widget Base" widget, or any other of it's PHP dependencies.
+Yes, and no. They do depend on each other, but this is on the PHP side of things, and in no way important to the registration of the widgets in the administration pages. Basically you can register the 'Widget Group' widget, without having to register the 'Widget Base' widget, or any other of it's PHP dependencies.
 
 = Is 'Extensible Widgets' right for me? =
 
