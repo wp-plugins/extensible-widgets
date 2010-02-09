@@ -21,15 +21,19 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	/**
 	 * @ignore
 	 */
+	protected $_children = null;
+	/**
+	 * @ignore
+	 */
+	protected $_defaultChild = null;
+	/**
+	 * @ignore
+	 */
+	protected $_submitted = null;
+	/**
+	 * @ignore
+	 */
 	protected $_rendered = false;
-	/**
-	 * @ignore
-	 */
-	protected $_pages = false;
-	/**
-	 * @ignore
-	 */
-	protected $_submitted = false;
 	/**
 	 * @var bool $isDefault The flag that tells a parent page if this page is the default
 	 */
@@ -82,7 +86,7 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 		$name = $this->unJoinShortName( $this->className, 'Page' );
 		$this->shortName = $name;
 		// the property menuTitle is optional
-		if( !$this->menuTitle ) $this->menuTitle = $this->title;
+		if( empty($this->menuTitle) ) $this->menuTitle = $this->title;
 		$this->addLocalAction( 'beforeRender' );
 	}
 	
@@ -92,11 +96,11 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	final public function setCapabilities( $cap = null ) {
 		if( !empty($cap) ) $this->capability = $cap;
 		if( !$this->hasChildren ) return;
-		reset($this->_pages);
+		reset($this->_children);
 		do {
-			$page =& current($this->_pages);
+			$page =& current($this->_children);
 			$page->capability = $this->capability;
-		} while( next($this->_pages) !== false );
+		} while( next($this->_children) !== false );
 	}
 
 	/**
@@ -123,13 +127,14 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	 */
 	final public function render() {
 		if( !$this->_rendered ) {
-			if( $this->isChild ) {
+			// This was to remove some things and save some memory but more trouble than it is worth
+			/*if( $this->isChild ) {
 				if( $this->isDefault ) {
 					$this->parentPage->removeDefaultChild(); 
 				} else {
 					$this->parentPage->removeChild( $this ); 
 				}
-			}
+			}*/
 			$this->_rendered = true;
 			$this->addAction('admin_notices');
 			if( method_exists( $this, $this->state ) ) $this->addLocalAction( $this->state );
@@ -160,7 +165,7 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	 */
 	final public function hasChildByName( $shortName ) {
 		if( !$this->hasChildren ) return false;
-		return array_key_exists( $shortName, $this->_pages );
+		return array_key_exists( $shortName, $this->_children );
 	}
 	
 	/**
@@ -168,7 +173,7 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	 */
 	final public function hasChild( xf_wp_AAdminPage $obj ) {
 		if( !$this->hasChildren ) return false;
-		return array_key_exists( $obj->shortName, $this->_pages );
+		return array_key_exists( $obj->shortName, $this->_children );
 	}
 	
 	/**
@@ -177,11 +182,11 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	public function &addChildByName( $shortName, xf_wp_AAdminPage &$obj ) {
 		$obj->parentPage =& $this;
 		if( !$this->hasChildren ) {
-			$this->_pages = array( $shortName => $obj );
+			$this->_children = array( $shortName => $obj );
 			return $obj;
 		}
 		if( $this->hasChildByName( $shortName ) ) return false;
-		return $this->_pages[$shortName] = $obj;
+		return $this->_children[$shortName] = $obj;
 	}
 	
 	/**
@@ -196,13 +201,10 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	 */
 	final public function addChildren( &$pages ) {
 		if( $this->hasChildren ) {
-			if( $this->hasDefaultChild ); $child = $this->removeDefaultChild();
-			$this->_pages = array_merge( $this->_pages, $pages );
-			if( isset( $child ) ) {
-				$this->defaultChild = $child;
-			}
+			if( $this->hasDefaultChild ) $this->_defaultChild = null;
+			$this->_children = array_merge( $this->_children, $pages );
 		} else {
-			$this->_pages = $pages;
+			$this->_children = $pages;
 		}
 	}
 	
@@ -211,8 +213,8 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	 */
 	final public function removeChildByName( $shortName ) {
 		if( $this->hasChildByName( $shortName ) ) {
-			$child = $this->_pages[$shortName];
-			unset( $this->_pages[$shortName] );
+			$child = $this->_children[$shortName];
+			unset( $this->_children[$shortName] );
 			return $child;
 		}
 		return false;
@@ -229,9 +231,10 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	 * @see xf_wp_IAdminPage::removeDefaultChild();
 	 */
 	final public function removeDefaultChild() {
-		if( $this->hasChildByName( 'default' ) ) {
-			$child = $this->removeChildByName( 'default' );
+		if( $this->hasDefaultChild ) {
+			$child = $this->removeChild( $this->_defaultChild );
 			$child->isDefault = false;
+			$this->_defaultChild = null;
 			return $child;
 		}
 		return false;
@@ -239,6 +242,9 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	
 	/**
 	 * Simply an easy way to print the state input field from render() methods.
+	 *
+	 * @param string $field
+	 * @return string The formatted field element id for this page
 	 */
 	final public function getFieldID( $field ) {
 		return xf_wp_APluggable::joinShortName( $this->pageName, $field );
@@ -246,6 +252,9 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	
 	/**
 	 * Simply an easy way to print the state input field from render() methods.
+	 *
+	 * @param string $field
+	 * @return string The formatted field element name for this page
 	 */
 	final public function getFieldName( $field ) {
 		return $this->pageName.'['.$field.']';
@@ -253,27 +262,27 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	
 	/**
 	 * Simply an easy way to print the state input field from render() methods.
+	 *
+	 * @param string $state The string to use for the field value
+	 * @param bool $echo Whether to output or to return the string
+	 * @return void|string If the echo param is true it returns the value instead of output
 	 */
 	final public function doStateField( $state, $echo = true ) {
 		$field = '<input type="hidden" name="'.$this->getFieldName('state').'" value="'.$state.'" />';
 		if( $echo ) { echo $field; } else { return $field; }
 	}
 	
-	/**
-	 * RESERVED PROPERTIES
-	 */
+	// RESERVED PROPERTIES
 	
 	/**
-	 * rendered (Boolean)
-	 * read-only
+	 * @property-read bool $rendered
 	 */
 	final public function get__rendered() {
 		return $this->_rendered;
 	}
 	
 	/**
-	 * state (String)
-	 * read-only
+	 * @property-read array $submitted
 	 */
 	final public function &get__submitted() {
 		if( is_array( $this->_submitted ) ) return $this->_submitted;
@@ -298,16 +307,14 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	}
 	
 	/**
-	 * formAction (String)
-	 * read-only
+	 * @property-read string $pageURI
 	 */
-	final public function get__formAction() {
+	final public function get__pageURI() {
 		return 'admin.php?page=' . $this->pageName;
 	}
 	
 	/**
-	 * isChild (Boolean)
-	 * read-only
+	 * @property-read bool $isChild
 	 */
 	final public function get__isChild() {
 		if( !isset( $this->parentPage ) ) return false;
@@ -316,64 +323,51 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	}
 	
 	/**
-	 * hasChildren (Boolean)
-	 * read-only
+	 * @property-read bool $hasChildren
 	 */
 	final public function get__hasChildren() {
-		if( !isset( $this->_pages ) ) return false;
-		if( !is_array( $this->_pages ) ) return false;
-		return ( count( $this->_pages ) > 0 );
+		if( !is_array( $this->_children ) ) return false;
+		return ( count( $this->_children ) > 0 );
 	}
 	
 	/**
-	 * children (Array)
-	 * read-only
+	 * @property-read array $children
 	 */
 	final public function &get__children() {
 		if( !$this->hasChildren ) return false;
-		return $this->_pages;
+		return $this->_children;
 	}
 	
 	/**
-	 * hasDefaultChild (Boolean)
-	 * read-only
+	 * @property-read bool $hasDefaultChild
 	 */
 	final public function get__hasDefaultChild() {
-		return $this->hasChildByName( 'default' );
+		return !empty($this->_defaultChild);
 	}
 	
 	/**
-	 * menuCallback (method function reference)
-	 * read-only
+	 * @property-read callback $menuCallback
 	 */
 	final public function get__menuCallback() {
 		return $this->getCallback( 'render' );
 	}
 	
 	/**
-	 * defaultChild (wpew_AAdminPage)
-	 * read-write
+	 * @property xf_wp_AAdminPage $defaultChild
 	 */
 	final public function &get__defaultChild() {
-		if( !$this->hasDefaultChild ) return null;
-		return $this->_pages['default'];
+		return $this->_defaultChild;
 	}
 	final public function set__defaultChild( xf_wp_AAdminPage &$v ) {
-		if( $v instanceof xf_wp_AAdminPage ) {
-			$v->isDefault = true;
+		if( $v instanceof xf_wp_AAdminPage && $this->hasChild( $v ) ) {
 			if( $this->hasDefaultChild ) {
-				$child = $this->removeDefaultChild();
-				$this->addChildByName( 'default', $v );
-				$this->addChild( $child );
-			} else {
-				if( $this->hasChild( $v ) ) {
-					$this->removeChild( $v );
-				}
-				$this->addChildByName( 'default', $v );
+				$this->_defaultChild->isDefault = false;
 			}
-		} else if( $this->hasDefaultChild  ) {
-			$child = $this->removeDefaultChild();
-			$this->addChild( $child );
+			$v->isDefault = true;
+			$this->_defaultChild =& $v;
+		} else {
+			if( $this->hasDefaultChild  ) $this->_defaultChild->isDefault = false;
+			$this->_defaultChild = null;
 		}
 	}
 }

@@ -42,15 +42,6 @@ interface wpew_IWidget extends wpew_IWP_Widget {
 	public static function beforeAdminOutput( &$obj );
 	
 	/**
-	 * Called from the form() method tThis is intended to output the 
-	 * actual widget back-end display.
-	 *
-	 * @param object $obj the current object instance of the widget class
-	 * @return void
-	 */
-	//public static function renderAdmin( &$obj );
-	
-	/**
 	 * Called from the form() method this is intended to be anything needed 
 	 * to be done after the widget admin output finishes.
 	 *
@@ -60,6 +51,15 @@ interface wpew_IWidget extends wpew_IWP_Widget {
 	public static function afterAdminOutput( &$obj );
 	
 	// INSTANCE MEMBERS
+	
+	/**
+	 * Required method to load a specific template file from within widget class
+	 * This allows for the template to have access to $this which is the current widget instance
+	 *
+	 * @param string $template The path of the template to load
+	 * @return void
+	 */
+	public function loadView( $template );
 	
 	/**
 	 * Method called by the manager itself when importing the widget 

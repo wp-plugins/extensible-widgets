@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: jimisaacs
 Author URI: http://jidd.jimisaacs.com/
-Donate link: http://jidd.jimisaacs.com/
+Donate link: http://jidd.jimisaacs.com/donate
 Plugin URI: http://jidd.jimisaacs.com/archives/863
 Tags: widgets, patterns, management, manager, mvc, model, view, controller
 Requires at least: 2.8
@@ -68,10 +68,20 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.7.2 =
+* Fixed another fatal error with the widget directory not using the correct path or structure, this was a PHP bug regarding Windows file paths
+* Updated the xf system Path class to convert to absolute paths to POSIX format when necessary (This still needs testing)
+* Removed many unnecessary xf framework class files
+* Cleaned much of the code bulk in admin page classes
+* Updated admin footer links and added a very small donate button
+* Started setting up the new method of defining and loading default widget class views (in-progress, stable)
+* Started setting up the new method of defining default widget class settings (in-progress, stable)
+* Thinking about a new way of creating the widget scope. Although it is stable, I do not like sessions. Debating on how to do this with only database cache.
+
 = 0.7.1 =
 * The first maintenance release of this plugin, even though it is still in beta
 * Fixed fatal error with the widget directory not using the correct path or structure (This should fix the Windows server issues)
-* Removed all uses of PHP shorttags for better server compatablility
+* Removed all uses of PHP short-tags for better server compatibility
 * Fixed error with twitter plugin to hide vital information when no user or password is supplied
 * Fixed minor css admin issues with the multiple select
 

@@ -33,12 +33,25 @@ class xf_system_Path {
 	const DS = DIRECTORY_SEPARATOR;
 
 	// STATIC MEMBERS
-
+	
+	/**
+	 * Converts a given file path to a POSIX style path
+	 * From C:\ProgramFiles\Users\Who to /ProgramFiles/Users/Who
+	 *
+	 * @param string $p
+	 * @return bool
+	 */
+	public static function toPOSIX( $p ) {
+		$px = str_replace( '\\', '/', $p );
+		if( self::isAbs( $p ) ) return preg_replace( '/^[a-zA-Z]:\//', '/', $px );
+		return $px;
+	}
+	
 	/**
 	 * Test if a given filesystem path is actually absolute
 	 * '/foo/bar', 'c:\windows'
 	 *
-	 * @param unknown $p
+	 * @param string $p
 	 * @return bool
 	 */
 	public static function isAbs( $p ) {

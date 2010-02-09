@@ -208,7 +208,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 */
 	public function uploadForm() { ?>
 		<h3>Upload File</h3>
-		<form name="uploadForm" enctype="multipart/form-data" method="post" action="<?php echo $this->formAction; ?>">
+		<form name="uploadForm" enctype="multipart/form-data" method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'importState' ); ?>
 			<p class="description">In the process of uploading files, the format is chosen automatically by the file's extension.<br />
 			Supported types for importing or to run a checksum are json, xml, dat, php, and checksum.<br />
@@ -225,7 +225,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 */
 	public function importForm() { ?>
 		<h3>Import Data</h3>
-		<form name="importForm" method="post" action="<?php echo $this->formAction; ?>">
+		<form name="importForm" method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'importState' ); ?>
 			<p class="description">For data you wish to enter manually, you need to specify the correct parsing format.</p>
 			<p><?php xf_display_Renderables::buildInputList( $this->getFieldID('format'), $this->getFieldName('format'), array(
@@ -253,7 +253,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	public function checksumForm() { ?>
 		<h3>MD5 Checksum</h3>
 		<p class="description">You may run an <a href="http://en.wikipedia.org/wiki/MD5" target="wpew_window">MD5</a> <a href="http://en.wikipedia.org/wiki/Checksum" target="wpew_window">Checksum</a> by pasting your exported checksum here.</p>
-		<form name="checksumForm" method="post" action="<?php echo $this->formAction; ?>">
+		<form name="checksumForm" method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'checksumState' ); ?>
 			<p><label>Checksum: <input type="text" size="32" name="<?php echo $this->getFieldName('checksum'); ?>" value="<?php echo esc_attr( $this->checksum );
 			?>"></label> <input type="submit" name="<?php echo $this->getFieldName('submit-checksum'); ?>" class="button-primary" value="Run" /></p>
@@ -267,8 +267,6 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 */
 	public function header() {
 		$this->parentPage->header(); ?>
-			<h2><?php echo $this->parentPage->title; ?> &raquo; <?php echo $this->title; ?></h2>
-			<?php do_action( 'admin_notices' ); ?>
 			<p class="description">Use this page to import data <a href="admin.php?page=wpew_admin_export">exported</a> from this plugin. In case you are wandering, yes it also imports any data that can simply be parsed into valid WordPress options based on the specified format.</p>
 			<p class="description">A successful import will overwrite all the current data, if you do not wish to lose it please make a backup by downloading an export.</p>
 			<h3>This page does not...</h3>

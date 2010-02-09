@@ -90,7 +90,7 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function uninstallForm() { ?>
-		<form onsubmit="return confirm('Are you sure? You cannot undo this action, though you may download an export of all data associated with this plugin.');" name="uninstallForm" method="post" action="<?php echo $this->formAction; ?>">
+		<form onsubmit="return confirm('Are you sure? You cannot undo this action, though you may download an export of all data associated with this plugin.');" name="uninstallForm" method="post" action="<?php echo $this->pageURI; ?>">
 			<p class="description">Clicking the button below will remove all data from the database that may have been added by this plugin, and then deactivates it. If you do not want to lose this data, then simply <a href="plugins.php">deactivate</a> this plugin instead, all the data with the exception of the widgets will remain. If you wish to save the data before uninstalling try the <a href="admin.php?page=wpew_admin_export">export</a> page.</p>
 			<?php $this->doStateField( 'uninstallState' ); ?>
 			<p><input type="submit" name="Submit" class="button-primary" value="Uninstall this Plugin" /></p>
@@ -104,8 +104,6 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 	 */
 	public function header() {
 		$this->parentPage->header(); ?>
-			<h2><?php echo $this->parentPage->title; ?> &raquo; <?php echo $this->title; ?></h2>
-			<?php do_action( 'admin_notices' ); ?>
 	<?php }
 	
 	/**

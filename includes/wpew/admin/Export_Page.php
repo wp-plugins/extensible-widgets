@@ -193,7 +193,7 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function exportForm() { ?>
-		<form name="exportForm" method="post" action="<?php echo $this->formAction; ?>">
+		<form name="exportForm" method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'export' ); ?>
 			<h3>Export Associated Options</h3>
 			<p>Export data as: &nbsp; <?php xf_display_Renderables::buildInputList( $this->getFieldID('format'), $this->getFieldName('format'), array(
@@ -219,7 +219,7 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function downloadForm() { ?>
-		<form name="downloadForm" method="post" action="<?php echo $this->formAction; ?>">
+		<form name="downloadForm" method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'downloadState' ); ?>
 			<p><label>Exported Data: <textarea class="widefat" rows="10" name="<?php echo $this->getFieldName('data'); ?>"><?php echo esc_attr( $this->formatData( $this->exportedOptions, $this->submitted['format'] ) ); ?></textarea></label></p>
 			<input type="hidden" name="<?php echo $this->getFieldName('format'); ?>" value="<?php echo $this->submitted['format'];?>" />
@@ -234,8 +234,6 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 */
 	public function header() { 
 		$this->parentPage->header(); ?>
-			<h2><?php echo $this->parentPage->title; ?> &raquo; <?php echo $this->title; ?></h2>
-			<?php do_action( 'admin_notices' ); ?>
 			<p class="description">Use this form to export data associated to this plugin. You may save it as a backup file, or <a href="admin.php?page=wpew_admin_import">import</a> into a different blog also using this plugin.</p>
 	<?php }
 	

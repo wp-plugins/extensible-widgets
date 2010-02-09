@@ -1,6 +1,8 @@
 <?php
 
 require_once(dirname(__FILE__).'/../xf/Object.php');
+require_once(dirname(__FILE__).'/../xf/errors/IOError.php');
+require_once(dirname(__FILE__).'/../xf/system/Path.php');
 require_once('IWidget.php');
 
 /**
@@ -76,10 +78,15 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	}
 	
 	/**
-	 * @see wpew_IWidget::loadTemplate()
+	 * @see wpew_IWidget::loadView()
 	 */
-	final public function loadTemplate( $template ) {
-		include( $template );
+	final public function loadView( $template ) {
+		$file = xf_system_Path::join( ABSPATH, self::$manager->root->settings['widgetsDir'], $template );
+		if( !file_exists( $file ) ) {
+			$file = xf_system_Path::join( ABSPATH, self::$manager->root->defaultSettings['widgetsDir'], $template );
+		}
+		if( !file_exists( $file ) ) throw new xf_errors_IOError( 1, $file );
+		include( $file );
 	}
 	
 	/**
@@ -204,12 +211,12 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 			if( is_callable(array( $class, 'renderAdmin' )) ) {
 				$output = call_user_func( array( $class, 'renderAdmin' ), $this );
 				if( $output === false ) {
-					$this->loadTemplate( 'widgets/'.strtolower($class).'/controls/default.php' );
+					$this->loadView( xf_system_Path::join( strtolower($class), 'controls', 'default.php' ) );
 				} else if( !empty($output) ) {
 					echo $output;
 				}
 			} else {
-				$this->loadTemplate( 'widgets/'.strtolower($class).'/controls/default.php' );
+				$this->loadView( xf_system_Path::join( strtolower($class), 'controls', 'default.php' ) );
 			}
 			do_action( $class . '_renderAdmin' );
 			echo '</div>';

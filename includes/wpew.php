@@ -16,7 +16,7 @@ require_once('xf/wp/APluggable.php');
 require_once('xf/wp/ASingleton.php');
 
 // Debugging purposes only
-//xf_errors_Error::setDebug(true);
+xf_errors_Error::setDebug(true);
 
 /**
  * Main Application class for the WordPress Plugin Extensible Widgets
@@ -42,7 +42,7 @@ class wpew extends xf_wp_ASingleton {
 	/**
 	 * @var string $version The current version of the plugin
 	 */
-	public $version = '0.7';
+	public $version = '0.7.2';
 	
 	/**
 	 * @var string $capability The name of the main capability of this plugin

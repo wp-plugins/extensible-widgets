@@ -1,7 +1,7 @@
 <?php
+require_once(dirname(__FILE__).'/../Object.php');
 require_once(dirname(__FILE__).'/../errors/ArgumentError.php');
 require_once(dirname(__FILE__).'/../errors/DefinitionError.php');
-require_once(dirname(__FILE__).'/../events/EventDispatcher.php');
 require_once(dirname(__FILE__).'/../system/Path.php');
 
 /**
@@ -20,7 +20,7 @@ require_once(dirname(__FILE__).'/../system/Path.php');
  */
 
 // START class
-class xf_source_Loader extends xf_events_EventDispatcher {
+class xf_source_Loader extends xf_Object {
 		
 	// STATIC MEMBERS
 	
@@ -250,13 +250,15 @@ class xf_source_Loader extends xf_events_EventDispatcher {
 	 * file_exists() checks directory names (useful for path checking).
 	 *
 	 * @param string $p The relative or absolute path to check
-	 * @param bool $absOnly Should it only check absolute paths or do both
+	 * @param bool $absOnly Flag to only check absolute paths and return false if relative
 	 * @return bool
 	 */
 	public function inBase( $p, $absOnly = true ) {
-		if( $absOnly ) {
-			if( !xf_system_Path::isAbs( $p ) ) return false;
-			if( preg_match( '|^'.$this->base.'|', $p ) ) return file_exists( $p );
+		if( xf_system_Path::isAbs( $p ) ) {
+			// Make sure to convert both paths to POSIX style to avoid any regex errors
+			if( preg_match( '|^'.xf_system_Path::toPOSIX( $this->base ).'|', xf_system_Path::toPOSIX( $p ) ) ) return file_exists( $p );
+			return false;
+		} else if( $absOnly ) {
 			return false;
 		}
 		return file_exists( xf_system_Path::join( $this->base, $p ) );

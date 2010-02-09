@@ -359,20 +359,19 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	public function widgets_init() {
 		// import widgets that are within the registration
 		if( $this->registration ) {
-			foreach( $this->registration as $class => $renderFlags ) {
+			foreach( $this->registration as $class => $regSettings ) {
 				$this->importWidget( $class );
 			}
 		}
-		// Register all the necessary global widget groups (sidebars)
-		// Only add a global widget group if there are none already registered
-		if( !$this->registeredGroups ) {
+		// Add a global widget group if there are none already registered
+		/*if( !$this->registeredGroups ) {
 			$this->registerGroup( array(
 				'before_widget' => '<div id="%1$s" class="widget %2$s">',
 				'after_widget' => '</div>',
 				'before_title' => '<h2>',
 				'after_title' => '</h2>',
 			));
-		}
+		}*/
 	}
 	
 	// OPTION MANIPULATION

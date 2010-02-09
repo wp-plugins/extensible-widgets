@@ -98,8 +98,8 @@ interface xf_wp_IAdminPage extends xf_wp_IPluggable {
 	public function get__rendered();
 	// state
 	public function get__state();
-	// formAction
-	public function get__formAction();
+	// pageURI
+	public function get__pageURI();
 	// isChild
 	public function get__isChild();
 	// isDefault

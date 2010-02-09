@@ -46,11 +46,11 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 		if( isset( $page->pageName ) ) return false;
 		if( $page->isDefault ) {
 			$page->pageName = $menu->pageName;
-			if( $addChild ) $menu->addChildByName( 'default', $page );
+			$menu->defaultChild = $page;
 		} else {
 			$page->pageName = $page->shortName;
-			if( $addChild ) $menu->addChild( $page );
 		}
+		if( $addChild && !$menu->hasChild($page) ) $menu->addChild( $page );
 		$added = add_submenu_page( $menu->pageName, $page->title, $page->menuTitle, $page->capability, $page->pageName, $page->menuCallback );
 		return $added;
 	}
@@ -67,22 +67,20 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 		$this->doLocalAction( 'buildStart' );
 		// First add this
 		self::addMenu( $this );
-		
 		// Now if there are children, add them (must be done with internal iderator loop)
 		if( !$this->hasChildren ) return;
-		reset($this->_pages);
+		reset($this->_children);
 		if( !$this->hasDefaultChild ) {
-			$first =& current($this->_pages);
+			$first =& current($this->_children);
 			$first->isDefault = true;;
 		}
 		do {
-			$child =& current($this->_pages);
+			$child =& current($this->_children);
 			self::addToMenu( $this, $child, false );
-			if( $this->currentPageName == $child->pageName ) $pn = key($this->_pages);
-		} while( next($this->_pages) !== false );
+		} while( next($this->_children) !== false );
 		$this->doLocalAction( 'buildComplete' );
-		
-		if(isset($pn)) $this->_pages[$pn]->doLocalAction( 'beforeRender' );
+		// The currentPage will be null if not on an active page of this menu
+		if( is_object($this->currentPage) ) $this->currentPage->doLocalAction( 'beforeRender' );
 	}
 	
 	/**
@@ -103,6 +101,22 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 	public function &get__currentPageName() {
 		if( !empty($_GET['page']) ) return $_GET['page'];
 		if( !empty($_POST['page']) ) return $_POST['page'];
+		return null;
+	}
+	
+	/**
+	 * @property-read string $currentPageName Get's the current page name set as 'page' as GET varaible if within the admin page
+	 *
+	 * It is retrieved as the POST varaible 'option_page' from the options.php file.
+	 * This input is set as a hidden variable by the settings_fields() function.
+	 */
+	public function &get__currentPage() {
+		if( $this->currentPageName == $this->pageName ) {
+			if( $this->hasDefaultChild ) return $this->_defaultChild;
+			return $this;
+		} else if( $this->hasChildByName($this->currentPageName) ) {
+			return $this->_children[$this->currentPageName];
+		}
 		return null;
 	}
 }

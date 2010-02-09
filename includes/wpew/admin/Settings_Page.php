@@ -109,7 +109,7 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 	}
 	
 	public function settingsForm() { ?>
-		<form method="post" action="<?php echo $this->formAction; ?>">
+		<form method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'saveSettingsState' ); ?>
 			<table class="form-table">
 				<tr valign="top">
@@ -151,7 +151,7 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 	public function resetSettingsForm() { ?>
 		<h3>Reset to Default Settings</h3>
 		<p>This does not include all data associated with this plugin, it only pertains to data that is editable on this page.</p>
-		<form method="post" action="<?php echo $this->formAction; ?>">
+		<form method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'resetSettingsState' ); ?>
 			<p><input onclick="return confirm('Are you sure you want to reset to the default settings?');" type="submit" name="<?php echo $this->getFieldName('submit'); ?>" class="button-primary" value="Reset Settings" /></p>
 		</form>
@@ -163,10 +163,8 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function header() {
-		$this->parentPage->header(); ?>
-			<h2><?php echo $this->parentPage->title; ?> &raquo; <?php echo $this->title; ?></h2>
-			<?php do_action( 'admin_notices' ); ?>
-	<?php }
+		$this->parentPage->header();
+	}
 	
 	/**
 	 * Used internally for a common content footer
