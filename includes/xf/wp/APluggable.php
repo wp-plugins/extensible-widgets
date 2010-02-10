@@ -357,13 +357,14 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	 * @return string
 	 */
 	public function absURIfromPath( $path ) {
-		$uriPath = str_replace( xf_system_Path::DS, '/', $path );
-		if ( !xf_system_Path::isAbs( $uriPath ) ) {
-			return get_bloginfo('wpurl') . '/' . $uriPath;
+		// Convert to a POSIX path and we're halfway there
+		$pxPath = xf_system_Path::toPOSIX( $path );
+		if ( !xf_system_Path::isAbs( $pxPath ) ) {
+			return get_bloginfo('wpurl') . '/' . $pxPath;
+		} else {
+			$uri = str_replace( ABSPATH, get_bloginfo('wpurl').'/', $pxPath );
 		}
-		$patterns = array( '|^'. ABSPATH . '|' );
-		$uri = trim(preg_replace( $patterns, get_bloginfo('wpurl') . xf_system_Path::DS, $uriPath ));
-		return str_replace( xf_system_Path::DS, '/', $uri );
+		return $uri;
 	}
 	
 	/**

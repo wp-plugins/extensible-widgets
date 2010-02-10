@@ -3,10 +3,10 @@
 require_once('View.php');
 
 /**
- * wpew_widgets_Date class
- * 
- * This is an example of a widget that used the previous widget's functionality, but is still higher up in the inheritance tree.
- * Use this widget to select a view template and handle any arbitrary date.
+ * This is an example of a widget that used the previous widget's functionality, 
+ * but is still higher up in the inheritance tree. Use this widget to select a 
+ * view template and handle any arbitrary date.
+ *
  * @package wpew
  * @subpackage widgets
  */

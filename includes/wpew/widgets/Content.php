@@ -3,10 +3,10 @@
 require_once('View.php');
 
 /**
- * wpew_widgets_Content class
- * 
- * This is an example of a widget that used the previous widget's functionality, but is still higher up in the inheritance tree.
- * Use this widget to enter any data (ex: text/HTML/XML/JavaScript) and optionally access it within in a view template.
+ * This is an example of a widget that used the previous widget's functionality, 
+ * but is still higher up in the inheritance tree. Use this widget to enter any 
+ * data (ex: text/HTML/XML/JavaScript) and optionally access it within in a view template.
+ *
  * @package wpew
  * @subpackage widgets
  */

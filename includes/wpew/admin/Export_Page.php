@@ -120,9 +120,9 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 */
 	public function defaultState() {
 		$this->header();
-		if( session_is_registered( 'group_data' ) || $this->widgets->backups  ) : ?>
+		if( isset($_SESSION['group_data']) || $this->widgets->backups  ) : ?>
 			<div class="error">There was an error when trying to access this page.</div>
-			<?php if( !session_is_registered( 'group_data' ) ) : ?>
+			<?php if( !isset($_SESSION['group_data']) ) : ?>
 		<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit the current widget editing scope.</p>
 		</div>
 			<?php else : ?>

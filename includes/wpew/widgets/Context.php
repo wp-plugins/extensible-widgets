@@ -4,9 +4,9 @@ require_once(dirname(__FILE__).'/../Widgets.php');
 require_once('Widget.php');
 
 /**
- * wpew_widgets_Context
+ * This is the base wpew Widget. It is not much on its own, but is meant to be extended. 
+ * wpew widgets are not available outside of this framework.
  *
- * This is the base wpew Widget. It is not much on its own, but is meant to be extended. wpew widgets are not available outside of this framework.
  * @package wpew
  * @subpackage widgets
  */

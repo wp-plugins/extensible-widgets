@@ -3,10 +3,11 @@
 require_once(dirname(__FILE__).'/../AWidget.php');
 
 /**
- * wpew_widgets_Widget class
+ * This is the base wpew Widget. It is not much on its own, but is meant to be extended. 
+ * It can still serve as a dynamic element.
  *
- * This is the base wpew Widget. It is not much on its own, but is meant to be extended. It can still serve as a dynamic element.
- * @package wpew-widgets
+ * @package wpew
+ * @subpackage widgets
  */
 class wpew_widgets_Widget extends wpew_AWidget {
 	

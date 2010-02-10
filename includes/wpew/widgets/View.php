@@ -8,10 +8,10 @@ require_once('Context.php');
 require_once('IView.php');
 
 /**
- * wpew_widgets_View class
+ * This is an example of a widget that used the previous widget's functionality, 
+ * but is still higher up in the inheritance tree. Use the view template control 
+ * system and pass custom parameters to display data in any desired format.
  *
- * This is an example of a widget that used the previous widget's functionality, but is still higher up in the inheritance tree.
- * Use the view template control system and pass custom parameters to display data in any desired format.
  * @package wpew
  * @subpackage widgets
  */

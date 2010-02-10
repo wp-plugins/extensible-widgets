@@ -121,7 +121,7 @@ class wpew_admin_WidgetsAjaxOverride extends xf_wp_ASingleton {
 			if( $this->currentGuid != $this->defaultGuid ) {
 				$force = (bool) isset($_GET['force']);
 				$this->_tmpSession = $this->newSession( $force );
-			} else if( session_is_registered( 'group_data' ) || isset( $_GET['force'] ) ) {
+			} else if( isset($_SESSION['group_data']) || isset( $_GET['force'] ) ) {
 				$this->killSession();
 			}
 		}
@@ -193,7 +193,6 @@ class wpew_admin_WidgetsAjaxOverride extends xf_wp_ASingleton {
 		}
 		$this->_sessionData = false;
 		unset( $_SESSION['group_data'] );
-		session_unregister( 'group_data' );
 		// This was a forced kill, so we redirect in order to prevent another one by a refresh or something
 		if( isset( $_GET['force'] ) ) wp_redirect( $this->admin->adminPage );
 		return true;
@@ -469,7 +468,7 @@ class wpew_admin_WidgetsAjaxOverride extends xf_wp_ASingleton {
 	 * read-only bool $inSession
 	 */
 	public function &get__inSession() {
-		return ( session_is_registered( 'group_data' ) || $this->_tmpSession );
+		return ( isset($_SESSION['group_data']) || $this->_tmpSession );
 	}
 	
 	/**
@@ -478,7 +477,6 @@ class wpew_admin_WidgetsAjaxOverride extends xf_wp_ASingleton {
 	 */
 	public function &get__sessionData() {
 		if( !empty( $this->_sessionData ) ) return $this->_sessionData;
-		if( !session_is_registered( 'group_data' ) ) return false;
 		if( !isset( $_SESSION['group_data'] ) ) return false;
 		return $this->_sessionData = unserialize( $_SESSION['group_data'] );
 	}
@@ -486,7 +484,6 @@ class wpew_admin_WidgetsAjaxOverride extends xf_wp_ASingleton {
 	 * @ignore
 	 */
 	public function set__sessionData( $v ) {
-		if( !session_is_registered( 'group_data' ) ) session_register('group_data');
 		$this->_sessionData = $v;
 		$_SESSION['group_data'] = serialize( $v );
 	}

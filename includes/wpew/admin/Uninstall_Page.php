@@ -54,7 +54,7 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 		// Here we must deactivate the plugin first in order to call the deactivation hook which uses the settings
 		deactivate_plugins( xf_system_Path::join('extensible-widgets','plugin.php') );
 		$this->header();
-		if( session_is_registered( 'group_data' ) ) : 
+		if( isset($_SESSION['group_data']) ) : 
 			$override =& wpew_admin_WidgetsAjaxOverride::getInstance();
 			$override->killSession(); 
 			?>

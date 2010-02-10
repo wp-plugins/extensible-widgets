@@ -4,10 +4,10 @@ require_once(dirname(__FILE__).'/../../xf/system/Path.php');
 require_once('View.php');
 
 /**
- * wpew_widgets_Group class
- * 
- * This is an example of a widget that used the previous widget's functionality, but is still higher up in the inheritance tree.
- * Use this widget to create a new widget group, as a widget? Yes... this is where it gets interesting.
+ * This is an example of a widget that used the previous widget's functionality, 
+ * but is still higher up in the inheritance tree. Use this widget to create a 
+ * new widget group, as a widget? Yes... this is where it gets interesting.
+ *
  * @package wpew
  * @subpackage widgets
  */

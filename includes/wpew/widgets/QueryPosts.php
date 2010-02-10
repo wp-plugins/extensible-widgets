@@ -3,10 +3,11 @@
 require_once('View.php');
 
 /**
- * wpew_widgets_QueryPosts class
- * 
- * This is an example of a widget that used the previous widget's functionality, but is still higher up in the inheritance tree.
- * A Widget than can create and use a sub-query or use the current global query and output the results in a view template.
+ * This is an example of a widget that used the previous widget's functionality, 
+ * but is still higher up in the inheritance tree. A Widget than can create and 
+ * use a sub-query or use the current global query and output the results in 
+ * a view template.
+ *
  * @package wpew
  * @subpackage widgets
  */

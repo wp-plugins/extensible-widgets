@@ -4,8 +4,10 @@ require_once(dirname(__FILE__).'/../../xf/utils/Misc.php');
 require_once('View.php');
 
 /**
- * This is an example of a widget that used the previous widget's functionality, but is still higher up in the inheritance tree.
- * Use this widget to retrieve statuses from a specified twitter account.
+ * This is an example of a widget that used the previous widget's functionality, 
+ * but is still higher up in the inheritance tree. Use this widget to retrieve 
+ * statuses from a specified twitter account.
+ *
  * @package wpew
  * @subpackage widgets
  */

@@ -68,6 +68,11 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.7.3 =
+* Many fixes in the jQuery Ajaxify plugin. It had major issues in certain browsers and the version included with this plugin is now an official fork from what is available from the jQuery community.
+* Fixed more errors regarding file paths and Windows, these were less fatal but should help some things
+* Removed some depreciated PHP functions I was still using (cough)
+
 = 0.7.2 =
 * Fixed another fatal error with the widget directory not using the correct path or structure, this was a PHP bug regarding Windows file paths
 * Updated the xf system Path class to convert to absolute paths to POSIX format when necessary (This still needs testing)

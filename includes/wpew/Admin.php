@@ -52,18 +52,18 @@ class wpew_Admin extends xf_wp_ASingleton {
 	public function admin() {
 		// Queue up the admin scripts for this package
 		$this->queueScript( 'jquery_ajaxify', array('jquery'), array(
-			'path' => dirname( $this->includeRootURI ) . '/js',
+			'path' => $this->pluginRootURI . '/js',
 			'filename' => 'jquery.ajaxify-0.4.js',
 			'version' => '0.4'
 		));
 		$this->queueScript( 'wpew_admin', array('jquery_ajaxify'), array(
-			'path' => dirname( $this->includeRootURI ) . '/js',
+			'path' => $this->pluginRootURI . '/js',
 			'filename' => 'admin.js',
 			'version' => '1.0'
 		));
 		// Queue up the admin css style for this package
 		$this->queueStyle( 'wpew_admin', false, array(
-			'path' => dirname( $this->includeRootURI ) . '/css',
+			'path' => $this->pluginRootURI . '/css',
 			'filename' => 'admin.css',
 			'version' => '1.0'
 		));

@@ -4,10 +4,10 @@ require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
 require_once('QueryPosts.php');
 
 /**
- * wpew_widgets_QueryPostsExtended
- * 
- * This is an example of a widget that used the previous widget's functionality, but is still higher up in the inheritance tree.
- * This widget is a simplified version of the Query Posts widget, for beginners.
+ * This is an example of a widget that used the previous widget's functionality, 
+ * but is still higher up in the inheritance tree. This widget is a simplified 
+ * version of the Query Posts widget, for beginners.
+ *
  * @package wpew
  * @subpackage widgets
  */
