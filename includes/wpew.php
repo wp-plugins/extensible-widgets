@@ -16,7 +16,7 @@ require_once('xf/wp/APluggable.php');
 require_once('xf/wp/ASingleton.php');
 
 // Debugging purposes only
-xf_errors_Error::setDebug(true);
+//xf_errors_Error::setDebug(true);
 
 /**
  * Main Application class for the WordPress Plugin Extensible Widgets
