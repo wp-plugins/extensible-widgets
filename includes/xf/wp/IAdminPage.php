@@ -24,7 +24,7 @@ interface xf_wp_IAdminPage extends xf_wp_IPluggable {
 	 *
 	 * @return void
 	 */
-	public function beforeRender();
+	public function onBeforeRender();
 	
 	// This is callback that actually prints out the content of the page.
 	public function render();

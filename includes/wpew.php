@@ -16,7 +16,7 @@ require_once('xf/wp/APluggable.php');
 require_once('xf/wp/ASingleton.php');
 
 // Debugging purposes only
-xf_errors_Error::setDebug(true);
+//xf_errors_Error::setDebug(true);
 
 /**
  * Main Application class for the WordPress Plugin Extensible Widgets
@@ -42,7 +42,7 @@ class wpew extends xf_wp_ASingleton {
 	/**
 	 * @var string $version The current version of the plugin
 	 */
-	public $version = '0.7.3';
+	public $version = '0.7.4';
 	
 	/**
 	 * @var string $capability The name of the main capability of this plugin
@@ -90,7 +90,7 @@ class wpew extends xf_wp_ASingleton {
 		$this->extend->widgets =& wpew_Widgets::getInstance();
 		
 		// Add Hooks
-		$this->addLocalAction( 'initiated' );
+		$this->addLocalAction( 'onInitiated' );
 	}
 	
 	/**
@@ -112,11 +112,11 @@ class wpew extends xf_wp_ASingleton {
 	public function client() {}
 	
 	/**
-	 * Action Hook - wpew_initiated
+	 * Action Hook - wpew_onInitiated
 	 *
 	 * @return void
 	 */
-	public function initiated() {
+	public function onInitiated() {
 		// For ajax calls do these actions after wpew, and all extensions have initiated, but before WordPress has initiated.
 		// This is because we can hook and manipulate things that normally WordPress does not allow hooks for.
 		if( !empty($this->_post['action']) ) {
@@ -133,8 +133,9 @@ class wpew extends xf_wp_ASingleton {
 		$settings = array(
 			'roles' => array('administrator')
 		);
-		$widgetsDir = xf_system_Path::join( $this->includeRoot, $this->widgets->dirWidgets );
-		$settings['widgetsDir'] = xf_system_Path::replace( $widgetsDir, ABSPATH );
+		// Convert to POSIX for easy string manipulation (this method shouldn't be called all the time anyway)
+		$widgetsDir = xf_system_Path::toPOSIX( xf_system_Path::join( $this->includeRoot, $this->widgets->dirWidgets ) );
+		$settings['widgetsDir'] = xf_system_Path::replace( $widgetsDir, xf_system_Path::toPOSIX(ABSPATH) );
 		return $settings;
 	}
 	

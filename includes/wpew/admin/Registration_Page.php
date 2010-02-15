@@ -53,7 +53,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 *
 	 * return void
 	 */
-	public function beforeRender() {
+	public function onBeforeRender() {
 		// get_option
 		$registration = ( $this->widgets->registration ) ? $this->widgets->registration : array();
 		// There was either a bulk action or a single action
@@ -79,12 +79,14 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 					switch( $action ) {
 						case 'register-selected' :
 							if( !isset($registration[$class]) ) {
+								if( method_exists( $widget, 'onRegister' ) ) if( $widget->onRegister() === false ) continue; 
 								$registration[$class] = true;
 								$this->noticeUpdates .= '<p>Registered <strong>'.$widget->name.'</strong></p>';
 							}
 						break;
 						case 'unregister-selected' :
 							if( isset($registration[$class]) ) {
+								if( method_exists( $widget, 'onUnregister' ) ) if( $widget->onUnregister() === false ) continue; 
 								unset( $registration[$class] );
 								$this->noticeUpdates .= '<p>Unregistered <strong>'.$widget->name.'</strong></p>';
 							}
@@ -117,7 +119,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 		$this->registeredClasses = array_keys($registration);
 		$this->allClasses = array_merge( $this->unregisteredClasses, $this->registeredClasses );
 		// Call parent
-		parent::beforeRender();
+		parent::onBeforeRender();
 	}
 	
 	// STATES
@@ -219,7 +221,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function controlHierarchy( &$widget = null ) {
+	public function controlHierarchy( $widget = null ) {
 		if( empty($widget) ) {
 			$class = ( empty($this->submitted['widget']) ) ? $_GET['widget'] : $this->submitted['widget'];
 			$widget = new $class();
@@ -306,6 +308,9 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 
 				<?php foreach( $this->classes as $class ) :
 					$widget = new $class();
+					if( method_exists( $widget, 'onRegistrationListing' ) ) {
+						if( $widget->onRegistrationListing() === false ) continue; 
+					}
 					$nameLink = $widget->name;
 					if( in_array( $class, $this->registeredClasses ) ) {
 						$rowClass = 'active';
@@ -442,8 +447,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	public function header() {
 		if( !count($this->classes) ) {
 			$this->state = null;
-			$this->defaultState();
-			return;
+			$this->classes =& $this->allClasses;
 		}
 		$this->parentPage->header(); ?>
 		<?php if( $this->widgets->registration ) : ?>

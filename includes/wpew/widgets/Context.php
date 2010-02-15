@@ -37,13 +37,14 @@ class wpew_widgets_Context extends wpew_widgets_Widget {
 	 */
 	public static function save( &$obj, $new_settings ) {
 		$obj->settings['context'] = $new_settings['context'];
-		if( !is_array( $new_settings['context_calls'] ) ) return;
 		// Check if this was serialized
 		if( wpew_Widgets::isSerialized( 'context_calls', $new_settings ) ) {
 			wpew_Widgets::unserialize( 'context_calls', $new_settings );
 			$obj->settings['context_calls'] = $new_settings['context_calls'];
-		} else {
+		} else if( is_array($new_settings['context_calls']) ) {
 			$obj->settings['context_calls'] = array_values( array_filter( $new_settings['context_calls'] ) );
+		} else {
+			$obj->settings['context_calls'] = array();
 		}
 		// Check if this was serialized
 		if( wpew_Widgets::isSerialized( 'context_args', $new_settings ) ) {

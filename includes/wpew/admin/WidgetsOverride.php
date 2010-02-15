@@ -182,11 +182,11 @@ class wpew_admin_WidgetsOverride extends wpew_admin_WidgetsAjaxOverride {
 				<p>This page has temporarily been disabled by <a href="admin.php?page=wpew_admin_wpew">Extensible Widgets</a></p>
 			</div>
 			<p>This of course is not a normal process of WordPress.</p>
-			<p>It happened because Extensible Widgets detected that another user entered another widget scope and now cannot allow you to access the global scope.</p>
-			<p><a class="button-primary" href="<?php echo $this->guidURI; ?>?force&g=<?php echo $this->defaultGuid; ?>" title="Click to Edit Widgets Regardless of This Error">Edit Anyway...</a> but be warned, you will probably discard any changes other users have made to scope they are editing!</p>
+			<p>It happened because Extensible Widgets detected that another user entered another widget scope and now cannot allow you access to the global scope.</p>
+			<p><a class="button-primary" href="<?php echo $this->guidURI; ?>?force&g=<?php echo $this->defaultGuid; ?>" title="Click to Edit Widgets Regardless of This Error">Edit Anyway...</a> but be warned, you will probably discard any changes other users have made to the scope they are editing!</p>
 		</div>
 		
-		<?php require_once( ABSPATH . xf_system_Path::DS . 'wp-admin'.xf_system_Path::DS.'admin-footer.php' );
+		<?php require_once( ABSPATH . 'wp-admin/admin-footer.php' );
 		exit;
 	}
 	
@@ -260,7 +260,7 @@ class wpew_admin_WidgetsOverride extends wpew_admin_WidgetsAjaxOverride {
 		$links = implode( ' '.xf_system_Path::DS.' ', $links ); ?>
 		
 		<div id="edit_level" class="wrap">
-			<h2><small>Editing Level <?php echo count($levels); ?> &raquo; </small><?php echo $this->sessionData['instance']['group_name']; ?></h2>
+			<h2><small>Editing Scope Level <?php echo count($levels); ?> &raquo; </small><?php echo $this->sessionData['instance']['group_name']; ?></h2>
 			<div class="setting_group">
 				<div class="alignright">
 					<a class="button-primary" href="<?php echo $this->defaultURI; ?>" title="Save the Current Scope and Exit">Save and Exit</a> <a class="button-primary" href="<?php echo $this->parentURI; ?>" title="Save and Go Back One Level">Go Back</a> <a class="button-primary" href="<?php echo $this->currentURI; ?>&force" title="Save the Current Scope">Save Level</a>

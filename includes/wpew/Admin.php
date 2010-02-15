@@ -40,16 +40,20 @@ class wpew_Admin extends xf_wp_ASingleton {
 	 * @see xf_wp_APluggable::init()
 	 */
 	public function init() {
-		// Add Hooks
-		$this->addAction( 'admin_menu' );
-		$this->addAction( 'wpew_admin_admin-ajax.php', 'admin_ajax_Override' );
-		$this->addAction( 'wpew_admin_widgets.php', 'widgets_Override' );
+		// Add hook to make sure everything in the plugin has initiated
+		$this->addAction( 'wpew_onAdminInitiated' );
 	}
 	
 	/**
-	 * @see xf_wp_APluggable::admin()
+	 * Action Hook - wpew_onAdminInitiated
+	 *
+	 * @return void
 	 */
-	public function admin() {
+	public function wpew_onAdminInitiated() {
+		// The Admin Menu
+		$this->addAction( 'admin_menu' );
+		$this->addAction( 'wpew_admin_admin-ajax.php', 'admin_ajax_Override' );
+		$this->addAction( 'wpew_admin_widgets.php', 'widgets_Override' );
 		// Queue up the admin scripts for this package
 		$this->queueScript( 'jquery_ajaxify', array('jquery'), array(
 			'path' => $this->pluginRootURI . '/js',
@@ -138,7 +142,7 @@ class wpew_Admin extends xf_wp_ASingleton {
 		$menu->build();
 		
 		// do the local action so more menus may be added after this one
-		$this->doLocalAction( 'menu' );
+		$this->doLocalAction( 'onMenu' );
 	}
 }
 ?>

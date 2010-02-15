@@ -62,7 +62,8 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 *
 	 * return void
 	 */
-	public function beforeRender() {
+	public function onBeforeRender() {
+		session_start();
 		if( $this->state == 'downloadState' || isset($this->submitted['force']) ) {
 			if( isset($this->submitted['force']) ) {
 				$string = $this->formatData( $this->export(true), $this->submitted['format'] );
@@ -108,7 +109,7 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 			die(0);
 		}
 		// Call parent
-		parent::beforeRender();
+		parent::onBeforeRender();
 	}
 	
 	// PAGE STATES
@@ -119,17 +120,17 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function defaultState() {
-		$this->header();
-		if( isset($_SESSION['group_data']) || $this->widgets->backups  ) : ?>
-			<div class="error">There was an error when trying to access this page.</div>
+		if( isset($_SESSION['group_data']) || $this->widgets->backups  ) : 
+			$this->parentPage->header(); ?>
+			<div class="error"><p><strong>There was an error when trying to access this page.</strong></p>
 			<?php if( !isset($_SESSION['group_data']) ) : ?>
-		<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit the current widget editing scope.</p>
-		</div>
+			<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit.</p>
 			<?php else : ?>
-		<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit the the global scope before using this page's functionality.</p>
+			<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit the the global scope before using this page's functionality.</p>
 		</div>
-			<?php endif;
-		else :
+			<?php endif; ?></div>
+		<?php else :
+			$this->header();
 			$this->exportForm();
 		endif;
 		$this->footer();
@@ -149,12 +150,14 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 			$this->widgets->getOptionName('widget_option_backups'),
 			'sidebars_widgets'
 		);
-		foreach( $this->widgets->currentGroups as $group ) {
-			if( !is_array($group) || count($group) == 0 ) continue;
-			foreach( $group as $widgetID ) {
-				if( !$parsed = wpew_Widgets::parseWidgetID( $widgetID ) ) continue;
-				$names[] = $parsed['option_name'];
-			}					
+		if( !empty($this->widgets->currentGroups) ) {
+			foreach( $this->widgets->currentGroups as $group ) {
+				if( !is_array($group) || count($group) == 0 ) continue;
+				foreach( $group as $widgetID ) {
+					if( !$parsed = wpew_Widgets::parseWidgetID( $widgetID ) ) continue;
+					$names[] = $parsed['option_name'];
+				}					
+			}
 		}
 		// Actually get the options
 		$options = array();

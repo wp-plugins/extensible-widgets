@@ -69,11 +69,15 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	 */
 	public $capability = 'activate_plugins';
 	/**
-	 * @var string $noticeUpdates An string representing updates from within the current page, renders in admin_notices action.
+	 * @var string $otherNotices A string representing updates from other sources such as plugins, the system, other pages, etc.
+	 */
+	public $otherNotices = '';
+	/**
+	 * @var string $noticeUpdates A string representing updates from within the current page, renders in admin_notices action.
 	 */
 	public $noticeUpdates = '';
 	/**
-	 * @var string $noticeErrors An string representing errors from within the current page, renders in admin_notices action.
+	 * @var string $noticeErrors A string representing errors from within the current page, renders in admin_notices action.
 	 */
 	public $noticeErrors = '';
 		
@@ -87,7 +91,7 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 		$this->shortName = $name;
 		// the property menuTitle is optional
 		if( empty($this->menuTitle) ) $this->menuTitle = $this->title;
-		$this->addLocalAction( 'beforeRender' );
+		$this->addLocalAction( 'onBeforeRender' );
 	}
 	
 	/**
@@ -104,9 +108,16 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	}
 
 	/**
-	 * @see xf_wp_IAdminPage::beforeRender();
+	 * @see xf_wp_IAdminPage::onBeforeRender();
 	 */
-	public function beforeRender() {
+	public function onBeforeRender() {
+		if( has_action('admin_notices') ) {
+			// Start buffer
+			ob_start();
+			do_action('admin_notices');
+			$this->otherNotices = ob_get_clean();
+			remove_all_actions('admin_notices');
+		}
 		// START THE BUFFER
 		if( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || !empty($_GET['ajax']) ) {
 			// Yes, it is asyncronous
@@ -158,6 +169,7 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 			<?php echo $this->noticeErrors; ?>
 		</div>
 		<?php endif;
+		echo $this->otherNotices;
 	}
 	
 	/**

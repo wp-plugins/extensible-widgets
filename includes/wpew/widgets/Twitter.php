@@ -49,10 +49,32 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 		if( empty( $name ) ) $name = __('Twitter');
 		// Set Options
 		$wOpts = wp_parse_args( $wOpts, array(
-			'description' => __( "Use this widget to retrieve statuses from a specified twitter account." )
+			'description' => __( "Use this widget to retrieve statuses from a specified twitter account. Requires CURL library." )
 		) );
 		// parent constructor
 		parent::__construct( $name, $wOpts, $cOpts );
+	}
+	
+	/**
+	 * WordPress Hook - admin_notices
+	 */
+	public function admin_notices() { ?>
+		<div class="error fade">
+			<p>Sorry, the widget <strong><?php echo $this->name; ?></strong> requires that the PHP Library CURL to be installed.</p>
+		</div> 
+	<?php }
+	
+	/**
+	 * Extensible Widgets Callback - When widget is registered on Registration page
+	 * Return false to prevent the widget from being registered.
+	 *
+	 * @return void|false
+	 */
+	public function onRegister() {
+		if( !function_exists('curl_init') ) {
+			add_action('admin_notices', array($this,'admin_notices'));
+			return false;
+		}
 	}
 	
 	/**

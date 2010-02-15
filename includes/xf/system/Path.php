@@ -35,6 +35,18 @@ class xf_system_Path {
 	// STATIC MEMBERS
 	
 	/**
+	 * Converts a given file path to use the native system's directory separators
+	 * From C:\ProgramFiles/Users/Who to C:\ProgramFiles\Users\Who
+	 *
+	 * @param string $p
+	 * @return bool
+	 */
+	public static function toSystem( $p ) {
+		if( self::DS == '/' ) $p = self::toPOSIX( $p );
+		return preg_replace( '|/+|', self::DS, $p );
+	}
+	
+	/**
 	 * Converts a given file path to a POSIX style path
 	 * From C:\ProgramFiles\Users\Who to /ProgramFiles/Users/Who
 	 *

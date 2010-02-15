@@ -23,9 +23,9 @@ class wpew_widgets_QueryPosts extends wpew_widgets_View {
 	public static $tabLabel = 'Query Posts';
 	
 	/**
-	 * @var WP_Query $globalQuery Holds the global $wp_query temporarily while this widget renders. 
+	 * @var WP_Query $_globalQuery Holds the global $wp_query temporarily while this widget renders. 
 	 */
-	public static $globalQuery = null;
+	private static $_globalQuery = null;
 	
 	/**
 	 * @see wpew_AWidget::getDefaultSettings()
@@ -73,13 +73,13 @@ class wpew_widgets_QueryPosts extends wpew_widgets_View {
 	/**
 	 * @see wpew_IWidget::beforeOutput()
 	 */
-	public function beforeOutput( ) {
+	public function beforeOutput() {
 		// call parent
 		parent::beforeOutput();
 		if( empty( $this->settings['query'] ) ) return;
 		// Save the global $wp_query to restore later
 		global $wp_the_query, $wp_query;
-		if(!is_null(self::$globalQuery)) self::$globalQuery = $wp_the_query;
+		if(is_null(self::$_globalQuery)) self::$_globalQuery = $wp_the_query;
 		// Create the new Query!
 		$wp_the_query = new WP_Query( $this->settings['query'] );
 		$wp_query =& $wp_the_query;
@@ -122,12 +122,13 @@ class wpew_widgets_QueryPosts extends wpew_widgets_View {
 	 * @see wpew_IWidget::afterOutput()
 	 */
 	public function afterOutput() {
-		if( empty( $this->settings['query'] ) ) return;
-		// Restore global $wp_query
-		global $wp_the_query, $wp_query;
-		$wp_the_query = self::$globalQuery;
-		$wp_query =& $wp_the_query;
-		self::$globalQuery = null;
+		if( !is_null( self::$_globalQuery ) ) {
+			// Restore global $wp_query
+			global $wp_the_query, $wp_query;
+			$wp_the_query = self::$_globalQuery;
+			$wp_query =& $wp_the_query;
+			self::$_globalQuery = null;
+		}
 		// Restore global post data stomped by the_post()
 		wp_reset_query();
 	}

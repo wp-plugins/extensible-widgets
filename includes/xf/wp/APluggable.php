@@ -150,24 +150,21 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 		// call init method
 		$this->init();
 		
-		// call hooks for {myclass}_init
-		$this->doLocalAction( 'init' );
-		
 		// fork admin side from client side
 		if( is_admin() ) {
 			// call admin method
 			$this->admin();
-			// call hooks for {myclass}_admin_init
-			$this->doLocalAction( 'admin_init' );
+			// call hooks for {myclass}_admin_onAdminInitiated
+			$this->doLocalAction( 'onAdminInitiated' );
 		} else {
 			// call client method
 			$this->client();
-			// call hooks for {myclass}_client_init
-			$this->doLocalAction( 'client_init' );
+			// call hooks for {myclass}_client_onClientInitiated
+			$this->doLocalAction( 'onClientInitiated' );
 		}
 		
-		// call hooks for {myclass}_initiated
-		$this->doLocalAction( 'initiated' );
+		// call hooks for {myclass}_onInitiated
+		$this->doLocalAction( 'onInitiated' );
 	}
 	
 	/**
@@ -287,8 +284,8 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	/*
 	 * Essentially everything sent to and from these methods in the action system are automatically prepended with class's shortName.
 	 * This means if the shortName is "myclass",
-	 * when the action "widgets_init" is passed though these functions
-	 * it is actually being passed as "myclass_widgets_init" but still through the WordPress action system.
+	 * when the action "widgets_initiated" is passed though these functions
+	 * it is actually being passed as "myclass_widgets_initiated" but still through the WordPress action system.
 	 */
 	
 	/**
@@ -362,7 +359,7 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 		if ( !xf_system_Path::isAbs( $pxPath ) ) {
 			return get_bloginfo('wpurl') . '/' . $pxPath;
 		} else {
-			$uri = str_replace( ABSPATH, get_bloginfo('wpurl').'/', $pxPath );
+			$uri = str_replace( xf_system_Path::toPOSIX(ABSPATH), get_bloginfo('wpurl').'/', $pxPath );
 		}
 		return $uri;
 	}

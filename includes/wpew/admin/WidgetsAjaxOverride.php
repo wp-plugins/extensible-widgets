@@ -74,7 +74,7 @@ class wpew_admin_WidgetsAjaxOverride extends xf_wp_ASingleton {
 		}
 	}
 	
-	public function widget_form_callback( &$instance, &$widget ) {
+	public function widget_form_callback( $instance, $widget ) {
 		if( is_numeric($widget->number) ) {
 			if( $widget->updated ) {
 				echo '<div class="updated fade fadeOut"><strong>'.$widget->name.' '.$widget->number.'</strong> Saved.</div>';

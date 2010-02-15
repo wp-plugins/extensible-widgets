@@ -138,10 +138,10 @@ class wpew_widgets_View extends wpew_widgets_Context implements wpew_widgets_IVi
 	 */
 	public function getViewsDir() {
 		// Do action here passing this widget as an argument, this allows for grabbing the correct widget just before the filter. 
-		self::$manager->doLocalAction( 'getViewsDir', $this );
+		self::$manager->doLocalAction( 'onGetViewsDir', $this );
 		$dir = xf_system_Path::join( self::$manager->root->settings['widgetsDir'], $this->id_base, $this->dirViews );
 		if( !xf_system_Path::isAbs( $dir ) ) {
-			$dir = xf_system_Path::join( ABSPATH, $dir );
+			$dir = ABSPATH . $dir;
 		}
 		// Apply the filter here after the action because callbacks could have grabbed the id_base from the widget to add the right filter.
 		return apply_filters( xf_wp_APluggable::joinShortName('getViewsDir', $this->id_base), $dir );
@@ -152,7 +152,7 @@ class wpew_widgets_View extends wpew_widgets_Context implements wpew_widgets_IVi
 	 */
 	public function getViews() {
 		// Do action here passing this widget as an argument, this allows for grabbing the correct widget just before the filter. 
-		self::$manager->doLocalAction( 'getViews', $this );
+		self::$manager->doLocalAction( 'onGetViews', $this );
 		
 		$views = array();
 		$dir = $this->getViewsDir();

@@ -73,6 +73,17 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 		return ( $checksum === $md5 );
 	}
 	
+	/**
+	 * Function called before any rendering occurs within the WordPress admin
+	 *
+	 * return void
+	 */
+	public function onBeforeRender() {
+		session_start();
+		// Call parent
+		parent::onBeforeRender();
+	}
+	
 	// PAGE STATES
 	
 	/**
@@ -81,10 +92,21 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function defaultState() {
-		$this->header();
-		$this->uploadForm();
-		$this->importForm();
-		$this->checksumForm();
+		if( isset($_SESSION['group_data']) || $this->widgets->backups  ) : 
+			$this->parentPage->header(); ?>
+			<div class="error"><p><strong>There was an error when trying to access this page.</strong></p>
+			<?php if( !isset($_SESSION['group_data']) ) : ?>
+			<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit.</p>
+			<?php else : ?>
+			<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit the the global scope before using this page's functionality.</p>
+		</div>
+			<?php endif; ?></div>
+		<?php else :
+			$this->header();
+			$this->uploadForm();
+			$this->importForm();
+			$this->checksumForm();
+		endif;
 		$this->footer();
 	}
 	

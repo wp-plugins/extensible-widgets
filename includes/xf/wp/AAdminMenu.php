@@ -64,7 +64,7 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	final public function build() {
-		$this->doLocalAction( 'buildStart' );
+		$this->doLocalAction( 'onBuildStart' );
 		// First add this
 		self::addMenu( $this );
 		// Now if there are children, add them (must be done with internal iderator loop)
@@ -78,9 +78,9 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 			$child =& current($this->_children);
 			self::addToMenu( $this, $child, false );
 		} while( next($this->_children) !== false );
-		$this->doLocalAction( 'buildComplete' );
+		$this->doLocalAction( 'onBuildComplete' );
 		// The currentPage will be null if not on an active page of this menu
-		if( is_object($this->currentPage) ) $this->currentPage->doLocalAction( 'beforeRender' );
+		if( is_object($this->currentPage) ) $this->currentPage->doLocalAction( 'onBeforeRender' );
 	}
 	
 	/**

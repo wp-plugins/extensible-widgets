@@ -4,7 +4,7 @@ Plugin Name: Extensible Widgets
 Plugin URI: http://jidd.jimisaacs.com/archives/863
 Description: In addition to adding numerous extremely useful widgets for developers and users alike, this plugin is a system written on a PHP 5 object oriented structure. In short, it is built for modification and extension. It wraps the WordPress Widget API to allow for an alternative, and in my opinion more robust method to hook into and use it. Widgets are WordPress's version of user interface modules. They already support an administrative and client-side view. This system simply leverages that with a higher potential in mind.
 Author: Jim Isaacs
-Version: 0.7.3
+Version: 0.7.4
 Author URI: http://jidd.jimisaacs.com/
 */
 

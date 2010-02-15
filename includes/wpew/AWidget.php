@@ -36,6 +36,11 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	// INSTANCE
 	
 	/**
+	 * @ignore
+	 * Used internally
+	 */
+	public $reference;
+	/**
 	 * @var array $parentClasses  any wpew widget instance's class hierarchy as an associative array, not including anything below from wpew_AWidget
 	 */
 	public $parentClasses;
@@ -63,6 +68,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	// CONSTRUCTOR
 	public function __construct( $name = '', $wOpts = array(), $cOpts = array() )
 	{
+		$this->reference =& $this;
 		// Set the static manager of all wpew widgets extending this class
 		$this->setManager( $GLOBALS['wpew']->widgets );
 		// See if we need to set a default name
@@ -104,9 +110,10 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 			'width' => 200
 		);
 		// add actions to flush cache, method is located within the class's settings
-		self::$manager->addAction( 'save_post', 'flushWidgetCache', $this );
-		self::$manager->addAction( 'deleted_post', 'flushWidgetCache', $this );
-		self::$manager->addAction( 'switch_theme', 'flushWidgetCache', $this );
+		$reference =& $this;
+		self::$manager->addAction( 'save_post', 'flushWidgetCache', $reference );
+		self::$manager->addAction( 'deleted_post', 'flushWidgetCache', $reference );
+		self::$manager->addAction( 'switch_theme', 'flushWidgetCache', $reference );
 	}
 	
 	/**
@@ -120,10 +127,11 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	 * @see wpew_IWidget::update()
 	 */
 	final public function update( $new_settings, $old_settings ) {
+		$reference =& $this;
 		$this->settings = &$old_settings;
 		foreach( $this->parentClasses as $class ) {
 			// call abstract
-			call_user_func( array( $class, 'save' ), $this, $new_settings );
+			call_user_func( array( $class, 'save' ), $reference, $new_settings );
 		}
 		// flush the cache
 		$this->flushWidgetCache();
@@ -140,6 +148,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	 * @see wpew_IWidget::form()
 	 */
 	final public function form( &$settings ) {
+		$reference =& $this;
 		// Get registration
 		$registration = self::$manager->registration[get_class($this)];
 		if( is_array($registration) ) {
@@ -150,7 +159,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 		// merge all the default settings from all the classes from highest to lowest class
 		$defaults = array();
 		foreach( $this->parentClasses as $class ) {
-			$classDefaults = call_user_func( array( $class, 'getDefaultSettings' ), $this );
+			$classDefaults = call_user_func( array( $class, 'getDefaultSettings' ), $reference );
 			if( !is_array( $classDefaults ) ) continue;
 			$classSettings[$class] = array_keys($classDefaults);
 			$defaults = wp_parse_args( $classDefaults, $defaults );
@@ -159,7 +168,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 		$this->settings = wp_parse_args( $settings, $defaults );
 		
 		// call abstract from decendant class only
-		$this->beforeAdminOutput( $this );
+		$this->beforeAdminOutput( $reference );
 				
 		echo $this->class_name;
 		
@@ -209,7 +218,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 			if($this->tabular) $cssclass .= ' tabs-panel';
 			echo '<div class="' . $cssclass . '">';
 			if( is_callable(array( $class, 'renderAdmin' )) ) {
-				$output = call_user_func( array( $class, 'renderAdmin' ), $this );
+				$output = call_user_func( array( $class, 'renderAdmin' ), $reference );
 				if( $output === false ) {
 					$this->loadView( xf_system_Path::join( strtolower($class), 'controls', 'default.php' ) );
 				} else if( !empty($output) ) {
@@ -235,7 +244,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 		}
 		
 		// call abstract from decendant class only
-		$this->afterAdminOutput( $this );
+		$this->afterAdminOutput( $reference );
 	}
 	
 	/**

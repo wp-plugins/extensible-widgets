@@ -29,17 +29,19 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 				$this->noticeErrors .= '<p><strong>Failed to save!</strong> Widget Directory cannot be empty.</p>';
 				return;
 			} else {
-				$widgetsDir = $settings['widgetsDir'];
+				// Convert to POSIX path because well... everything favors this format for string manipulation
+				$widgetsDir = xf_system_Path::toPOSIX( stripslashes($settings['widgetsDir']) );
 				if( !xf_system_Path::isAbs( $settings['widgetsDir']) ) {
-					$widgetsDir = xf_system_Path::replace( $settings['widgetsDir'], ABSPATH );
-					if( !file_exists( xf_system_Path::join( ABSPATH, $widgetsDir ) ) ) {
+					if( !file_exists( ABSPATH . $widgetsDir ) ) {
 						$this->noticeErrors .= '<p><strong>Failed to save!</strong> Widgets Directory does not exist.</p>';
 						return false;
 					}
 					$settings['widgetsDir'] = $widgetsDir;
 				} else if( !file_exists( $widgetsDir ) ) {
-					$this->noticeErrors .= '<p><strong>Failed to save!</strong> Widgets Directory does not exist.</p>';
+					$this->noticeErrors .= '<p><strong>Failed to save!</strong> Widgets Directory does not exist or is not relative to the WordPress root.</p>';
 					return false;
+				} else {
+					$widgetsDir = xf_system_Path::replace( $widgetsDir, xf_system_Path::toPOSIX(ABSPATH) );
 				}
 				$settings['widgetsDir'] = $widgetsDir;
 			}
@@ -114,13 +116,12 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 			<table class="form-table">
 				<tr valign="top">
 					<th scope="row"><label for="<?php echo $this->getFieldID('widgetsDir'); ?>">Widgets Directory</label></th>
-					<td><input size="80" type="text" id="<?php echo $this->getFieldID('widgetsDir'); ?>" name="<?php echo $this->getFieldName('widgetsDir'); ?>" value="<?php echo $this->root->settings['widgetsDir']; ?>">
+					<td><input size="80" type="text" id="<?php echo $this->getFieldID('widgetsDir'); ?>" name="<?php echo $this->getFieldName('widgetsDir'); ?>" value="<?php echo esc_attr( stripslashes($this->root->settings['widgetsDir']) ); ?>">
 					<p class="description">This is the directory Extensible Widgets uses for looking up widget templates. Remember widget templates are NOT the same as theme templates. The path specified may be an absolute path or relative to the the root of your WordPress installation.</p></td>
 				</tr>
 				<tr valign="top">
 					<th scope="row"><span>Example:</span></th>
-					<td><?php
-					$this->widgets->importWidget( 'wpew_widgets_View', false );
+					<td><?php $this->widgets->importWidget( 'wpew_widgets_View', false );
 					$testClass = 'custom_MyExtended_Widget';
 					if( !class_exists($testClass, false)) {
 						eval('class '.$testClass.' extends wpew_widgets_View {}');
@@ -129,7 +130,8 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 					Lets say you have a PHP class by the name of:<br />
 					<code><?php echo $testClass; ?></code>
 					<p>The directory of this widget's view templates would be located here:<br />
-					<code><?php echo $testWidget->getViewsDir(); ?></code></p>
+					<code><?php // I know PHP doesn't mind different slash styles in a path, this conversion is just for cosmetic reasons.
+					echo xf_system_Path::toSystem($testWidget->getViewsDir()); ?></code></p>
 					<p>Within that directory, view templates are defined with a comment header in this format:<br />
 					<code>&lt;?php /* Template Name: My Template */ ?&gt;</code></p>
 					<p>Where <code>My Template</code> is the name that appears in the dropdown of the view controls.</p></td>

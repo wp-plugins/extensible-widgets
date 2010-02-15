@@ -68,6 +68,19 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.7.4 =
+* Fixed the Query Posts widget not reinitiating the global query correctly after render
+* Many fixes regarding the Windows platform. This one should be the final since I finally tested on my own brand new Windows server.
+* Fixes for the script queue in the base class also regarding Windows file paths
+* Fixed widget contexts which were not saving correctly
+* Fixed many instances of passing by reference which failed in PHP 5.3.* (This was fixed using the in-between reference workaround)
+* Fixed export page not reading the sidebars_widgets option correctly
+* Fixed registration page rendered list twice in certain instances
+* Turned off xf package debug mode by default (This might have been setting your error handling without you knowing it, sorry)
+* Changed internal setup of plugin hooks to fix many possible memory leaks
+* Fixed force edit when user is editing local scope for all necessary pages
+* Added plugin registration class method hooks for better control when and how a widget registers and unregisters
+
 = 0.7.3 =
 * Many fixes in the jQuery Ajaxify plugin. It had major issues in certain browsers and the version included with this plugin is now an official fork from what is available from the jQuery community.
 * Fixed more errors regarding file paths and Windows, these were less fatal but should help some things
@@ -92,6 +105,11 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 = 0.7 =
 * The first release of this plugin. It is beta and I have already received some bug reports regarding Windows servers.
+
+== Upgrade Notice ==
+
+= 0.7.4 =
+This version has the most bug fixes since the first beta, I strongly encourage all users to upgrade.
 
 == Widgets ==
 

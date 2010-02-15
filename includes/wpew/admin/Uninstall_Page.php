@@ -28,7 +28,7 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 	 *
 	 * return void
 	 */
-	/*public function beforeRender() {		
+	/*public function onBeforeRender() {		
 		if( $this->state == 'uninstallState' ) {}
 	}*/
 	
