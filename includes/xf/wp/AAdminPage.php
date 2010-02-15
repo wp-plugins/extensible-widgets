@@ -14,7 +14,7 @@ abstract class xf_wp_AAdminPage extends xf_wp_Plugin implements xf_wp_IAdminPage
 	
 	// CONSTANTS
 	
-	const DEFAULT_STATE = 'defaultState';
+	const DEFAULT_STATE = 'index';
 	
 	// PRIVATE MEMBERS
 	

@@ -64,9 +64,21 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 */
 	public function onBeforeRender() {
 		session_start();
+		if( isset($_SESSION['group_data']) || $this->widgets->backups ) { 
+			$this->state = 'onDisabled';
+			$this->noticeErrors .= '<p><strong>There was an error trying to access this page.</strong></p>';
+			if( !isset($_SESSION['group_data']) ) {
+				$this->noticeErrors .= '<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit.</p>';
+			} else {
+				$this->noticeErrors .= '<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit to the global scope before using this page\'s functionality.</p>';
+			}
+			// Call parent
+			parent::onBeforeRender();
+			return;
+		}
 		if( $this->state == 'downloadState' || isset($this->submitted['force']) ) {
 			if( isset($this->submitted['force']) ) {
-				$string = $this->formatData( $this->export(true), $this->submitted['format'] );
+				$string = $this->formatData( $this->onExport(true), $this->submitted['format'] );
 			} else {
 				$string = $this->submitted['data'];
 			}
@@ -119,20 +131,19 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function defaultState() {
-		if( isset($_SESSION['group_data']) || $this->widgets->backups  ) : 
-			$this->parentPage->header(); ?>
-			<div class="error"><p><strong>There was an error when trying to access this page.</strong></p>
-			<?php if( !isset($_SESSION['group_data']) ) : ?>
-			<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit.</p>
-			<?php else : ?>
-			<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit the the global scope before using this page's functionality.</p>
-		</div>
-			<?php endif; ?></div>
-		<?php else :
-			$this->header();
-			$this->exportForm();
-		endif;
+	public function index() {
+		$this->header();
+		$this->exportForm();
+		$this->footer();
+	}
+	
+	/**
+	 * State called by corresponding submited or preset state
+	 *
+	 * @return void
+	 */
+	public function onDisabled() {
+		$this->parentPage->header();
 		$this->footer();
 	}
 	
@@ -142,7 +153,7 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 * @param bool $return If true this returns the exported options
 	 * @return void
 	 */
-	public function &export( $return = false ) {
+	public function &onExport( $return = false ) {
 		// Build the options array (names of the options to retrieve)
 		$names = array(
 			$this->root->getOptionName('settings'),
@@ -197,7 +208,7 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 */
 	public function exportForm() { ?>
 		<form name="exportForm" method="post" action="<?php echo $this->pageURI; ?>">
-			<?php $this->doStateField( 'export' ); ?>
+			<?php $this->doStateField( 'onExport' ); ?>
 			<h3>Export Associated Options</h3>
 			<p>Export data as: &nbsp; <?php xf_display_Renderables::buildInputList( $this->getFieldID('format'), $this->getFieldName('format'), array(
 				'json' => __('JSON'),

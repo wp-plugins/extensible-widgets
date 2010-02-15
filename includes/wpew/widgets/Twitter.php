@@ -60,7 +60,8 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 	 */
 	public function admin_notices() { ?>
 		<div class="error fade">
-			<p>Sorry, the widget <strong><?php echo $this->name; ?></strong> requires that the PHP Library CURL to be installed.</p>
+			<p>Failed registering widget - <strong><?php echo $this->name; ?></strong></p>
+			<p>This widget requires the PHP CURL library.</p>
 		</div> 
 	<?php }
 	

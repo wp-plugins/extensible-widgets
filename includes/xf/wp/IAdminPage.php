@@ -121,7 +121,7 @@ interface xf_wp_IAdminPage extends xf_wp_IPluggable {
 	 *
 	 * @return void
 	 */
-	public function defaultState();
+	public function index();
 }
 // END interface
 ?>

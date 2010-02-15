@@ -79,7 +79,7 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function defaultState() {
+	public function index() {
 		$this->header();
 		$this->settingsForm();
 		$this->resetSettingsForm();
@@ -91,11 +91,11 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function saveSettingsState() {
+	public function onSaveSettings() {
 		if( $this->saveSettings( $this->submitted ) ) {
 			$this->noticeUpdates .= '<p><strong>Settings saved.</strong></p>';
 		}
-		$this->defaultState();
+		$this->index();
 	}
 	
 	/**
@@ -103,16 +103,16 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function resetSettingsState() {
+	public function onResetSettings() {
 		if( $this->saveSettings( $this->root->defaultSettings ) ) {
 			$this->noticeUpdates .= '<p><strong>Settings reset.</strong></p>';
 		}
-		$this->defaultState();
+		$this->index();
 	}
 	
 	public function settingsForm() { ?>
 		<form method="post" action="<?php echo $this->pageURI; ?>">
-			<?php $this->doStateField( 'saveSettingsState' ); ?>
+			<?php $this->doStateField( 'onSaveSettings' ); ?>
 			<table class="form-table">
 				<tr valign="top">
 					<th scope="row"><label for="<?php echo $this->getFieldID('widgetsDir'); ?>">Widgets Directory</label></th>
@@ -154,7 +154,7 @@ class wpew_admin_Settings_Page extends xf_wp_AAdminPage {
 		<h3>Reset to Default Settings</h3>
 		<p>This does not include all data associated with this plugin, it only pertains to data that is editable on this page.</p>
 		<form method="post" action="<?php echo $this->pageURI; ?>">
-			<?php $this->doStateField( 'resetSettingsState' ); ?>
+			<?php $this->doStateField( 'onResetSettings' ); ?>
 			<p><input onclick="return confirm('Are you sure you want to reset to the default settings?');" type="submit" name="<?php echo $this->getFieldName('submit'); ?>" class="button-primary" value="Reset Settings" /></p>
 		</form>
 <?php }

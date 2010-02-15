@@ -69,7 +69,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	public function md5Checksum( $checksum ) {
 		require_once('Export_Page.php');
 		$exporter = new wpew_admin_Export_Page();
-		$md5 = $exporter->formatData( $exporter->export(true), 'md5' );
+		$md5 = $exporter->formatData( $exporter->onExport(true), 'md5' );
 		return ( $checksum === $md5 );
 	}
 	
@@ -80,6 +80,15 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 */
 	public function onBeforeRender() {
 		session_start();
+		if( isset($_SESSION['group_data']) || $this->widgets->backups ) { 
+			$this->state = 'onDisabled';
+			$this->noticeErrors .= '<p><strong>There was an error trying to access this page.</strong></p>';
+			if( !isset($_SESSION['group_data']) ) {
+				$this->noticeErrors .= '<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit.</p>';
+			} else {
+				$this->noticeErrors .= '<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit to the global scope before using this page\'s functionality.</p>';
+			}
+		}
 		// Call parent
 		parent::onBeforeRender();
 	}
@@ -91,22 +100,11 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function defaultState() {
-		if( isset($_SESSION['group_data']) || $this->widgets->backups  ) : 
-			$this->parentPage->header(); ?>
-			<div class="error"><p><strong>There was an error when trying to access this page.</strong></p>
-			<?php if( !isset($_SESSION['group_data']) ) : ?>
-			<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit.</p>
-			<?php else : ?>
-			<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit the the global scope before using this page's functionality.</p>
-		</div>
-			<?php endif; ?></div>
-		<?php else :
-			$this->header();
-			$this->uploadForm();
-			$this->importForm();
-			$this->checksumForm();
-		endif;
+	public function index() {
+		$this->header();
+		$this->uploadForm();
+		$this->importForm();
+		$this->checksumForm();
 		$this->footer();
 	}
 	
@@ -115,7 +113,17 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function importState() {
+	public function onDisabled() {
+		$this->parentPage->header();
+		$this->footer();
+	}
+	
+	/**
+	 * State called by corresponding submited or preset state
+	 *
+	 * @return void
+	 */
+	public function onImport() {
 		$doImport = false;
 		// Which button was submitted?
 		if( isset($this->submitted['submit-upload']) ) {
@@ -169,7 +177,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 					case 'checksum' :
 						$this->format = 'json';
 						$this->checksum = $data;
-						$this->checksumState();
+						$this->onChecksum();
 						// The checksum stops this function here
 						return;
 					break;
@@ -209,7 +217,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function checksumState() {
+	public function onChecksum() {
 		if( isset($this->submitted['checksum']) ) $this->checksum = $this->submitted['checksum'];
 		if( $this->md5Checksum( $this->checksum ) ) {
 			$this->noticeUpdates .= '<p><strong>Checksum passed.</strong></p>';
@@ -231,7 +239,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	public function uploadForm() { ?>
 		<h3>Upload File</h3>
 		<form name="uploadForm" enctype="multipart/form-data" method="post" action="<?php echo $this->pageURI; ?>">
-			<?php $this->doStateField( 'importState' ); ?>
+			<?php $this->doStateField( 'onImport' ); ?>
 			<p class="description">In the process of uploading files, the format is chosen automatically by the file's extension.<br />
 			Supported types for importing or to run a checksum are json, xml, dat, php, and checksum.<br />
 			All of these types can be downloaded from the export page.</p>
@@ -248,7 +256,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	public function importForm() { ?>
 		<h3>Import Data</h3>
 		<form name="importForm" method="post" action="<?php echo $this->pageURI; ?>">
-			<?php $this->doStateField( 'importState' ); ?>
+			<?php $this->doStateField( 'onImport' ); ?>
 			<p class="description">For data you wish to enter manually, you need to specify the correct parsing format.</p>
 			<p><?php xf_display_Renderables::buildInputList( $this->getFieldID('format'), $this->getFieldName('format'), array(
 				'json' => __('JSON'),
@@ -276,7 +284,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 		<h3>MD5 Checksum</h3>
 		<p class="description">You may run an <a href="http://en.wikipedia.org/wiki/MD5" target="wpew_window">MD5</a> <a href="http://en.wikipedia.org/wiki/Checksum" target="wpew_window">Checksum</a> by pasting your exported checksum here.</p>
 		<form name="checksumForm" method="post" action="<?php echo $this->pageURI; ?>">
-			<?php $this->doStateField( 'checksumState' ); ?>
+			<?php $this->doStateField( 'onChecksum' ); ?>
 			<p><label>Checksum: <input type="text" size="32" name="<?php echo $this->getFieldName('checksum'); ?>" value="<?php echo esc_attr( $this->checksum );
 			?>"></label> <input type="submit" name="<?php echo $this->getFieldName('submit-checksum'); ?>" class="button-primary" value="Run" /></p>
 		</form>

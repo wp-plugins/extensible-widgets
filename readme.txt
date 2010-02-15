@@ -68,6 +68,12 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.8 =
+* Added sub-navigation to plugin administration pages
+* Changed plugin page method calls to be more intuitive and familiar with other PHP frameworks
+* Added more checks with widget registration and admin pages regarding users editing a another widget scope (Widget Group)
+* Continued testing on multiple server platforms fixing small bugs here and there
+
 = 0.7.4 =
 * Fixed the Query Posts widget not reinitiating the global query correctly after render
 * Many fixes regarding the Windows platform. This one should be the final since I finally tested on my own brand new Windows server.

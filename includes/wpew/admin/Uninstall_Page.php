@@ -29,7 +29,7 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 	 * return void
 	 */
 	/*public function onBeforeRender() {		
-		if( $this->state == 'uninstallState' ) {}
+		if( $this->state == 'onUninstall' ) {}
 	}*/
 	
 	// PAGE STATES
@@ -39,7 +39,7 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function defaultState() {
+	public function index() {
 		$this->header();
 		$this->uninstallForm();
 		$this->footer();
@@ -50,7 +50,7 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function uninstallState() {
+	public function onUninstall() {
 		// Here we must deactivate the plugin first in order to call the deactivation hook which uses the settings
 		deactivate_plugins( xf_system_Path::join('extensible-widgets','plugin.php') );
 		$this->header();
@@ -92,7 +92,7 @@ class wpew_admin_Uninstall_Page extends xf_wp_AAdminPage {
 	public function uninstallForm() { ?>
 		<form onsubmit="return confirm('Are you sure? You cannot undo this action, though you may download an export of all data associated with this plugin.');" name="uninstallForm" method="post" action="<?php echo $this->pageURI; ?>">
 			<p class="description">Clicking the button below will remove all data from the database that may have been added by this plugin, and then deactivates it. If you do not want to lose this data, then simply <a href="plugins.php">deactivate</a> this plugin instead, all the data with the exception of the widgets will remain. If you wish to save the data before uninstalling try the <a href="admin.php?page=wpew_admin_export">export</a> page.</p>
-			<?php $this->doStateField( 'uninstallState' ); ?>
+			<?php $this->doStateField( 'onUninstall' ); ?>
 			<p><input type="submit" name="Submit" class="button-primary" value="Uninstall this Plugin" /></p>
 		</form>
 	<?php }

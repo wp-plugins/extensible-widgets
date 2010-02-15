@@ -29,6 +29,15 @@ class wpew_admin_wpew_Page extends xf_wp_AAdminMenu {
 		<div class="wrap">
 			<div id="icon-themes" class="icon32"><br /></div>
 			<h2><?php echo $this->title; ?> &raquo; <?php echo $title; ?></h2>
+			<p><?php 
+			$navs = array();
+			reset($this->_children);
+			do {
+				$child =& current($this->_children);
+				$class = ($child == $this->currentPage) ? 'button-primary' : 'button';
+				$navs[] = '<a href="'.$child->pageURI.'" class="'.$class.'">'.$child->title.'</a>';
+			} while( next($this->_children) !== false ); 
+			echo implode(' | ', $navs ); ?></p>
 			<?php do_action( 'admin_notices' ); ?>
 	<?php }
 	
@@ -50,8 +59,8 @@ class wpew_admin_wpew_Page extends xf_wp_AAdminMenu {
 	// STATES
 	
 	/**
-	 * @see xf_wp_IPluggable::defaultState()
+	 * @see xf_wp_IPluggable::index()
 	 */
-	public function defaultState() {}
+	public function index() {}
 }
 ?>

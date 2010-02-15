@@ -186,6 +186,34 @@ class wpew_widgets_Group extends wpew_widgets_View {
 	}
 	
 	/**
+	 * WordPress Hook - admin_notices
+	 */
+	public function admin_notices() { ?>
+		<div class="error fade">
+			<p>Failed unregistering widget - <strong><?php echo $this->name; ?></strong></p>
+			<?php if( !isset($_SESSION['group_data']) ) : ?>
+			<p>Currently there is a user editing a widget group. You cannot access this page until that user has completed, or you go to the <a href="widgets.php">Widgets Administration Page</a> to force edit.</p>
+			<?php else : ?>
+			<p>You are currently editing a widget group, you must go to the <a href="widgets.php">Widgets Administration Page</a> to save and exit to the global scope before unregistering this widget.</p>
+			<?php endif; ?>
+		</div>
+	<?php }
+	
+	/**
+	 * Extensible Widgets Callback - When widget is registered on Registration page
+	 * Return false to prevent the widget from being registered.
+	 *
+	 * @return void|false
+	 */
+	public function onUnregister() {
+		session_start();
+		if( isset($_SESSION['group_data']) || self::$manager->backups ) {
+			add_action('admin_notices', array($this,'admin_notices'));
+			return false;
+		}
+	}
+	
+	/**
 	 * Just a shortcut to reset all the members that have to do with front-end rendering.
 	 * These are reset at render start to not interfere with the current group instance.
 	 * They are reset after render simply for memory cleanup.

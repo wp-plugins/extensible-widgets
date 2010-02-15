@@ -120,7 +120,7 @@ class wpew_widgets_View extends wpew_widgets_Context implements wpew_widgets_IVi
 	 * @see wpew_IWidget::defaultOutput()
 	 */
 	final public function defaultOutput() {		
-		// Include a view if there is one and send the view params in extracted, otherwise just do the defaultState.
+		// Include a view if there is one and send the view params in extracted, otherwise just do the default.
 		if( isset( $this->settings['view_template'] ) ) {
 			// Enable the global here, just so we don't have to think about it in the views.
 			global $wpew;
