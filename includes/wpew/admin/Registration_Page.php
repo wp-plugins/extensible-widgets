@@ -79,14 +79,14 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 					switch( $action ) {
 						case 'register-selected' :
 							if( !isset($registration[$class]) ) {
-								if( method_exists( $widget, 'onRegister' ) ) if( $widget->onRegister() === false ) continue; 
+								if( apply_filters( xf_wp_APluggable::joinShortName('onRegister', $class), $widget ) === false ) continue; 
 								$registration[$class] = true;
 								$this->noticeUpdates .= '<p>Registered <strong>'.$widget->name.'</strong></p>';
 							}
 						break;
 						case 'unregister-selected' :
 							if( isset($registration[$class]) ) {
-								if( method_exists( $widget, 'onUnregister' ) ) if( $widget->onUnregister() === false ) continue; 
+								if( apply_filters( xf_wp_APluggable::joinShortName('onUnregister', $class), $widget ) === false ) continue; 
 								unset( $registration[$class] );
 								$this->noticeUpdates .= '<p>Unregistered <strong>'.$widget->name.'</strong></p>';
 							}
@@ -313,9 +313,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 
 				<?php foreach( $this->classes as $class ) :
 					$widget = new $class();
-					if( method_exists( $widget, 'onRegistrationListing' ) ) {
-						if( $widget->onRegistrationListing() === false ) continue; 
-					}
+					if( apply_filters( xf_wp_APluggable::joinShortName('onRegistrationListing', $class), $widget ) === false ) continue;
 					$nameLink = $widget->name;
 					if( in_array( $class, $this->registeredClasses ) ) {
 						$rowClass = 'active';
@@ -457,7 +455,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 		$this->parentPage->header(); ?>
 		<?php if( $this->widgets->registration ) : ?>
 			<p class="description">This plugin has slightly changed the functionality of WordPress's <a href="widgets.php">Widgets Administration Page</a>. As a normal user you may not notice, overall your experience will be the same. For developers, you will notice what looks to be an extra step when adding a widget. This is necessary because of how extensive the controls are for the widgets included in this plugin. Basically no widget controls are rendered until the addition of that widget. The second forced save is needed to initiate the default settings that were once set by the pre-rendered but hidden controls. Also, widgets with functionalities as great as the Widget Group need access to more data than WordPress allows normally by the <a href="http://codex.wordpress.org/Widgets_API" target="wpew_window">Widget API</a>. These changes are necessary for this reason as well to keep these kinds of uber-widgets' modularity intact.</p>
-			<p class="description">For the page to return to its default functionality either unregister all widgets on this page, <a href="plugins.php">deactivate</a>, or <a href="admin.php?page=wpew_admin_uninstall">uninstall</a> this plugin.</p>
+			<p class="description">For the page to return to its default functionality either unregister all widgets on this page, <a href="plugins.php">deactivate</a>, or <a href="admin.php?page=wpew_admin_uninstall" class="wpew-navigation">uninstall</a> this plugin.</p>
 			<?php else : ?>
 			<p class="description">There are currently no widgets registered by this plugin.</p>
 		<?php endif ?>

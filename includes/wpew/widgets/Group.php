@@ -159,6 +159,20 @@ class wpew_widgets_Group extends wpew_widgets_View {
 		return self::$manager->admin->override->guidURI . '?g=' . urlencode( $guid );
 	}
 	
+	/**
+	 * Extensible Widgets Callback - When widget is unregistered on Registration page
+	 * Return false to prevent the widget from being unregistered.
+	 *
+	 * @return void|false
+	 */
+	public static function onUnregister( $widget ) {
+		session_start();
+		if( isset($_SESSION['group_data']) || self::$manager->backups ) {
+			add_action('admin_notices', array($widget,'admin_notices'));
+			return false;
+		}
+	}
+	
 	// INSTANCE MEMBERS
 	
 	public $parentCallback = null;
@@ -181,6 +195,8 @@ class wpew_widgets_Group extends wpew_widgets_View {
 		$cOpts = wp_parse_args( $cOpts, array(
 			'width' => 350
 		) );
+		// Add hook for unregistering
+		add_action( xf_wp_APluggable::joinShortName( 'onUnregister', __CLASS__ ), array(__CLASS__, 'onUnregister') );
 		// parent constructor
 		parent::__construct( $name, $wOpts, $cOpts );
 	}
@@ -198,20 +214,6 @@ class wpew_widgets_Group extends wpew_widgets_View {
 			<?php endif; ?>
 		</div>
 	<?php }
-	
-	/**
-	 * Extensible Widgets Callback - When widget is registered on Registration page
-	 * Return false to prevent the widget from being registered.
-	 *
-	 * @return void|false
-	 */
-	public function onUnregister() {
-		session_start();
-		if( isset($_SESSION['group_data']) || self::$manager->backups ) {
-			add_action('admin_notices', array($this,'admin_notices'));
-			return false;
-		}
-	}
 	
 	/**
 	 * Just a shortcut to reset all the members that have to do with front-end rendering.

@@ -50,7 +50,7 @@
           $(e).click(function(event) {
             $(this).before('<input type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '" class="ajaxify__submitButton__"/>').attr('name', $(this).attr('name')).val($(this).val());
 
-            // if it's an imagae, also capture the x/y co-ordinates
+            // if it's an image, also capture the x/y co-ordinates
             if ($(this).attr('type') == 'image') {
               $(this).before('<input type="hidden" name="' + $(this).attr('name') + '_y" value="' + (event.pageY - $(this).offset().top) + '" class="ajaxify__submitButtonX__"/>');
               $(this).before('<input type="hidden" name="' + $(this).attr('name') + '_x" value="' + (event.pageX - $(this).offset().left) + '" class="ajaxify__submitButtonY__"/>');
@@ -341,6 +341,9 @@ var Ajaxify = {
 		
 		// run the request
 		options.success = function(data, textStatus) {
+			// make the node trigger an event to target it on success
+			$(node).trigger('success', data, textStatus );
+			// do it before this in case the node will be removed
 			if (options.replace) {
 				jQuery(options.update).html(data);
 			} else {

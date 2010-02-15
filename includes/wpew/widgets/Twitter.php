@@ -40,6 +40,19 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 		$obj->settings['limit'] = (int) $new_settings['limit'];
 	}
 	
+	/**
+	 * Extensible Widgets Callback - When widget is registered on Registration page
+	 * Return false to prevent the widget from being registered.
+	 *
+	 * @return void|false
+	 */
+	public static function onRegister( $widget ) {
+		if( !function_exists('curl_init') ) {
+			add_action('admin_notices', array($widget,'admin_notices'));
+			return false;
+		}
+	}
+	
 	// INSTANCE MEMBERS
 	
 	// CONSTRUCTOR
@@ -51,6 +64,8 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 		$wOpts = wp_parse_args( $wOpts, array(
 			'description' => __( "Use this widget to retrieve statuses from a specified twitter account. Requires CURL library." )
 		) );
+		// Add hook for registering
+		add_action( xf_wp_APluggable::joinShortName( 'onRegister', __CLASS__ ), array(__CLASS__, 'onRegister') );
 		// parent constructor
 		parent::__construct( $name, $wOpts, $cOpts );
 	}
@@ -64,19 +79,6 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 			<p>This widget requires the PHP CURL library.</p>
 		</div> 
 	<?php }
-	
-	/**
-	 * Extensible Widgets Callback - When widget is registered on Registration page
-	 * Return false to prevent the widget from being registered.
-	 *
-	 * @return void|false
-	 */
-	public function onRegister() {
-		if( !function_exists('curl_init') ) {
-			add_action('admin_notices', array($this,'admin_notices'));
-			return false;
-		}
-	}
 	
 	/**
 	 * @see wpew_IWidget::beforeOutput()

@@ -68,6 +68,10 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.8.1 =
+* Cosmetic changes on the administration pages
+* Reworking of the admin pages JavaScript
+
 = 0.8 =
 * Added sub-navigation to plugin administration pages
 * Changed plugin page method calls to be more intuitive and familiar with other PHP frameworks

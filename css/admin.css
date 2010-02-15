@@ -164,3 +164,25 @@ select[multiple="multiple"] {
 	margin-left: 0;
 	padding-left: 0;
 	}
+
+#wpew-subnav,
+#wpew-footer {
+	color: #999;
+	}
+#wpew-subnav span, #wpew-subnav a {
+	padding: 0 5px;
+	}
+#wpew-subnav a.current,
+#wpew-subnav a.current:hover {
+	font-weight: bold;
+	color: #999;
+	text-decoration: none;
+	}
+
+#wpew-footer {
+	text-align: right;
+	font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
+	font-style: italic;
+	font-size: 12px;
+	border-top: 1px solid #DDD;
+	}

@@ -248,7 +248,7 @@ class wpew_admin_Export_Page extends xf_wp_AAdminPage {
 	 */
 	public function header() { 
 		$this->parentPage->header(); ?>
-			<p class="description">Use this form to export data associated to this plugin. You may save it as a backup file, or <a href="admin.php?page=wpew_admin_import">import</a> into a different blog also using this plugin.</p>
+			<p class="description">Use this form to export data associated to this plugin. You may save it as a backup file, or <a href="admin.php?page=wpew_admin_import" class="wpew-navigation">import</a> into a different blog also using this plugin.</p>
 	<?php }
 	
 	/**

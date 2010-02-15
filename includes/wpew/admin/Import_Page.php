@@ -297,7 +297,7 @@ class wpew_admin_Import_Page extends xf_wp_AAdminPage {
 	 */
 	public function header() {
 		$this->parentPage->header(); ?>
-			<p class="description">Use this page to import data <a href="admin.php?page=wpew_admin_export">exported</a> from this plugin. In case you are wandering, yes it also imports any data that can simply be parsed into valid WordPress options based on the specified format.</p>
+			<p class="description">Use this page to import data <a href="admin.php?page=wpew_admin_export" class="wpew-navigation">exported</a> from this plugin. In case you are wandering, yes it also imports any data that can simply be parsed into valid WordPress options based on the specified format.</p>
 			<p class="description">A successful import will overwrite all the current data, if you do not wish to lose it please make a backup by downloading an export.</p>
 			<h3>This page does not...</h3>
 			<ol>
