@@ -42,7 +42,7 @@ class wpew extends xf_wp_ASingleton {
 	/**
 	 * @var string $version The current version of the plugin
 	 */
-	public $version = '0.8.1';
+	public $version = '0.9';
 	
 	/**
 	 * @var string $capability The name of the main capability of this plugin

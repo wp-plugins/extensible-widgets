@@ -165,24 +165,35 @@ select[multiple="multiple"] {
 	padding-left: 0;
 	}
 
+.form-table .widget td {
+	padding: 0;
+	}
+
 #wpew-subnav,
 #wpew-footer {
-	color: #999;
+	color: #666;
+	font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
+	font-size: 12px;
 	}
+#wpew-subnav a,
+#wpew-footer a {
+	text-decoration: none;
+	font-size: 12px;
+	}
+	
 #wpew-subnav span, #wpew-subnav a {
 	padding: 0 5px;
 	}
 #wpew-subnav a.current,
 #wpew-subnav a.current:hover {
-	font-weight: bold;
-	color: #999;
-	text-decoration: none;
+	color: #000;
 	}
 
 #wpew-footer {
-	text-align: right;
-	font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
 	font-style: italic;
-	font-size: 12px;
 	border-top: 1px solid #DDD;
+	}
+
+.wpew_widget_default {
+	padding: 10px 10px 0 10px;
 	}

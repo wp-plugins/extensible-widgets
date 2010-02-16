@@ -68,6 +68,11 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.9 =
+* Added the ability to use custom default settings for each registered Extensible Widget
+* Also with the previous functionality, added the ability to reset back to system default settings
+* Added a documentation page that is included with this plugin
+
 = 0.8.1 =
 * Cosmetic changes on the administration pages
 * Reworking of the admin pages JavaScript

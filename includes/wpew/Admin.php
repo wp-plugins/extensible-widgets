@@ -65,12 +65,18 @@ class wpew_Admin extends xf_wp_ASingleton {
 			'filename' => 'admin.js',
 			'version' => '1.0'
 		));
+		$this->queueScript( 'wpew_widgets_admin', array('jquery'), array(
+			'path' => $this->pluginRootURI . '/js',
+			'filename' => 'admin_widgets.js',
+			'version' => '1.0'
+		));
 		// Queue up the admin css style for this package
 		$this->queueStyle( 'wpew_admin', false, array(
 			'path' => $this->pluginRootURI . '/css',
 			'filename' => 'admin.css',
 			'version' => '1.0'
 		));
+		
 		// Add builtInPage or pluginPage to any and all admin page hooks
 		$page = basename( $_SERVER['SCRIPT_NAME'] );
 		// check if the member isn't empty

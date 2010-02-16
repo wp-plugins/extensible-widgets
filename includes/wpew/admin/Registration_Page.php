@@ -45,7 +45,8 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 */
 	private $_defaultRegSettings = array(
 		'display' => 'tabular',
-		'renderFlags' => null
+		'renderFlags' => null,
+		'defaults' => null
 	);
 	
 	/**
@@ -165,6 +166,27 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
+	public function onResetSettings() {
+		$class = $this->submitted['widget'];
+		$widget = new $class();
+		
+		$registration = $this->widgets->registration;
+		$registration[$class] = $this->_defaultRegSettings;
+		$this->widgets->registration = $registration;
+		$this->noticeUpdates = '<p>Widget - <strong>'.$widget->name.'</strong> reset.</p>';
+		
+		$this->noticeUpdates .= '<p><a href="'.$this->pageURI.'">Go back</a> to registration.</p>';
+		$this->parentPage->header( ' Editing &raquo; ' . $widget->name ); ?>
+		<?php unset( $widget );
+		$this->editForm( $class );
+		$this->footer();
+	}
+	
+	/**
+	 * State called by corresponding submited or preset state
+	 *
+	 * @return void
+	 */
 	public function onEdit() {
 		if( !empty($this->submitted['widget']) ) {
 			$class = $this->submitted['widget'];
@@ -197,6 +219,16 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 			foreach( array_reverse($parentClasses) as $parentClass ) {
 				$settings['renderFlags'][] = ( array_key_exists($parentClass, $flags ) ) ? 1 : 0;
 			}
+			if( $this->submitted['widget_defaults'] == 'custom' && !empty($_POST['widget-'.$widget->id_base][0]) ) {
+				// null out the option_name to make sure it doesn't actually save anything
+				$widget->option_name = null;
+				$old_settings = $widget->settings;
+				$new_settings = $_POST['widget-'.$widget->id_base][0];
+				$widget->update( $new_settings, $old_settings );
+				$settings['defaults'] = $widget->settings;
+			} else {
+				$settings['defaults'] = null;
+			};
 			$registration = $this->widgets->registration;
 			$registration[$class] = $settings;
 			$this->widgets->registration = $registration;
@@ -373,12 +405,12 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	function editForm( $class ) { 
-		$widget = new $class();
 		if( !is_array($this->widgets->registration[$class]) ) {
 			$settings = $this->_defaultRegSettings;
 		} else {
 			$settings = $this->widgets->registration[$class];
-		} ?>
+		}
+		$widget = new $class(); ?>
 		
 		<h3>Administrative Controls</h3>
 		<?php if($this->isAsync) : ?>
@@ -388,7 +420,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 		<form name="exportForm"  method="post" action="<?php echo $this->pageURI; ?>">
 			<?php $this->doStateField( 'onEdit' ); ?>
 		<?php endif; ?>
-			<input type="hidden" name="<?php echo $this->getFieldName('widget'); ?>" value="<?php echo $class; ?>" />
+			<input type="hidden" name="<?php echo $this->getFieldName('widget'); ?>" value="<?php echo $class; ?>" />			
 			<table class="form-table">
 				<tr valign="top">
 					<th scope="row">Display Type<p class="description">Rendering without tabs is basically like accessibility mode.</p></th>
@@ -427,19 +459,48 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 					)); ?></ul></td>
 				</tr>
 			</table>
-			<p><?php if( !$this->isAsync ) : ?>
-			<h3>Roles/Capabilities</h3>
-			<p class="description">Ideally the section above should be completely replaced with role or capability-based display management. I am not ready to implement this yet, but just wanted to let you know that I am aware of the importance.</p>
-			<?php endif; ?>
+				
 			<p><?php if( $this->isAsync ) : ?>
 			<input type="submit" name="<?php echo $this->getFieldName('edit-submit'); ?>" class="button-primary" value="Save &amp; Close" />
 			<a href="<?php echo $this->pageURI; ?>&state=onControlHierarchy&widget=<?php echo $class; ?>" class="ajaxify button-primary" target=".edit-<?php echo $class; ?>">Cancel</a>
 			<?php else : ?>
+			
+			<h3>Default Settings</h3>
+			<p class="description">Default settings represent the initial settings for each widget of this kind when it is first added to a widget area.</p>
+			<?php
+			$defaults = ( is_array($settings['defaults']) ) ? $settings['defaults'] : array();
+			$widget->number = 0;
+			?>
+			
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><label><input type="radio" name="<?php echo $this->getFieldName('widget_defaults'); ?>" value="system"<?php if( !is_array($settings['defaults']) ) echo ' checked="checked"'; ?>> Use System Defaults</label><p class="description">This deletes any custom settings that may be set within the controls preview and uses the defaults set by the system.</p></th>
+					
+					<th><label><input type="radio" name="<?php echo $this->getFieldName('widget_defaults'); ?>" value="custom"<?php if( is_array($settings['defaults']) ) echo ' checked="checked"'; ?>> Use Custom Defaults</label>
+						<p class="description">The following preview represents custom default settings. You may edit and save these settings within this overall form, though you must also select the button above to activate them for actual usage.</p>
+						
+						<h3>Controls Preview</h3>
+						<div id="<?php echo $widget->id_base; ?>-0" class="wpew_widget_default widget <?php echo $widget->control_options['id_base']; ?>" style="width: <?php echo $widget->control_options['width']+10;?>px">
+						<?php $widget->form( $defaults ); ?>
+						</div>
+					</th>
+				</tr>
+			</table>
+			
 			<input type="submit" name="<?php echo $this->getFieldName('edit-submit'); ?>" class="button-primary" value="Save" />
 			<input type="submit" name="<?php echo $this->getFieldName('edit-close'); ?>" class="button-primary" value="Save &amp; Close" />
 			<a href="<?php echo $this->pageURI; ?>" class="button-primary">Cancel</a>
 			<?php endif; ?></p>
 		</form>
+		<?php if( !$this->isAsync ) : ?>		
+		<h3>Reset to Default Settings</h3>
+		<p>This includes all data editable within the above form.</p>
+		<form name="resetForm" method="post" action="<?php echo $this->pageURI; ?>">
+			<?php $this->doStateField( 'onResetSettings' ); ?>
+			<input type="hidden" name="<?php echo $this->getFieldName('widget'); ?>" value="<?php echo $class; ?>" />
+			<p><input onclick="return confirm('Are you sure you want to reset to the default settings?');" type="submit" name="<?php echo $this->getFieldName('reset-submit'); ?>" class="button-primary" value="Reset Settings" /></p>
+		</form>
+		<?php endif; ?>
 	<?php }
 	
 	/**

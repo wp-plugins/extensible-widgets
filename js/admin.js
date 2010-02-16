@@ -44,6 +44,7 @@
 			dataType: 'html',
 		};
 		$(this).find('form.ajaxify, a.ajaxify').ajaxify(ajaxOpts);
+		var widget = $('#wpew-wrap .widget').eq(0); initControlTabs( widget ); initFadeOut( widget ); 
 		// All little overboard for now...
 		/*var navOpts = $.extend({},ajaxOpts);
 		navOpts.update = '#wpew-wrap';

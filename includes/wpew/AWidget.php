@@ -149,20 +149,22 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	 */
 	final public function form( &$settings ) {
 		$reference =& $this;
-		// Get registration
-		$registration = self::$manager->registration[get_class($this)];
-		if( is_array($registration) ) {
-			$this->tabular = ($registration['display'] == 'tabular') ? true : false;
-			$this->adminRenderFlags = $registration['renderFlags'];
-		}
-		
-		// merge all the default settings from all the classes from highest to lowest class
+		// Get system defaults
 		$defaults = array();
+		// merge all the default settings from all the classes from highest to lowest class
 		foreach( $this->parentClasses as $class ) {
 			$classDefaults = call_user_func( array( $class, 'getDefaultSettings' ), $reference );
 			if( !is_array( $classDefaults ) ) continue;
 			$classSettings[$class] = array_keys($classDefaults);
 			$defaults = wp_parse_args( $classDefaults, $defaults );
+		}
+		// Get registration
+		$registration = self::$manager->registration[get_class($this)];
+		if( is_array($registration) ) {
+			$this->tabular = ($registration['display'] == 'tabular') ? true : false;
+			$this->adminRenderFlags = $registration['renderFlags'];
+			// Get custom defaults?
+			if( is_array($registration['defaults']) ) $defaults = wp_parse_args( $registration['defaults'], $defaults );
 		}
 		// set the instance settings member (very important to do this here)
 		$this->settings = wp_parse_args( $settings, $defaults );

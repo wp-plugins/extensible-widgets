@@ -33,17 +33,16 @@ class wpew_admin_WidgetsOverride extends wpew_admin_WidgetsAjaxOverride {
 	/**
 	 * We are overriding the abstract constructor because we must do stuff before the action hooks.
 	 */
-	public function init() {
+	/*public function init() {
 		// Call parent
 		parent::init();
 		// Queue up the widgets JavaScript for this admin page
 		$this->queueScript( 'wpew_widgets_admin', array('jquery'), array(
-			'path' => dirname( $this->includeRootURI ) . '/js',
+			'path' => dirname( $this->pluginRootURI ) . '/js',
 			'filename' => 'admin_widgets.js',
 			'version' => '1.0'
 		));
-		//print_r( $this->widgets->backups );
-	}
+	}*/
 	
 	// SESSION MANIPULATION
 	
