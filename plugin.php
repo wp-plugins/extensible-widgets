@@ -4,7 +4,7 @@ Plugin Name: Extensible Widgets
 Plugin URI: http://jidd.jimisaacs.com/archives/863
 Description: In addition to adding numerous extremely useful widgets for developers and users alike, this plugin is a system written on a PHP 5 object oriented structure. In short, it is built for modification and extension. It wraps the WordPress Widget API to allow for an alternative, and in my opinion more robust method to hook into and use it. Widgets are WordPress's version of user interface modules. They already support an administrative and client-side view. This system simply leverages that with a higher potential in mind.
 Author: Jim Isaacs
-Version: 0.9
+Version: 0.9.1
 Author URI: http://jidd.jimisaacs.com/
 */
 
@@ -34,6 +34,8 @@ class wpew_PHP4 {
 		require_once('includes/wpew.php');
 		// Instantiate the global!!!
 		$GLOBALS['wpew'] =& wpew::getInstance();
+		// Register deavitvation hook to global, need to use the PHP 4 wrapper anymore here (It passed)
+		register_deactivation_hook( __FILE__, array( $GLOBALS['wpew'], 'deactivate' ) );
 	}
 	
 	/**
@@ -48,34 +50,13 @@ class wpew_PHP4 {
 		if( !empty($message) ) {
 			$instance->activationError( __FILE__, '<ul><li><strong>Sorry, Extensible Widgets failed to activate!</strong><li>'.$message.'</ul>' );
 		}
+		// Make sure we have a singleton
 		wpew_PHP4::plugins_loaded();
 		global $wpew;
 		if( empty( $wpew->settings['version'] ) ) {
 			$wpew->install();
 		}
-		// Set the capabilities
-		$roles = new WP_Roles();
-		foreach( $wpew->settings['roles'] as $role ) {
-			$roles->add_cap( $role, $wpew->capability );
-		}
-	}
-	
-	/**
-	 * WordPress deactivation callback
-	 *
-	 * @return void
-	 */
-	function deactivation_hook() {
-		$settings = get_option('wpew_settings');
-		// Remove the capabilities
-		$roles = new WP_Roles();
-		if( !empty($settings['roles']) ) {
-			foreach( $settings['roles'] as $role ) {
-				$roles->remove_cap( $role, 'manage_plugin_wpew' );
-			}
-		} else {
-			$roles->remove_cap( 'administrator', 'manage_plugin_wpew' );
-		}
+		$wpew->activate();
 	}
 	
 	/**

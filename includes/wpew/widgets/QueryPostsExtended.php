@@ -64,7 +64,7 @@ class wpew_widgets_QueryPostsExtended extends wpew_widgets_QueryPosts {
 			'description' => "This is an extended version of the Query Posts widget with a controlled form."
 		) );
 		$cOpts = wp_parse_args( $wOpts, array(
-			'width' => 350
+			'width' => 380
 		) );
 		// parent constructor
 		parent::__construct( $name, $wOpts, $cOpts );

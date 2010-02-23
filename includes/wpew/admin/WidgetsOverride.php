@@ -55,7 +55,7 @@ class wpew_admin_WidgetsOverride extends wpew_admin_WidgetsAjaxOverride {
 		// Check session and backups
 		if( $this->inSession ) {
 			$this->addAction( 'sidebar_admin_setup' );
-		} else if( $this->widgets->backups ) {
+		} else if( $this->plugin->widgets->backups ) {
 			// We are filtering this because it's the only way to keep things intact
 			// This filter is applied by WordPress when it retrieves this option
 			$this->addFilter( 'sidebars_widgets' );
@@ -156,7 +156,7 @@ class wpew_admin_WidgetsOverride extends wpew_admin_WidgetsAjaxOverride {
 	public function sidebars_widgets( $sidebars_widgets ) {
 		// temporarily unregister all the widgets.
 		// doesn't save anything, just should make this page unusable for the moment.
-		$this->widgets->factory->widgets = array();
+		$this->plugin->widgets->factory->widgets = array();
 		$this->addAction( 'admin_notices', 'admin_notices_session_error' );
 		return false;
 	}
@@ -172,16 +172,16 @@ class wpew_admin_WidgetsOverride extends wpew_admin_WidgetsAjaxOverride {
 	 */
 	public function admin_notices_session_error() {
 		// remove all registered groups
-		$this->widgets->registeredGroups = array(); ?>	
+		$this->plugin->widgets->registeredGroups = array(); ?>	
 		
 		<div class="wrap">
 			<?php screen_icon(); ?>
 			<h2>Sorry!</h2>
 			<div class="error">
-				<p>This page has temporarily been disabled by <a href="admin.php?page=wpew_admin_wpew">Extensible Widgets</a></p>
+				<p>This page has temporarily been disabled by <a href="admin.php?page=extensible-widgets"><?php echo $this->plugin->pluginName; ?></a></p>
 			</div>
 			<p>This of course is not a normal process of WordPress.</p>
-			<p>It happened because Extensible Widgets detected that another user entered another widget scope and now cannot allow you access to the global scope.</p>
+			<p>It happened because <?php echo $this->plugin->pluginName; ?> detected that another user entered another widget scope and now cannot allow you access to the global scope.</p>
 			<p><a class="button-primary" href="<?php echo $this->guidURI; ?>?force&g=<?php echo $this->defaultGuid; ?>" title="Click to Edit Widgets Regardless of This Error">Edit Anyway...</a> but be warned, you will probably discard any changes other users have made to the scope they are editing!</p>
 		</div>
 		
@@ -200,9 +200,9 @@ class wpew_admin_WidgetsOverride extends wpew_admin_WidgetsAjaxOverride {
 	 */
 	public function sidebar_admin_setup() {
 		// Clear the registered groups, the necessary ones will be registered following this
-		$this->widgets->registeredGroups = array();
+		$this->plugin->widgets->registeredGroups = array();
 		// REGISTER THIS GROUP
-		$this->widgets->registerGroup( array(
+		$this->plugin->widgets->registerGroup( array(
 			'id' => $this->sessionData['id'],
 			'name' => $this->sessionData['instance']['group_name'],
 			'before_widget' => $this->sessionData['instance']['before_widget'],

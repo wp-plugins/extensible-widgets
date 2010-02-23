@@ -1,6 +1,6 @@
 <?php
 
-require_once('AAdminPage.php');
+require_once('AAdminController.php');
 
 /**
  * This is the admin menu manager for the WordPress admin.
@@ -8,54 +8,65 @@ require_once('AAdminPage.php');
  * @package xf 
  * @subpackage wp
  */
-abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
+abstract class xf_wp_AAdminMenu extends xf_wp_AAdminController {
 	
 	// STATIC MEMBERS
 	
 	/**
-	 * Adds a page of the menu manager instance to the admin menu.
+	 * Adds a controller of the menu manager instance to the admin menu.
 	 * This is a wrapper around the WordPress add_menu_page() function.
-	 * This function takes a page object and sends that data to the WordPress function.
+	 * This function takes a controller object and sends that data to the WordPress function.
 	 *
-	 * @param xf_wp_AdminMenu $menu  The menu manager instance that is adding the page
+	 * @param xf_wp_AdminMenu $menu  The menu manager instance that is adding the controller
 	 * @return bool
 	 */
 	protected static function addMenu( xf_wp_AAdminMenu &$menu ) {
-		// the pageName is important, because it is what is checked later to see if this page has been added to a menu
-		// this is also the name of the page in the WordPress file admin.php. so it is really "admin.php?page=$page->pageName"
-		if( isset( $menu->pageName ) ) return false;
-		$menu->pageName = $menu->shortName;
-		$added = add_menu_page( $menu->title, $menu->menuTitle, $menu->capability, $menu->pageName, $menu->menuCallback );
-		return $added;
+		$function = 'add_'.$menu->type.'_page';
+		if( is_callable($function) ) {
+			$args =  array( $menu->title, $menu->menuTitle, $menu->capability, $menu->routeString, $menu->menuCallback, $menu->iconURI );
+			return $menu->hookname = call_user_func_array( $function, $args );
+		}
+		return null;
 	}
 	
 	/**
-	 * Adds a page child of the menu manager instance to an admin menu page as a sub page.
+	 * Adds a controller child of the menu manager instance to an admin menu controller as a sub controller.
 	 * This is a wrapper around the WordPress add_submenu_page() function.
-	 * This function takes a page object and sends that data to the WordPress function.
+	 * This function takes a controller object and sends that data to the WordPress function.
 	 *
-	 * @param xf_wp_AdminMenu $menu The menu manager instance that is adding the page
-	 * @param xf_wp_AAdminPage $parentPage The page of the menu manager that is the parent page of the page that will be added.
-	 * @param xf_wp_AAdminPage $page The page of the menu manager that will be added
+	 * @param xf_wp_AdminMenu $menu The menu manager instance that is adding the controller
+	 * @param xf_wp_AAdminController $parent The controller of the menu manager that is the parent controller of the controller that will be added.
+	 * @param xf_wp_AAdminController $controller The controller of the menu manager that will be added
 	 * @param bool $addChild Whether or not to automatically add the child to the parent's children
 	 * @return bool
 	 */
-	protected static function addToMenu( xf_wp_AAdminMenu &$menu, xf_wp_AAdminPage &$page, $addChild = true ) {
-		// the pageName is important, because it is what is checked later to see if this page has been added to a menu
-		// this is also the name of the page in the WordPress file admin.php. so it is really "admin.php?page=$page->pageName"
-		if( isset( $page->pageName ) ) return false;
-		if( $page->isDefault ) {
-			$page->pageName = $menu->pageName;
-			$menu->defaultChild = $page;
-		} else {
-			$page->pageName = $page->shortName;
-		}
-		if( $addChild && !$menu->hasChild($page) ) $menu->addChild( $page );
-		$added = add_submenu_page( $menu->pageName, $page->title, $page->menuTitle, $page->capability, $page->pageName, $page->menuCallback );
-		return $added;
+	protected static function addToMenu( xf_wp_AAdminMenu &$menu, xf_wp_AAdminController &$controller, $addChild = true ) {
+		if( $addChild && !$menu->hasChild($controller) ) $menu->addChild( $controller );
+		if( $controller->isDefault && !$menu->hasDefaultChild ) {
+			$menu->defaultChild = $controller;
+		} 
+		return $controller->hookname = add_submenu_page( $menu->routeString, $controller->title.' &lsaquo; '.$menu->title, $controller->menuTitle, $controller->capability, $controller->routeString, $controller->menuCallback );
 	}
 	
 	// INSTANCE MEMBERS
+	
+	/**
+	 * @var string $type This specifies the type of this menu and thus where to add it within the overall WordPress admin menu
+	 */
+	public $type = 'menu';
+	
+	/**
+	 * @var string $iconURI This specifies the url of the icon to use for this menu, relative to the pluginRootURI
+	 */
+	public $iconURI = null;
+	
+	/**
+	 * @see xf_wp_ASingleton::__construct()
+	 */
+	public function __construct( $unregistrable = __CLASS__ )
+	{
+		parent::__construct( $unregistrable );
+	}
 	
 	/**
 	 * Actually builds the menu adding this instance's and the children's callbacks to WordPress's admin menu system.
@@ -71,51 +82,48 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminPage {
 		if( !$this->hasChildren ) return;
 		reset($this->_children);
 		if( !$this->hasDefaultChild ) {
-			$first =& current($this->_children);
-			$first->isDefault = true;;
+			$this->defaultChild = current($this->_children);
 		}
 		do {
-			$child =& current($this->_children);
+			$child = current($this->_children);
 			self::addToMenu( $this, $child, false );
 		} while( next($this->_children) !== false );
 		$this->doLocalAction( 'onBuildComplete' );
-		// The currentPage will be null if not on an active page of this menu
-		if( is_object($this->currentPage) ) $this->currentPage->doLocalAction( 'onBeforeRender' );
-	}
-	
-	/**
-	 * @see xf_wp_IAdminPage::addChildByName();
-	 */
-	final public function &addChildByName( $shortName, xf_wp_AAdminPage &$obj ) {
-		parent::addChildByName( $shortName, $obj );
+		// The currentController will be be empty when not on any page corresponding to this menu
+		if( !is_null($this->currentController) ) $this->currentController->doLocalAction( 'onBeforeRender' );
 	}
 	
 	// RESERVED PROPERTIES
 	
 	/**
-	 * @property-read string $currentPageName Get's the current page name set as 'page' as GET varaible if within the admin page
+	 * @property-read string $currentRouteString Get's the current controller name set as 'page' as GET varaible if within the admin controller
 	 *
 	 * It is retrieved as the POST varaible 'option_page' from the options.php file.
 	 * This input is set as a hidden variable by the settings_fields() function.
 	 */
-	public function &get__currentPageName() {
-		if( !empty($_GET['page']) ) return $_GET['page'];
-		if( !empty($_POST['page']) ) return $_POST['page'];
+	final public function &get__currentRouteString() {
+		if( !empty(self::$get['page']) ) return self::$get['page'];
+		if( !empty(self::$post['page']) ) return self::$post['page'];
 		return null;
 	}
 	
 	/**
-	 * @property-read string $currentPageName Get's the current page name set as 'page' as GET varaible if within the admin page
-	 *
-	 * It is retrieved as the POST varaible 'option_page' from the options.php file.
-	 * This input is set as a hidden variable by the settings_fields() function.
+	 * @property-read xf_wp_AAdminController $currentController Get's the current controller object based on $currentRouteString
 	 */
-	public function &get__currentPage() {
-		if( $this->currentPageName == $this->pageName ) {
+	final public function &get__currentController() {
+		if( $this->currentRouteString == $this->routeString && $this->hasChildren ) {
 			if( $this->hasDefaultChild ) return $this->_defaultChild;
 			return $this;
-		} else if( $this->hasChildByName($this->currentPageName) ) {
-			return $this->_children[$this->currentPageName];
+		}
+		if( $this->hasChildren ) {
+			$parts = array_filter( explode( '/', $this->currentRouteString ) );
+			end($parts);
+			do {
+				$current = current($parts);
+				if( $this->hasChildByName( $current ) ) {
+					return $this->_children[$current];
+				}
+			} while( prev($parts) !== false );
 		}
 		return null;
 	}

@@ -139,7 +139,7 @@ class wpew_widgets_View extends wpew_widgets_Context implements wpew_widgets_IVi
 	public function getViewsDir() {
 		// Do action here passing this widget as an argument, this allows for grabbing the correct widget just before the filter. 
 		self::$manager->doLocalAction( 'onGetViewsDir', $this );
-		$dir = xf_system_Path::join( self::$manager->root->settings['widgetsDir'], $this->id_base, $this->dirViews );
+		$dir = xf_system_Path::join( self::$manager->plugin->settings['widgetsDir'], $this->id_base, $this->dirViews );
 		if( !xf_system_Path::isAbs( $dir ) ) {
 			$dir = ABSPATH . $dir;
 		}

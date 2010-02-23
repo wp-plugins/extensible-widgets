@@ -45,14 +45,16 @@ class xf_errors_Error extends Exception implements xf_IException {
 	 * Error instantiation process must happen after calling this method.
 	 *
 	 * @param bool $flag When true sets PHP errors to display, and when false they do not.
+	 * @param constant $reporting Set the current PHP error reporting method
 	 * @return void
 	 */
-	public static function setDebug( $flag ) {
+	public static function setDebug( $flag, $reporting = null ) {
 		self::$_debug = (bool) $flag;
 		ini_set( 'display_errors', self::$_debug );
 		ini_set( 'display_startup_errors', self::$_debug );
 		if( self::$_debug ) {
-			error_reporting( E_ALL & ~E_NOTICE );
+			if( is_null($reporting) ) $reporting = E_ALL & ~E_NOTICE;
+			error_reporting( $reporting );
 		} else {
 			error_reporting( 0 );
 		}
@@ -101,12 +103,12 @@ class xf_errors_Error extends Exception implements xf_IException {
 	 * @param string|null $callback Optional user defined "die" callback. The user defined function should accept one argument which is the error message.
 	 * @return void
 	 */
-	public static function trigger( $message, $callback = null, $backtrace = 1 ) {
+	public static function trigger( $message, $callback = null, $backtrace = 1, $flag = E_USER_NOTICE ) {
 		if( self::$_debug ) {
-			$trace = ( $backtrace >= 0 ) ? debug_backtrace() : array();
+			$trace = ( is_int($backtrace) ) ? debug_backtrace() : array();
 			$file = ( isset($trace[$backtrace]['file']) ) ? $trace[$backtrace]['file'] : 'Unknown';
 			$line = ( isset($trace[$backtrace]['line']) ) ? $trace[$backtrace]['line'] : 'Unknown';
-			trigger_error( self::getErrorString( $message, 'NA', $file, $line ).' triggered ', E_USER_NOTICE);
+			trigger_error( self::getErrorString( $message, 'NA', $file, $line ).' triggered ', $flag);
 		} else {
 			$die = (empty($callback)) ? self::$callback : $callback;
 			if( is_callable($die) ) {

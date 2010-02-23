@@ -11,7 +11,7 @@
  */
 
 require_once(dirname(__FILE__).'/../xf/wp/APluggable.php');
-require_once(dirname(__FILE__).'/../xf/wp/ASingleton.php');
+require_once(dirname(__FILE__).'/../xf/wp/AExtension.php');
 require_once(dirname(__FILE__).'/../xf/patterns/ASingleton.php');
 require_once(dirname(__FILE__).'/../xf/system/Path.php');
 
@@ -22,7 +22,7 @@ require_once(dirname(__FILE__).'/../xf/system/Path.php');
  * @since 1.0
  * @author Jim Isaacs <jim@jimisaacs.com>
  */
-class wpew_Widgets extends xf_wp_ASingleton {
+class wpew_Widgets extends xf_wp_AExtension {
 	
 	// CONSTANT
 	
@@ -141,7 +141,7 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	private $_backups = false;
 	
 	/**
-	 * @see xf_wp_APluggable::init()
+	 * @see xf_wp_IPluggable::init()
 	 */
 	public function init() {
 		// Add Hooks
@@ -150,7 +150,7 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	}
 	
 	/**
-	 * @see xf_wp_APluggable::client()
+	 * @see xf_wp_IPluggable::client()
 	 */
 	public function client() {
 		// Here we check if there are options in backup
@@ -174,7 +174,7 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	 * @return bool
 	 */
 	public function widgetIsRegistered( $class ) {
-		return (bool) array_key_exists( $class, $this->factory->widgets );
+		return array_key_exists( $class, $this->factory->widgets );
 	}
 	
 	/**
@@ -212,7 +212,7 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	 */
 	public function importWidget( $class, $autoRegister = true ) {
 		if( !class_exists( $class, false ) ) {
-			$file = xf_system_Path::join( $this->root->includeRoot, $this->dirWidgets, xf_wp_APluggable::unJoinShortName( $class, 'wpew_widgets') ).'.php';
+			$file = xf_system_Path::join( $this->plugin->includeRoot, $this->dirWidgets, xf_wp_APluggable::unJoinShortName( $class, 'wpew_widgets') ).'.php';
 			require_once( $file );
 		}
 		if( $autoRegister ) return $this->registerWidget( $class );
@@ -430,7 +430,7 @@ class wpew_Widgets extends xf_wp_ASingleton {
 	 * @property array $registration Option holding all the registration widget classes of this plugin.
 	 */
 	public function &get__registration() {
-		$v =& get_option( $this->getOptionName('registration') );
+		$v = get_option( $this->getOptionName('registration') );
 		if( empty($v) ) return false;
 		return $v;
 	}

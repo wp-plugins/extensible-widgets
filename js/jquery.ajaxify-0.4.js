@@ -12,67 +12,66 @@
  * @contributors Dom Hastings, Andrea Battaglia, Jim Isaacs
  */
 (function($) {
-  /**
-   * jQuery.ajaxify
-   * 
-   * The main wrapper method for the Ajaxify object.
-   * This adds the event handlers to the required elements.
-   * It can accept an options object (detailed in Ajaxify.process)
-   * 
-   * @param options object See Ajaxify.process
-   * @return object The jQuery object
-   * @contributors Dom Hastings, Jim Isaacs
-   */
-  $.fn.ajaxify = function(options) {
-    options = $.extend({}, Ajaxify.options, options || {});
+	/**
+	 * jQuery.ajaxify
+	 * 
+	 * The main wrapper method for the Ajaxify object.
+	 * This adds the event handlers to the required elements.
+	 * It can accept an options object (detailed in Ajaxify.process)
+	 * 
+	 * @param options object See Ajaxify.process
+	 * @return object The jQuery object
+	 * @contributors Dom Hastings, Jim Isaacs
+	 */
+	$.fn.ajaxify = function(options) {
+		options = $.extend({}, Ajaxify.options, options || {});
 
-    // loop through all the matched elements
-    for (var i = 0; i < this.length; i++) {
-      $(this[i]).data('options', options);
+		// loop through all the matched elements
+		for (var i = 0; i < this.length; i++) {
+			$(this[i]).data('options', options);
 
-      // if we're dealing with a link
-      if ($(this[i]).attr('tagName').toLowerCase() == 'a') {
-        // just bind to the click event
-        $(this[i]).bind('click', function(event) {
-          event.preventDefault();
+			// if we're dealing with a link
+			if ($(this[i]).attr('tagName').toLowerCase() == 'a') {
+				// just bind to the click event
+				$(this[i]).bind('click', function(event) {
+					event.preventDefault();
+					if (!$(this).data('options').confirm || ($(this).data('options').confirm && confirm($(this).data('options').confirm))) {
+						// process the event
+						Ajaxify.process(event, this);
+					}
+				});
 
-          if (!$(this).data('options').confirm || ($(this).data('options').confirm && confirm($(this).data('options').confirm))) {
-            // process the event
-            Ajaxify.process(event, this);
-          }
-        });
+			// if it's a form
+			} else if ($(this[i]).attr('tagName').toLowerCase() == 'form') {
+			
+				// find the possible submission methods
+				$(this[i]).find(options.buttons).each(function(i, e) {
+				
+					// and attach click handlers to each
+					$(e).click(function(event) {
+						$(this).before('<input type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '" class="ajaxify__submitButton__"/>').attr('name', $(this).attr('name')).val($(this).val());
 
-      // if it's a form
-      } else if ($(this[i]).attr('tagName').toLowerCase() == 'form') {
-        // find the possible submission methods
-        $(this[i]).find(options.buttons).each(function(i, e) {
-          // and attach click handlers to each
-          $(e).click(function(event) {
-            $(this).before('<input type="hidden" name="' + $(this).attr('name') + '" value="' + $(this).val() + '" class="ajaxify__submitButton__"/>').attr('name', $(this).attr('name')).val($(this).val());
+						// if it's an image, also capture the x/y co-ordinates
+						if ($(this).attr('type') == 'image') {
+							$(this).before('<input type="hidden" name="' + $(this).attr('name') + '_y" value="' + (event.pageY - $(this).offset().top) + '" class="ajaxify__submitButtonX__"/>');
+							$(this).before('<input type="hidden" name="' + $(this).attr('name') + '_x" value="' + (event.pageX - $(this).offset().left) + '" class="ajaxify__submitButtonY__"/>');
+						}
+					});
+				});
 
-            // if it's an image, also capture the x/y co-ordinates
-            if ($(this).attr('type') == 'image') {
-              $(this).before('<input type="hidden" name="' + $(this).attr('name') + '_y" value="' + (event.pageY - $(this).offset().top) + '" class="ajaxify__submitButtonX__"/>');
-              $(this).before('<input type="hidden" name="' + $(this).attr('name') + '_x" value="' + (event.pageX - $(this).offset().left) + '" class="ajaxify__submitButtonY__"/>');
-            }
-          });
-        });
-
-        // bind to the submit event
-        $(this[i]).bind('submit', function(event) {
-          event.preventDefault();
-
-          if (!$(this).data('options').confirm || ($(this).data('options').confirm && confirm($(this).data('options').confirm))) {
-            // process the event
-            Ajaxify.process(event, this);
-          }
-        });
-      }
-    }
-
-    // return the jQuery object for chaining
-    return this;
-  }
+				// bind to the submit event
+				$(this[i]).bind('submit', function(event) {
+					event.preventDefault();
+					if (!$(this).data('options').confirm || ($(this).data('options').confirm && confirm($(this).data('options').confirm))) {
+						// process the event
+						Ajaxify.process(event, this);
+					}
+				});
+			}
+		}
+		// return the jQuery object for chaining
+		return this;
+	}
 })(jQuery);
 
 /**
@@ -91,12 +90,12 @@ var Ajaxify = {
 	 *   'append': A query string to append to the URL (can help to treat AJAX requests differently, default is: ajax=1)
 	 *   'buttons': A jQuery selector of the what is classed as a button (default: button[type=submit], input[type=submit], input[type=image])
 	 *   'confirm': When set to a string when the link/button is clicked a confirm() box will be displayed and the script will only proceed if Ok is pressed
-	 *   'replace': When set to true the new content will replace all content in the element specified by 'update', otherwise just appends
 	 *   'submit': Submit options:
 	 *     'disable': If the selector is set, all child elements of the main element that match the selector will be set to disabled. The selector key can be set to 'buttons' to use the buttons selector. If className is specified, this will be applied using jQuery.addClass()
 	 *     'message': If the text is set, a <div/> will be created containing the specified text when the request starts. If className is specified, this will be applied using jQuery.addClass()
 	 *     'waiting': If the timeout is specified then after timeout * 1000 ms, the script will optionally re-enable the submit buttons if they were previously disabled, update the message displayed to the specified message key value (if not empty), applying the specified className using jQuery.addClass()
 	 *   'update': A jQuery selector of an element to update with the result (default: element.target or element parent if not specified)
+	 *   'handleUpdate': This is a mixed value with possible string values of 'replace' or 'append', or a custom callback with the data as a parameter
 	 *   Also accepts any of the jQuery AjaxOptions keys (http://docs.jquery.com/Ajax/jQuery.ajax#options)
 	 */
 	options: {
@@ -104,7 +103,6 @@ var Ajaxify = {
 		buttons: 'button[type=submit], input[type=submit], input[type=image]',
 		cache: true,
 		confirm: null,  // if set to text, will be displayed in a confirm() box before proceeding
-		replace: true,  // if set to true, will replace content in the update element, otherwise will just append
 		submit: { // events to be carried out onclick/submit
 			disable: {  // disable any inputs (form only)
 				selector: null,
@@ -119,9 +117,11 @@ var Ajaxify = {
 				message: null,
 				className: null,
 				callback: null  // callback to display an alternative message to users after the specified period
-			}
+			},
+			callback: null // callback on form submit
 	},
 	update: null,
+	handleUpdate: 'replace',  // How to handle the content in the update element
 	// jQuery AJAX options, see http://docs.jquery.com/Ajax/jQuery.ajax#toptions
 	async: true,
 	beforeSend: null,
@@ -197,7 +197,15 @@ var Ajaxify = {
 	
 	    // extend the object with the default options
 	    $.extend(options, $(node).data('options'));
-	
+	    
+	     // update the element specified in options, or the parent element if not
+	    options.update = (options.update) ? options.update : ($(node).attr('target') ? $(node).attr('target') : $(node).parent());
+	    
+	    // fire the custom callback
+		if (options.submit.callback) {
+			try { options.submit.callback(options); } catch (e) {}
+		};
+			
 	    // if we're working on a form
 	    if ($(node).attr('tagName').toLowerCase() == 'form') {
 			// set the url to the action attribute or the options url if specified on init
@@ -239,9 +247,6 @@ var Ajaxify = {
 		
 	    // Build the selector for the element
 	    var selector = $(node).attr('tagName').toLowerCase() + '#' + id;
-	    
-	    // update the element specified in options, or the parent element if not
-	    options.update = (options.update) ? options.update : ($(node).attr('target') ? $(node).attr('target') : $(node).parent());
 	    
 	    // submit events
 	    if ($(node).attr('tagName').toLowerCase() == 'form') {
@@ -339,17 +344,27 @@ var Ajaxify = {
 			timeout: timeoutID
 		});
 		
-		// run the request
+		// Always use ajaxifies on success method
 		options.success = function(data, textStatus) {
-			// make the node trigger an event to target it on success
+			// make the node triggers an event to target it on success
 			$(node).trigger('success', data, textStatus );
-			// do it before this in case the node will be removed
-			if (options.replace) {
-				jQuery(options.update).html(data);
-			} else {
-				jQuery(options.update).append(data);
+			// do it before just in case the node will be removed from the following logic
+			if( typeof(options.handleUpdate) == 'function' ) {
+				options.handleUpdate(data);
+			} else if(options.dataType =='html') {
+				data = $.trim(data);
+				switch(options.handleUpdate) {
+					case 'append' :
+						$(options.update).append(data);
+					break;
+					case 'replace' :
+					default :
+						$(options.update).html(data);
+					break;
+				}
 			}
 		};
+		// run the request
 		$.ajax(options);
 	},
 

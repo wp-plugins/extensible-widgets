@@ -36,7 +36,7 @@ $view_radios = xf_display_Renderables::buildInputList( $view_type_id, $view_type
 		</td>
 		</tr></table>
 		
-		<p><small class="description">Edit where views are loaded from <a href="admin.php?page=wpew_admin_settings" title="Extensible Widgets Settings" target="wpew_window">here</a>.<br />
+		<p><small class="description">Edit where views are loaded from <a href="admin.php?page=extensible-widgets/settings" title="Extensible Widgets Settings" target="wpew_window">here</a>.<br />
 		Add theme templates by placing files <a href="<?php echo get_stylesheet_directory_uri(); ?>/" title="Theme Location" target="wpew_window">here</a>.<br />
 		All files require this comment header format:<br />
 		<code>&lt;?php /* Template Name: My Template */ ?&gt;</code></small></p>

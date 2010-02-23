@@ -124,10 +124,10 @@ class wpew_widgets_Group extends wpew_widgets_View {
 	 */
 	public static function getGuid( &$obj ) {
 		if( !is_admin() ) return '';
-		if( self::$manager->admin->override->sessionData ) {
-			$guid = xf_system_Path::join( self::$manager->admin->override->sessionData['guid'], $obj->id );
+		if( self::$manager->plugin->override->sessionData ) {
+			$guid = xf_system_Path::join( self::$manager->plugin->override->sessionData['guid'], $obj->id );
 		} else {
-			$guid = xf_system_Path::join( self::$manager->admin->override->defaultGuid, $obj->id );
+			$guid = xf_system_Path::join( self::$manager->plugin->override->defaultGuid, $obj->id );
 		}
 		return $guid;
 	}
@@ -156,11 +156,11 @@ class wpew_widgets_Group extends wpew_widgets_View {
 	public static function getEditURI( &$obj ) {
 		$guid = self::getGuid( $obj ); 
 		if( empty( $guid ) ) return '';
-		return self::$manager->admin->override->guidURI . '?g=' . urlencode( $guid );
+		return self::$manager->plugin->override->guidURI . '?g=' . urlencode( $guid );
 	}
 	
 	/**
-	 * Extensible Widgets Callback - When widget is unregistered on Registration page
+	 * WordPress Hook - When widget is unregistered on Registration controller
 	 * Return false to prevent the widget from being unregistered.
 	 *
 	 * @return void|false

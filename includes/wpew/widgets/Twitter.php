@@ -41,7 +41,7 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 	}
 	
 	/**
-	 * Extensible Widgets Callback - When widget is registered on Registration page
+	 * WordPress Hook - When widget is registered on Registration controller
 	 * Return false to prevent the widget from being registered.
 	 *
 	 * @return void|false

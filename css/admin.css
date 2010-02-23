@@ -151,11 +151,12 @@ select[multiple="multiple"] {
 .strikeout {
 	text-decoration: line-through;
 	}
-
-.wpew .renderflag {
+	
+.green, .wpew .renderflag {
 	color: green;
 	}
-.wpew .renderflag.strikeout {
+
+.red, .wpew .renderflag.strikeout {
 	color: red;
 	}
 	

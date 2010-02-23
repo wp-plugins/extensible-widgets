@@ -68,7 +68,7 @@
 })(jQuery);
 
 jQuery(function($) {
-	if( $('.toplevel_page_wpew_admin_wpew').hasClass('wp-has-current-submenu') ) {	
+	if( $('.toplevel_page_extensible-widgets.wp-has-current-submenu').size() ) {
 		//$('#adminmenu').find('a[href*="wpew_admin_"]').addClass('wpew-navigation');
 		$(document).wpewAdmin();
 	}

@@ -39,8 +39,8 @@ $specific_fields = xf_display_Renderables::buildInputList( $context_calls_id, $c
 ?>
 
 <p><?php xf_display_Renderables::buildInputList( $this->get_field_id('context'), $this->get_field_name('context'), array(
-	'exc' => __('Choose where this widget WILL NOT appear.'),
-	'inc' => __('Choose where this widget WILL appear.')
+	'exc' => __('Choose where this widget').' <span class="red strikeout">'.__('WILL NOT').'</span> '.__('render.'),
+	'inc' => __('Choose where this widget <span class="green">WILL</span> render.')
 ), array(
 	'type' => 'radio',
 	'checked' => array( $this->settings['context'] ),

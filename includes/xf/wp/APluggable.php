@@ -43,16 +43,13 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	);
 	
 	/**
-	 * @ignore
-	 * A Static property of all instances of xf_wp_APluggable
+	 * @var array $get Accessible copy of PHP super global $_GET
 	 */
-	protected static $_root = null;
-	
+	public static $get;
 	/**
-	 * @ignore
-	 * A Static property of all instances of xf_wp_APluggable, this will be set and an Object
+	 * @var array $post Accessible copy of PHP super global $_POST
 	 */
-	protected static $_extend = null;
+	public static $post;
 	
 	/**
 	 * sanitizeShortName
@@ -77,7 +74,16 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	 * @return string Joined shortName
 	 */
 	final public static function joinShortName( $n, $append ) {
-		return rtrim( $n, self::SNS ) . self::SNS . ltrim( $append, self::SNS );
+		if ( empty( $append ) ) return $n;
+		$joined = rtrim( $n, self::SNS ) . self::SNS . ltrim( $append, self::SNS );
+		$count = func_num_args();
+		if( $count > 2 ) {
+			$args = func_get_args();
+			for( $i=2 ; $i < $count ; $i++ ) {
+				$joined = self::joinShortName( $joined, $args[$i] );
+			}
+		}
+		return $joined;
 	}
 	
 	/**
@@ -112,22 +118,6 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	 * Used internally as instance's shortName memory variable (so not to parse it everytime)
 	 */
 	private $_shortName;
-	/**
-	 * @var string Name of the directory that stores images for this plugin.
-	 */
-	public $dirImages = 'images';
-	/**
-	 * @var string Name of the directory that stores JavaScript for this plugin.
-	 */
-	public $dirScripts = 'js';
-	/**
-	 * @var string Name of the directory that stores CSS stylesheets for this plugin.
-	 */
-	public $dirStyles = 'css';
-	/**
-	 * @var string Name of the directory that stores all cached files for this plugin.
-	 */
-	public $dirCache = 'cache';
 	
 	/**
 	 * @var mixed Used internally for WordPress action/filter system, but must remain public for WordPress to access.
@@ -140,9 +130,11 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	 * @return void
 	 */
 	public function __construct()
-	{		
-		// set the common ext property
-		if( is_null(self::$_extend) ) self::$_extend = new stdClass();
+	{
+		// Save the super globals because WordPress likes to unset certain values it sets in the admin and so forth
+		// This is a quick fix, instead of course I could just make sure I save all the necessary variables it does unset.
+		self::$get = $_GET;
+		self::$post = $_POST;
 		
 		// Set the shortName to a version of this instance's class name
 		$this->shortName = $this->className;
@@ -168,18 +160,27 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	}
 	
 	/**
+	 * @see xf_wp_IPluggable::admin()
+	 */
+	public function admin() {}
+	
+	/**
+	 * @see xf_wp_IPluggable::client()
+	 */
+	public function client() {}
+	
+	/**
 	 * Wrapper of the xf_errors_Error static method, passing a die callback
 	 * @see xf_errors_Error::trigger()
 	 */
-	public function error( $message ) {
-		return xf_errors_Error::trigger( $message, 'wp_die', 2 );
+	public function error( $message, $backtrace = 2, $flag = E_USER_ERROR ) {
+		return xf_errors_Error::trigger( $message, 'wp_die', $backtrace, $flag );
 	}
 	
 	/**
 	 * __get magic method
 	 *
 	 * Override this Magic method for getting properties
-	 * This first checks to see if property is an extension, if it is it returns that.
 	 *
 	 * What this is doing is dynamically adding a filter to every property of this object.
 	 * Lets say you have an instance of a child class called My_Class which is $myObject.
@@ -194,20 +195,8 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 	 * @return mixed
 	 */
 	public function &__get( $n ) {
-		if( $this->isExt($n) ) return $this->extend->$n;
 		if( in_array( $n, self::$_unfilteredProps ) ) return parent::__get( $n );
 		return $this->applyLocalFilters( self::sanitizeShortName( $n ), parent::__get( $n ) );
-	}
-	
-	/**
-	 * Checks to see if property exists in the ext object.
-	 *
-	 * @param string $n The name of the extension to check
-	 * @return bool
-	 */
-	final public function isExt( $n ) {
-		if( is_object( $this->extend ) ) return property_exists( $this->extend, $n );
-		return false;
 	}
 	
 	/**
@@ -379,97 +368,7 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 		return str_replace( '/', xf_system_Path::DS, $path );
 	}
 	
-	/**
-	 * This is a wrapper around WordPress's wp_register_script()
-	 * The difference here is that it uses more concise and useful arguments in the $args paramter.
-	 *
-	 * @return bool false if script is already registered, or true if it is not
-	 */
-	public function registerScript( $handle, $dependencies = array(), $args = array() ) {
-		if( wp_script_is( $handle, 'registered' ) ) return false;
-		$defaults = array(
-			'path' => false,
-			'filename' => false,
-			'version' => '1.0',
-			'query_vars' => false,
-			'in_footer' => false
-		);
-		extract( wp_parse_args($args, $defaults) );
-		if( !$path ) {
-			$path = $this->scriptRootURI;
-		} else if( !strstr($path, '://') ) {
-			$path = $this->scriptRootURI . '/' . $path;
-		}
-		$filename = (!$filename) ? $handle . '.js' : $filename;
-		$query = (!$query_vars) ? '' : http_build_query( $query_vars );
-		wp_register_script( $handle, $path . '/' . $filename . $query, $dependencies, $version, $in_footer );
-		return true;
-	}
-	
-	/**
-	 * This is a wrapper around WordPress's wp_enqueue_script()
-	 * The difference here is that it accepts the same parameters as registration, and auto-registers with those parameters.
-	 *
-	 * @return void
-	 */
-	public function queueScript( $handle, $dependencies = false, $args = array() ) {
-		$this->registerScript( $handle, $dependencies, $args );
-		wp_enqueue_script( $handle );
-	}
-
-	/**
-	 * This is a wrapper around WordPress's wp_register_style()
-	 * The difference here is that it uses more concise and useful arguments in the $args paramter.
-	 *
-	 * @return bool false if style is already registered, or true if it is not
-	 */
-	public function registerStyle( $handle, $dependencies = array(), $args = array() ) {
-		if( wp_style_is( $handle, 'registered' ) ) return false;
-		$defaults = array(
-			'path' => false,
-			'filename' => false,
-			'version' => '1.0',
-			'query_vars' => false,
-			'media' => 'all'
-		);
-		extract( wp_parse_args($args, $defaults) );
-		if( !$path ) {
-			$path = $this->styleRootURI;
-		} else if( !strstr($path, '://') ) {
-			$path = $this->styleRootURI . '/' . $path;
-		}
-		$filename = (!$filename) ? $handle . '.css' : $filename;
-		$query = (!$query_vars) ? '' : http_build_query( $query_vars );
-		wp_register_style( $handle, $path . '/' . $filename . $query, $dependencies, $version, $media );
-		return true;
-	}
-	
-	/**
-	 * This is a wrapper around WordPress's wp_enqueue_style()
-	 * The difference here is that it accepts the same parameters as registration, and auto-registers with those parameters.
-	 *
-	 * @return void
-	 */
-	public function queueStyle( $handle, $dependencies = false, $args = array() ) {
-		$this->registerStyle( $handle, $dependencies, $args );
-		wp_enqueue_style( $handle );
-	}
-	
 	// RESERVERED PROPERTIES
-	
-	/**
-	 * @property-read object $root Common property accessable across all instances of this class
-	 */
-	final public function &get__root() {
-		return self::$_root;
-	}
-	
-	/**
-	 * @property-read object $extend Common property accessable across all instances of this class
-	 */
-	final public function &get__extend() {
-		return self::$_extend;
-	}
 	
 	/**
 	 * @property-read WPDB $db The WordPress Database object
@@ -503,98 +402,6 @@ abstract class xf_wp_APluggable extends xf_Object implements xf_wp_IPluggable {
 		// Mainly for local action prefixes within this class.
 		$this->_shortName = self::sanitizeShortName( $v );
 		if( empty( $this->_shortName ) ) $this->_shortName =  self::sanitizeShortName( $this->className );
-	}
-	
-	/**
-	 * @property-read string $includeRoot the absolute path to this plugin's include root
-	 * @see xf_source_Loader::get__base()
-	 */
-	public function get__includeRoot() {
-		return $this->applyLocalFilters( 'includeRoot', $this->loader->base );
-	}
-	
-	/**
-	 * @property-read string $includeRootURI the absolute path to this plugin's include root
-	 * @see xf_source_Loader::get__base()
-	 */
-	public function get__includeRootURI() {
-		return $this->applyLocalFilters( 'includeRootURI', $this->absURIfromPath($this->loader->base) );
-	}
-	
-	/**
-	 * @property-read string $pluginRoot the absolute path to this plugin's include root
-	 * @see xf_source_Loader::get__base()
-	 */
-	public function get__pluginRoot() {
-		return $this->applyLocalFilters( 'pluginRoot', dirname($this->loader->base) );
-	}
-	
-	/**
-	 * @property-read string $pluginRootURI the absolute path to this plugin's include root
-	 * @see xf_source_Loader::get__base()
-	 */
-	public function get__pluginRootURI() {
-		return $this->applyLocalFilters( 'pluginRootURI', dirname($this->absURIfromPath($this->loader->base)) );
-	}
-	
-	/**
-	 * @property-read string $imageRoot the absolute path to this plugin's images directory
-	 */
-	public function get__imageRoot() {
-		return xf_system_Path::join( $this->pluginRoot, $this->dirImages );
-	}
-	
-	/**
-	 * @property-read string $imageRootURI the absolute URI to this plugin's images directory
-	 */
-	public function get__imageRootURI() {
-		$uri = $this->pluginRootURI;
-		return $uri .= ( empty( $this->dirImages ) ) ? '' : '/' . $this->dirImages;
-	}
-	
-	/**
-	 * @property-read string $scriptRoot the absolute path to this plugin's scripts directory
-	 */
-	public function get__scriptRoot() {
-		return xf_system_Path::join( $this->pluginRoot, $this->dirScripts );
-	}
-	
-	/**
-	 * @property-read string $scriptRootURI the absolute URI to this plugin's scripts directory
-	 */
-	public function get__scriptRootURI() {
-		$uri = $this->pluginRootURI;
-		return $uri .= ( empty( $this->dirScripts ) ) ? '' : '/' . $this->dirScripts;
-	}
-	
-	/**
-	 * @property-read string $styleRoot the absolute path to this plugin's styles directory
-	 */
-	public function get__styleRoot() {
-		return xf_system_Path::join( $this->pluginRoot, $this->dirStyles );
-	}
-	
-	/**
-	 * @property-read string $styleRootURI the absolute URI to this plugin's styles directory
-	 */
-	public function get__styleRootURI() {
-		$uri = $this->pluginRootURI;
-		return $uri .= ( empty( $this->dirStyles ) ) ? '' : '/' . $this->dirStyles;
-	}
-	
-	/**
-	 * @property-read string $cacheDir the absolute path to this plugin's cache directory
-	 */
-	public function get__cacheDir() {
-		return xf_system_Path::join( $this->pluginRoot, $this->dirCache );
-	}
-	
-	/**
-	 * @property-read string $cacheDirURI the absolute URI to this plugin's cache directory
-	 */
-	public function get__cacheDirURI() {
-		$uri = $this->pluginRootURI;
-		return $uri .= ( empty( $this->dirCache ) ) ? '' : '/' . $this->dirCache;
 	}
 }
 ?>

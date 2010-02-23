@@ -26,7 +26,7 @@ interface wpew_IWP_Widget {
 	 * @param array $settings the current settings data
 	 * @return void
 	 */
-	public function form( &$settings );
+	public function form( $settings );
 	
 	/**
 	 * widget
@@ -36,7 +36,7 @@ interface wpew_IWP_Widget {
 	 * @param array $settings the current settings data
 	 * @return void
 	 */
-	public function widget( $args, &$settings );
+	public function widget( $args, $settings );
 		
 }
 ?>

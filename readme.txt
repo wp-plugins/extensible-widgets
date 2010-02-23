@@ -5,7 +5,7 @@ Donate link: http://jidd.jimisaacs.com/donate
 Plugin URI: http://jidd.jimisaacs.com/archives/863
 Tags: widgets, patterns, management, manager, mvc, model, view, controller
 Requires at least: 2.8
-Tested up to: 2.9.1
+Tested up to: 2.9.2
 Stable tag: trunk
 
 Includes extremely useful widgets for developers and users alike, and is a system written on a PHP 5 object oriented structure.
@@ -67,6 +67,16 @@ Once you start using this plugin, you will notice that widgets will become a maj
 Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ "Screenshots") of this plugin's administration.
 
 == Changelog ==
+
+= 0.9.1 =
+* Too many changes in this version to list, all are transparent to the functionality and interface
+* Cleaned up the overall framework to better support the possibility of multiple plugins
+* Changed admin classes into admin controller classes
+* Cleaned up the capability functionality to use ONLY the WordPress API underneath
+* Added platform checking for the export/import formats
+* Hooked the import and export pages together underneath to use these platform check throughout the entire plugin
+* Noticed a random bug with formatting xml on export, still works fine 99% of the time, a fix in in-progress
+* Fixed many grammar and spelling errors in my text (sorry)
 
 = 0.9 =
 * Added the ability to use custom default settings for each registered Extensible Widget

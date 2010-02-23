@@ -2,7 +2,7 @@
 
 require_once(dirname(__FILE__).'/../patterns/ISingleton.php');
 require_once(dirname(__FILE__).'/../patterns/ASingleton.php');
-require_once('Plugin.php');
+require_once('APluggable.php');
 
 /**
  * This is an abstract class and is meant to be extended.
@@ -19,7 +19,7 @@ require_once('Plugin.php');
  * @package xf
  * @subpackage wp
  */
-abstract class xf_wp_ASingleton extends xf_wp_Plugin implements xf_patterns_ISingleton {
+abstract class xf_wp_ASingleton extends xf_wp_APluggable implements xf_patterns_ISingleton {
 	
 	// INSTANCE MEMBERS
 	
@@ -32,7 +32,7 @@ abstract class xf_wp_ASingleton extends xf_wp_Plugin implements xf_patterns_ISin
 	 *
 	 * @return void
 	 */
-	final public function __construct()
+	public function __construct( $unregistrable = __CLASS__ )
 	{
 		if( xf_patterns_ASingleton::isSingleton( $this->className ) ) {
 			throw new xf_errors_DefinitionError( 4, $this->className );
@@ -41,7 +41,7 @@ abstract class xf_wp_ASingleton extends xf_wp_Plugin implements xf_patterns_ISin
 			parent::__construct();
 			// Add class xf_wp_ASingleton to never be registered as a Singleton.
 			// This is because this is an abstract class, and we only want classes that extend this to be Singletons.
-			xf_patterns_ASingleton::setSingletonInstance( $this, __CLASS__ );
+			xf_patterns_ASingleton::setSingletonInstance( $this, $unregistrable );
 		}
 	}
 }

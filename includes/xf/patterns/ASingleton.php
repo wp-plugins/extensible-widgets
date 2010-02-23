@@ -45,9 +45,9 @@ abstract class xf_patterns_ASingleton extends xf_Object implements xf_patterns_I
 	/**
 	 * @see xf_ISingleton::setSingletonInstance()
 	 */
-	final public static function setSingletonInstance( &$instance, $_unregistrable = __CLASS__ ) {
-		$allClasses = xf_Object::getParentClasses( $instance, true, $_unregistrable, false );
-		self::addUnregistrable( $_unregistrable );
+	final public static function setSingletonInstance( &$instance, $unregistrable = __CLASS__ ) {
+		$allClasses = xf_Object::getParentClasses( $instance, true, $unregistrable, false );
+		self::addUnregistrable( $unregistrable );
 		$registered = array();
 		foreach( $allClasses as $class ) {
 			if( array_key_exists( $class, self::$_unregistrable )  ) break;
@@ -60,9 +60,9 @@ abstract class xf_patterns_ASingleton extends xf_Object implements xf_patterns_I
 	/**
 	 * @see xf_ISingleton::setSingletonClass()
 	 */
-	final public static function &setSingletonClass( $class, $_unregistrable = __CLASS__ ) {
+	final public static function &setSingletonClass( $class, $unregistrable = __CLASS__ ) {
 		$instance = new $class();
-		self::setSingletonInstance( $instance, $_unregistrable );
+		self::setSingletonInstance( $instance, $unregistrable );
 		return $instance;
 	}
 	

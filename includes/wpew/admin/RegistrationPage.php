@@ -1,20 +1,26 @@
 <?php
 
-require_once(dirname(__FILE__).'/../../xf/Object.php');
 require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
-require_once(dirname(__FILE__).'/../../xf/wp/AAdminPage.php');
-require_once(dirname(__FILE__).'/../../xf/wp/APluggable.php');
+require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');
+require_once(dirname(__FILE__).'/../../xf/wp/AAdminController.php');
 
 /**
- * wpew_admin_Registration_Page
+ * wpew_admin_RegistrationPage
  *
  * @package wpew
  * @subpackage admin
  */
-class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
+class wpew_admin_RegistrationPage extends xf_wp_AAdminController {
 	
 	/**
-	 * @var string $title This page's title
+	 * @see xf_wp_ASingleton::getInstance();
+	 */
+	public static function &getInstance() {
+		return xf_patterns_ASingleton::getSingleton(__CLASS__);
+	}
+	
+	/**
+	 * @var string $title This controller's title
 	 */
 	public $title = "Registration";
 	
@@ -38,6 +44,11 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * Used internally
 	 */
 	private $classes;
+	/**
+	 * @ignore
+	 * Used internally
+	 */
+	private $activeClass;
 	
 	/**
 	 * @ignore
@@ -55,39 +66,45 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * return void
 	 */
 	public function onBeforeRender() {
+		// Set active widget class if there is one
+		if( empty($this->submitted['widget']) ) {
+			$this->activeClass = ( !empty(self::$get['widget']) ) ? self::$get['widget'] : null;
+		} else {
+			$this->activeClass = $this->submitted['widget'];
+		}
 		// get_option
-		$registration = ( $this->widgets->registration ) ? $this->widgets->registration : array();
+		$registration = ( $this->parent->plugin->widgets->registration ) ? $this->parent->plugin->widgets->registration : array();
 		// There was either a bulk action or a single action
-		if( isset($this->submitted['checked']) || !empty($_GET['widget']) ) {
+		if( isset($this->submitted['checked']) || !empty($this->activeClass) ) {
 			// find and set the current action
 			$action = false;
 			if( !empty($this->submitted['action']) ) {
 				$action = $this->submitted['action'];
 			} else if( !empty($this->submitted['action2']) ) {
 				$action = $this->submitted['action2'];
-			} else if( !empty($_GET['action']) ) {
-				$action = $_GET['action'];
+			} else if( !empty(self::$get['action']) ) {
+				$action = self::$get['action'];
 			}
 			// Was there an action in the request
 			if( $action ) {
 				// Get the classes we are applying the action to
 				$classes = ( isset($this->submitted['checked']) ) ? $this->submitted['checked'] : array();
-				if( !empty($_GET['widget']) ) $classes[] = $_GET['widget'];
+				if( !empty($this->activeClass) ) $classes[] = $this->activeClass;
 				// Loop through the classes
 				foreach( $classes as $class ) {
-					$this->widgets->importWidget( $class, false );
+					$this->parent->plugin->widgets->importWidget( $class, false );
 					$widget = new $class();
 					switch( $action ) {
 						case 'register-selected' :
 							if( !isset($registration[$class]) ) {
-								if( apply_filters( xf_wp_APluggable::joinShortName('onRegister', $class), $widget ) === false ) continue; 
+								if( apply_filters( self::joinShortName('onRegister', $class), $widget ) === false ) continue; 
 								$registration[$class] = true;
 								$this->noticeUpdates .= '<p>Registered <strong>'.$widget->name.'</strong></p>';
 							}
 						break;
 						case 'unregister-selected' :
 							if( isset($registration[$class]) ) {
-								if( apply_filters( xf_wp_APluggable::joinShortName('onUnregister', $class), $widget ) === false ) continue; 
+								if( apply_filters( self::joinShortName('onUnregister', $class), $widget ) === false ) continue; 
 								unset( $registration[$class] );
 								$this->noticeUpdates .= '<p>Unregistered <strong>'.$widget->name.'</strong></p>';
 							}
@@ -95,16 +112,17 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 					}
 					ksort($registration);
 					// update_option
-					$this->widgets->registration = $registration;
+					$this->parent->plugin->widgets->registration = $registration;
 					// free memory
 					unset( $widget );
 				}
 			}
 		}
 		// Look and find all the widget class files of this plugin
-		$files = $this->loader->locate( $this->widgets->dirWidgets, false, true, false);
+		$files = $this->parent->plugin->loader->locate( $this->parent->plugin->widgets->dirWidgets, false, true, false);
 		foreach( $files as $file ) {
-			$class = 'wpew_widgets_'.array_shift(explode('.',basename($file)));
+			$a = explode('.',basename($file));
+			$class = 'wpew_widgets_'.array_shift($a);
 			// the unregistered classes might not have been loaded yet, so load them now
 			if( !class_exists($class, false) ) {
 				require_once( $file );
@@ -132,9 +150,13 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 */
 	public function index() {
 		$this->classes =& $this->allClasses;
-		$this->header();
-		$this->registrationTable();
-		$this->footer();
+		if( $this->isAsync ) {
+			$this->registrationTable();
+		} else {
+			$this->header();
+			$this->registrationForm();
+			$this->footer();
+		}
 	}
 	
 	/**
@@ -145,7 +167,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	public function onRegistered() {
 		$this->classes =& $this->registeredClasses;
 		$this->header();
-		$this->registrationTable();
+		$this->registrationForm();
 		$this->footer();
 	}
 	
@@ -157,7 +179,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	public function onUnregistered() {
 		$this->classes =& $this->unregisteredClasses;
 		$this->header();
-		$this->registrationTable();
+		$this->registrationForm();
 		$this->footer();
 	}
 	
@@ -167,16 +189,16 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function onResetSettings() {
-		$class = $this->submitted['widget'];
+		$class = $this->activeClass;
 		$widget = new $class();
 		
-		$registration = $this->widgets->registration;
-		$registration[$class] = $this->_defaultRegSettings;
-		$this->widgets->registration = $registration;
+		$registration = $this->parent->plugin->widgets->registration;
+		$registration[$class] = true;
+		$this->parent->plugin->widgets->registration = $registration;
 		$this->noticeUpdates = '<p>Widget - <strong>'.$widget->name.'</strong> reset.</p>';
 		
-		$this->noticeUpdates .= '<p><a href="'.$this->pageURI.'">Go back</a> to registration.</p>';
-		$this->parentPage->header( ' Editing &raquo; ' . $widget->name ); ?>
+		$this->noticeUpdates .= '<p><a href="'.$this->controllerURI.'">Go back</a> to registration.</p>';
+		$this->parent->header( ' Editing &raquo; ' . $widget->name ); ?>
 		<?php unset( $widget );
 		$this->editForm( $class );
 		$this->footer();
@@ -188,13 +210,9 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function onEdit() {
-		if( !empty($this->submitted['widget']) ) {
-			$class = $this->submitted['widget'];
-		} else {
-			$class = $_REQUEST['widget'];
-		}
+		$class = $this->activeClass;
 		if( !in_array( $class, $this->allClasses, true ) ) {
-			$this->noticeErrors = '<p>Sorry, the specified widget does not exist.</p>';
+			$this->noticeErrors = '<p>Sorry, the specified widget <strong>'.$class.'</strong> does not exist.</p>';
 			$this->state = null;
 			$this->index();
 			return;
@@ -219,19 +237,19 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 			foreach( array_reverse($parentClasses) as $parentClass ) {
 				$settings['renderFlags'][] = ( array_key_exists($parentClass, $flags ) ) ? 1 : 0;
 			}
-			if( $this->submitted['widget_defaults'] == 'custom' && !empty($_POST['widget-'.$widget->id_base][0]) ) {
+			if( $this->submitted['widget_defaults'] == 'custom' && !empty(self::$post['widget-'.$widget->id_base][0]) ) {
 				// null out the option_name to make sure it doesn't actually save anything
 				$widget->option_name = null;
 				$old_settings = $widget->settings;
-				$new_settings = $_POST['widget-'.$widget->id_base][0];
+				$new_settings = self::$post['widget-'.$widget->id_base][0];
 				$widget->update( $new_settings, $old_settings );
 				$settings['defaults'] = $widget->settings;
 			} else {
 				$settings['defaults'] = null;
 			};
-			$registration = $this->widgets->registration;
+			$registration = $this->parent->plugin->widgets->registration;
 			$registration[$class] = $settings;
-			$this->widgets->registration = $registration;
+			$this->parent->plugin->widgets->registration = $registration;
 			$this->noticeUpdates = '<p>Widget - <strong>'.$widget->name.'</strong> updated.</p>';
 		}
 		if( isset( $this->submitted['edit-close'] ) ) {
@@ -240,17 +258,18 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 			return;
 		}
 		if( !$this->isAsync ) {
-			$this->noticeUpdates .= '<p><a href="'.$this->pageURI.'">Go back</a> to registration.</p>';
-			$this->parentPage->header( ' Editing &raquo; ' . $widget->name ); ?>
+			$this->noticeUpdates .= '<p><a href="'.$this->controllerURI.'">Go back</a> to registration.</p>';
+			$this->parent->header( ' Editing &raquo; ' . $widget->name ); ?>
 			<?php unset( $widget );
 			$this->editForm( $class );
 			$this->footer();
-		} else if( empty($this->submitted['widget']) ) {
+		} else if( !empty($this->activeClass) ) {
 			unset( $widget );
-			$this->editForm( $_GET['widget'] );
+			$this->editForm( $this->activeClass );
 		} else {
-			$this->onControlHierarchy( $widget );
+			$this->onControlHierarchy( $class );
 		}
+		unset( $widget );
 	}
 	
 	/**
@@ -258,18 +277,14 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 *
 	 * @return void
 	 */
-	public function onControlHierarchy( $widget = null ) {
-		if( empty($widget) ) {
-			$class = ( empty($this->submitted['widget']) ) ? $_GET['widget'] : $this->submitted['widget'];
-			$widget = new $class();
-		} else {
-			$class = get_class($widget);
-		} ?>
+	public function onControlHierarchy( $class = null ) {
+		if( empty($class) ) $class = $this->activeClass;
+		$widget = new $class(); ?>
 		<p class="description">
 		<?php if( in_array( $class, $this->unregisteredClasses, true ) ) : ?>
 			Register this widget to allow it to be added within widgets administration.
 		<?php else :
-			$registration = $this->widgets->registration[get_class($widget)];
+			$registration = $this->parent->plugin->widgets->registration[get_class($widget)];
 			$display = ( empty($registration['display']) || $registration['display'] == 'tabular' ) ? 'With Tabs' : 'Without Tabs'; ?>
 			<strong><?php echo $display; ?>:</strong> 
 			<?php if( is_array($registration['renderFlags']) ) {
@@ -289,8 +304,56 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 				unset( $instance );
 			}
 			echo implode(' &raquo; ', $parentNames ); ?></p>
-		<?php endif; ?>
-	<?php }
+		<?php endif;
+		unset( $widget );
+	}
+	
+	/**
+	 * Used internally to render a registrationTableRow
+	 *
+	 * @return void
+	 */
+	public function registrationTableRow( $class = null ) {
+		if( empty($class) ) $class = $this->activeClass;
+		$widget = new $class();
+		if( apply_filters( self::joinShortName('onRegistrationListing', $class), $widget ) === false ) return;
+		$nameLink = $widget->name;
+		if( in_array( $class, $this->registeredClasses ) ) {
+			$rowClass = 'active';
+			$regLink = 'Unregister';
+			$action = 'unregister-selected';
+			$editLink = $this->controllerURI.'&widget='.$class.'&state=onEdit';
+		} else {
+			$rowClass = 'inactive';
+			$regLink = 'Register';
+			$action = 'register-selected';
+		}
+		$shortNameLink = $class; ?>
+		<tr class="<?php echo $rowClass; ?>">
+			<th scope="row" class="check-column"><input id="<?php echo $class.'-checkbox'; ?>" type="checkbox" name="<?php echo $this->getFieldName('checked'); ?>[]" value="<?php echo $class;?>" /></th>
+			<td class="plugin-title"><strong><?php 
+				if( $rowClass == 'active' ) {
+					echo '<a href="'.$this->controllerURI.'&widget='.$class.'&state=onEdit">'.$widget->name.'</a>';
+				} else {
+					echo '<label for="'.$class.'-checkbox">'.$widget->name.'</label>';
+				}
+			?></strong></td>
+			<td class="desc"><p><?php echo $widget->widget_options['description']; ?></p></td>
+		</tr>
+		<tr class="<?php echo $rowClass; ?> second">
+			<td></td>
+			<td class="plugin-title"><div class="row-actions-visible"><span><a href="<?php 
+				// Set this classes single url action request URI
+				echo $this->controllerURI.'&action='.$action.'&widget='.$class.'&state='.$this->state;
+			?>" title="<?php echo $regLink; ?> this widget" class="edit"><?php echo $regLink; ?></a><?php
+				if( $rowClass == 'active' ) {
+					echo '<span class="hide-if-no-js"> | <a class="ajaxify" href="'.$this->controllerURI.'&widget='.$class.'&state=onEdit" target=".edit-'.$class.'">Quick Edit</a></span>';
+				}
+			?></div></td>
+			<td class="desc"><div class="edit-<?php echo $class; ?>"><?php $this->onControlHierarchy( $class ); ?></div></td>
+		</tr>
+		<?php unset( $widget );
+	}
 	
 	/**
 	 * Used internally to render the registrationTable
@@ -298,19 +361,45 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function registrationTable() { ?>
-		
-		<div class="async"><div class="content"></div></div>
-		
-		<form method="post" action="<?php echo $this->pageURI; ?>">
+		<table class="widefat" cellspacing="0" id="all-plugins-table">
+			<thead>
+			<tr>
+				<th scope="col" class="manage-column check-column"><input type="checkbox" /></th>
+				<th scope="col" class="manage-column">Name</th>
+				<th scope="col" class="manage-column">Description</th>
+			</tr>
+			</thead>
+			<tfoot>
+			<tr>
+				<th scope="col" class="manage-column check-column"><input type="checkbox" /></th>
+				<th scope="col" class="manage-column">Name</th>
+				<th scope="col" class="manage-column">Description</th>
+			</tr>
+			</tfoot>
+			<tbody class="plugins wpew">
+			<?php foreach( $this->classes as $class ) {
+				$this->registrationTableRow( $class );
+			} ?>
+			</tbody>
+		</table>
+	<?php }
+	
+	/**
+	 * Used internally to render the registrationForm
+	 *
+	 * @return void
+	 */
+	public function registrationForm() { ?>
+		<form method="post" action="<?php echo $this->controllerURI; ?>">
 			<input type="hidden" id="_wpnonce" name="_wpnonce" value="<?php echo wp_create_nonce('load_template'); ?>" />
-			<input type="hidden" name="_wp_http_referer" value="<?php echo $this->pageURI; ?>" /><input type="hidden" name="plugin_status" value="all" />
+			<input type="hidden" name="_wp_http_referer" value="<?php echo $this->controllerURI; ?>" /><input type="hidden" name="plugin_status" value="all" />
 			<input type="hidden" name="paged" value="1" />
 			<?php $this->doStateField( $this->state ); ?>
 			
 			<ul class="subsubsub">
-			<li><a <?php if( $this->state == self::DEFAULT_STATE ) echo 'class="current" '; ?>href="<?php echo $this->pageURI; ?>">All <span class="count">(<?php echo count($this->allClasses); ?>)</span></a></li>
-			<?php if( count($this->registeredClasses) > 0 ) : ?><li> | <a <?php if( $this->state == 'onRegistered' ) echo 'class="current" '; ?>href="<?php echo $this->pageURI; ?>&state=onRegistered">Registered <span class="count">(<?php echo count($this->registeredClasses); ?>)</span></a></li><?php endif; ?>
-			<?php if( count($this->unregisteredClasses) > 0 ) : ?><li> | <a <?php if( $this->state == 'onUnregistered' ) echo 'class="current" '; ?>href="<?php echo $this->pageURI; ?>&state=onUnregistered">Unregistered <span class="count">(<?php echo count($this->unregisteredClasses); ?>)</span></a></li><?php endif; ?></ul>
+			<li><a <?php if( $this->state == self::DEFAULT_STATE ) echo 'class="current" '; ?>href="<?php echo $this->controllerURI; ?>">All <span class="count">(<?php echo count($this->allClasses); ?>)</span></a></li>
+			<?php if( count($this->registeredClasses) > 0 ) : ?><li> | <a <?php if( $this->state == 'onRegistered' ) echo 'class="current" '; ?>href="<?php echo $this->controllerURI; ?>&state=onRegistered">Registered <span class="count">(<?php echo count($this->registeredClasses); ?>)</span></a></li><?php endif; ?>
+			<?php if( count($this->unregisteredClasses) > 0 ) : ?><li> | <a <?php if( $this->state == 'onUnregistered' ) echo 'class="current" '; ?>href="<?php echo $this->controllerURI; ?>&state=onUnregistered">Unregistered <span class="count">(<?php echo count($this->unregisteredClasses); ?>)</span></a></li><?php endif; ?></ul>
 		
 			<div class="tablenav">
 				<div class="alignleft actions">
@@ -323,68 +412,9 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 				</div>
 			</div>
 			<div class="clear"></div>
-	
-			<table class="widefat" cellspacing="0" id="all-plugins-table">
-				<thead>
-				<tr>
-					<th scope="col" class="manage-column check-column"><input type="checkbox" /></th>
-					<th scope="col" class="manage-column">Name</th>
-					<th scope="col" class="manage-column">Description</th>
-				</tr>
-				</thead>
 			
-				<tfoot>
-				<tr>
-					<th scope="col" class="manage-column check-column"><input type="checkbox" /></th>
-					<th scope="col" class="manage-column">Name</th>
-					<th scope="col" class="manage-column">Description</th>
-				</tr>
-				</tfoot>
+			<?php $this->registrationTable(); ?>
 			
-				<tbody class="plugins wpew">
-
-				<?php foreach( $this->classes as $class ) :
-					$widget = new $class();
-					if( apply_filters( xf_wp_APluggable::joinShortName('onRegistrationListing', $class), $widget ) === false ) continue;
-					$nameLink = $widget->name;
-					if( in_array( $class, $this->registeredClasses ) ) {
-						$rowClass = 'active';
-						$regLink = 'Unregister';
-						$action = 'unregister-selected';
-						$editLink = $this->pageURI.'&widget='.$class.'&state=onEdit';
-					} else {
-						$rowClass = 'inactive';
-						$regLink = 'Register';
-						$action = 'register-selected';
-					}
-					$shortNameLink = $class; ?>
-					<tr class="<?php echo $rowClass; ?>">
-						<th scope="row" class="check-column"><input id="<?php echo $class.'-checkbox'; ?>" type="checkbox" name="<?php echo $this->getFieldName('checked'); ?>[]" value="<?php echo $class;?>" /></th>
-						<td class="plugin-title"><strong><?php 
-							if( $rowClass == 'active' ) {
-								echo '<a href="'.$this->pageURI.'&widget='.$class.'&state=onEdit">'.$widget->name.'</a>';
-							} else {
-								echo '<label for="'.$class.'-checkbox">'.$widget->name.'</label>';
-							}
-						?></strong></td>
-						<td class="desc"><p><?php echo $widget->widget_options['description']; ?></p></td>
-					</tr>
-					<tr class="<?php echo $rowClass; ?> second">
-						<td></td>
-						<td class="plugin-title"><div class="row-actions-visible"><span><a href="<?php 
-							// Set this classes single url action request URI
-							echo $this->pageURI.'&action='.$action.'&widget='.$class.'&state='.$this->state;
-						?>" title="<?php echo $regLink; ?> this widget" class="edit"><?php echo $regLink; ?></a><?php
-							if( $rowClass == 'active' ) {
-								echo '<span class="hide-if-no-js"> | <a class="ajaxify" href="'.$this->pageURI.'&widget='.$class.'&state=onEdit" target=".edit-'.$class.'">Quick Edit</a></span>';
-							}
-						?></div></td>
-						<td class="desc"><div class="edit-<?php echo $class; ?>"><?php $this->onControlHierarchy( $widget ); ?></div></td>
-					</tr>
-				<?php unset($widget); endforeach; ?>
-		
-				</tbody>
-			</table>
 			<div class="tablenav">
 				<div class="alignleft actions">
 					<select name="<?php echo $this->getFieldName('action2'); ?>">
@@ -395,8 +425,8 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 					<input type="submit" name="doaction_active" value="Apply" class="button-secondary action" />
 				</div>
 			</div>
+			
 		</form>
-		
 	<?php }
 	
 	/**
@@ -405,19 +435,19 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	function editForm( $class ) { 
-		if( !is_array($this->widgets->registration[$class]) ) {
+		if( !is_array($this->parent->plugin->widgets->registration[$class]) ) {
 			$settings = $this->_defaultRegSettings;
 		} else {
-			$settings = $this->widgets->registration[$class];
+			$settings = $this->parent->plugin->widgets->registration[$class];
 		}
 		$widget = new $class(); ?>
 		
 		<h3>Administrative Controls</h3>
 		<?php if($this->isAsync) : ?>
-		<form class="ajaxify" name="exportForm" method="post" action="<?php echo $this->pageURI; ?>" target=".edit-<?php echo $class; ?>">
+		<form class="ajaxify" name="exportForm" method="post" action="<?php echo $this->controllerURI; ?>" target=".edit-<?php echo $class; ?>">
 			<?php $this->doStateField( 'onEdit' ); ?>
 		<?php else : ?>
-		<form name="exportForm"  method="post" action="<?php echo $this->pageURI; ?>">
+		<form name="exportForm"  method="post" action="<?php echo $this->controllerURI; ?>">
 			<?php $this->doStateField( 'onEdit' ); ?>
 		<?php endif; ?>
 			<input type="hidden" name="<?php echo $this->getFieldName('widget'); ?>" value="<?php echo $class; ?>" />			
@@ -462,7 +492,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 				
 			<p><?php if( $this->isAsync ) : ?>
 			<input type="submit" name="<?php echo $this->getFieldName('edit-submit'); ?>" class="button-primary" value="Save &amp; Close" />
-			<a href="<?php echo $this->pageURI; ?>&state=onControlHierarchy&widget=<?php echo $class; ?>" class="ajaxify button-primary" target=".edit-<?php echo $class; ?>">Cancel</a>
+			<a href="<?php echo $this->controllerURI; ?>&state=onControlHierarchy&widget=<?php echo $class; ?>" class="ajaxify button-primary" target=".edit-<?php echo $class; ?>">Cancel</a>
 			<?php else : ?>
 			
 			<h3>Default Settings</h3>
@@ -489,16 +519,16 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 			
 			<input type="submit" name="<?php echo $this->getFieldName('edit-submit'); ?>" class="button-primary" value="Save" />
 			<input type="submit" name="<?php echo $this->getFieldName('edit-close'); ?>" class="button-primary" value="Save &amp; Close" />
-			<a href="<?php echo $this->pageURI; ?>" class="button-primary">Cancel</a>
+			<a href="<?php echo $this->controllerURI; ?>" class="button-primary">Close</a>
 			<?php endif; ?></p>
 		</form>
 		<?php if( !$this->isAsync ) : ?>		
-		<h3>Reset to Default Settings</h3>
-		<p>This includes all data editable within the above form.</p>
-		<form name="resetForm" method="post" action="<?php echo $this->pageURI; ?>">
+		<form onsubmit="return confirm('Are you sure you want to reset the settings back to the registration defaults?');" name="resetForm" method="post" action="<?php echo $this->controllerURI; ?>">
 			<?php $this->doStateField( 'onResetSettings' ); ?>
 			<input type="hidden" name="<?php echo $this->getFieldName('widget'); ?>" value="<?php echo $class; ?>" />
-			<p><input onclick="return confirm('Are you sure you want to reset to the default settings?');" type="submit" name="<?php echo $this->getFieldName('reset-submit'); ?>" class="button-primary" value="Reset Settings" /></p>
+			<h3>Reset to Registration Defaults</h3>
+			<p class="description">Resetting <span class="red">clears any customizations</span> made within the form above, setting everything back to the initial registration defaults.</p>
+			<p><input type="submit" name="<?php echo $this->getFieldName('reset-submit'); ?>" class="button-primary" value="Reset Settings" /></p>
 		</form>
 		<?php endif; ?>
 	<?php }
@@ -513,10 +543,10 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 			$this->state = null;
 			$this->classes =& $this->allClasses;
 		}
-		$this->parentPage->header(); ?>
-		<?php if( $this->widgets->registration ) : ?>
-			<p class="description">This plugin has slightly changed the functionality of WordPress's <a href="widgets.php">Widgets Administration Page</a>. As a normal user you may not notice, overall your experience will be the same. For developers, you will notice what looks to be an extra step when adding a widget. This is necessary because of how extensive the controls are for the widgets included in this plugin. Basically no widget controls are rendered until the addition of that widget. The second forced save is needed to initiate the default settings that were once set by the pre-rendered but hidden controls. Also, widgets with functionalities as great as the Widget Group need access to more data than WordPress allows normally by the <a href="http://codex.wordpress.org/Widgets_API" target="wpew_window">Widget API</a>. These changes are necessary for this reason as well to keep these kinds of uber-widgets' modularity intact.</p>
-			<p class="description">For the page to return to its default functionality either unregister all widgets on this page, <a href="plugins.php">deactivate</a>, or <a href="admin.php?page=wpew_admin_uninstall" class="wpew-navigation">uninstall</a> this plugin.</p>
+		$this->parent->header(); ?>
+		<?php if( $this->parent->plugin->widgets->registration ) : ?>
+			<p class="description">This plugin has slightly changed the functionality of WordPress's <a href="widgets.php">Widgets Administration Page</a>. As a normal user you may not notice, overall your experience will be the same. For developers, you will notice what looks to be an extra step when adding a widget. This is necessary because of how extensive the controls are for most widgets included with this plugin. The advantage is that no widget control is rendered until that widget is added. The second save action is forced to initiate the default settings that were before pre-rendered as hidden elements. Widgets with functionalities as great as the <strong>Group</strong> widget need access to more data than WordPress allows normally by the <a href="http://codex.wordpress.org/Widgets_API" target="wpew_window">Widget API</a>. For this reason these changes are also necessary to keep the modularity of these kinds of 'uber-widgets' intact.</p>
+			<p class="description">For everything to return to default functionality, either unregister all widgets below, <a href="plugins.php">deactivate</a>, or <a href="admin.php?page=extensible-widgets/uninstall" class="wpew-navigation">uninstall</a> this plugin.</p>
 			<?php else : ?>
 			<p class="description">There are currently no widgets registered by this plugin.</p>
 		<?php endif ?>
@@ -528,7 +558,7 @@ class wpew_admin_Registration_Page extends xf_wp_AAdminPage {
 	 * @return void
 	 */
 	public function footer() {
-		$this->parentPage->footer();
+		$this->parent->footer();
 	}
 }
 ?>

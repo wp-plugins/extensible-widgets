@@ -73,6 +73,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 		$this->setManager( $GLOBALS['wpew']->widgets );
 		// See if we need to set a default name
 		if( empty( $name ) ) $name = $this->name;
+		
 		// parent constructor WP_Widget
 		// the id_base is false because it should use the sanitized version of the PHP classname by default
 		// The name is appended to "wpew:" to differentiate these widgets from all the other installed widgets.
@@ -87,9 +88,9 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	 * @see wpew_IWidget::loadView()
 	 */
 	final public function loadView( $template ) {
-		$file = xf_system_Path::join( ABSPATH, self::$manager->root->settings['widgetsDir'], $template );
+		$file = xf_system_Path::join( ABSPATH, self::$manager->plugin->settings['widgetsDir'], $template );
 		if( !file_exists( $file ) ) {
-			$file = xf_system_Path::join( ABSPATH, self::$manager->root->defaultSettings['widgetsDir'], $template );
+			$file = xf_system_Path::join( ABSPATH, self::$manager->plugin->defaultSettings['widgetsDir'], $template );
 		}
 		if( !file_exists( $file ) ) throw new xf_errors_IOError( 1, $file );
 		include( $file );
@@ -147,7 +148,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	/**
 	 * @see wpew_IWidget::form()
 	 */
-	final public function form( &$settings ) {
+	final public function form( $settings ) {
 		$reference =& $this;
 		// Get system defaults
 		$defaults = array();
@@ -252,7 +253,7 @@ abstract class wpew_AWidget extends WP_Widget implements wpew_IWidget {
 	/**
 	 * @see wpew_IWidget::widget()
 	 */
-	final public function widget( $args, &$settings ) {
+	final public function widget( $args, $settings ) {
 		// set the instance settings member (very important to do this here)
 		$this->settings =& $settings;
 		// set the instance args member (very important to do this here)
