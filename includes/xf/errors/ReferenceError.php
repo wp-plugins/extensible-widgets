@@ -1,4 +1,5 @@
-<?php
+<?php if( class_exists('xf_errors_ReferenceError', false) ) return;
+
 /**
  * This file defines xf_errors_ReferenceError, an exception of the errors subpackage.
  * 

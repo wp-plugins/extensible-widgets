@@ -1,4 +1,15 @@
 <?php
+/**
+ * This file defines wpew_admin_SettingsPage, a controller class a plugin admin page.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @subpackage admin
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
 require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
 require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');

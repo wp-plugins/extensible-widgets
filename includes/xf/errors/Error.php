@@ -1,4 +1,5 @@
-<?php
+<?php if( class_exists('xf_errors_Error', false) ) return;
+
 /**
  * This file defines xf_errors_Error, the base class within the errors subpackage.
  * 

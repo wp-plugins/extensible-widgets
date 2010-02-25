@@ -1,10 +1,25 @@
-<?php
+<?php if( class_exists('xf_wp_IAdminController', false) ) return;
+
+/**
+ * This file defines xf_wp_IAdminController, an interface 
+ * for WordPress admin page controllers.
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
 
 require_once('IPluggable.php');
 
 /**
  * xf_wp_IAdminController interface
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage wp
  */

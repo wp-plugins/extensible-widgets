@@ -1,4 +1,17 @@
-<?php
+<?php if( class_exists('xf_wp_APluggable', false) ) return;
+
+/**
+ * This file defines xf_wp_APluggable, an abstract class for objects
+ * that hook into the WordPress filter/action system.
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
 
 require_once(dirname(__FILE__).'/../Object.php');
 require_once(dirname(__FILE__).'/../errors/Error.php');
@@ -9,7 +22,7 @@ require_once('IPluggable.php');
  * This is an abstract class and is meant to be extended.
  *
  * Provides an easier way to get into the WordPress filter/action sytem, and provide methods to deal with shortNames
- * Shortnames are very usefull when dealing with filter/action names, option names, ids, CSS class names, etc...
+ * Shortnames are very usefull when dealing with filter/action names, option names, etc...
  * PHP versions prior to 5.3 do not support Name Spaces.
  * I think a good thing to compare ShortNames to would be with Name Spaces.
  * With that comparison you may continue with the next section with a littile more understanding (hopefully).
@@ -19,6 +32,8 @@ require_once('IPluggable.php');
  * Again, this is an optional peice of functionality, you don't have to use it...
  * You can still only just use the global WordPress connectivity this class provides.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage wp
  */

@@ -1,4 +1,17 @@
-<?php
+<?php if( class_exists('xf_utils_UUID', false) ) return;
+
+/**
+ * This file defines xf_utils_UUID, a class used for object Universal Unique Identifiers
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage utils
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
+
 /**
  * xf_utils_UUID
  *
@@ -6,7 +19,10 @@
  * Version 3, Version 4, and Version 5.
  * xf_Objects use Version 5 for self identification.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
+ * @subpackage utils
  */
  
 // START CLASS

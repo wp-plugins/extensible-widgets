@@ -1,4 +1,5 @@
-<?php
+<?php if( class_exists('xf_system_Path', false) ) return;
+
 /**
  * This file defines xf_system_Path, which is used for
  * system path string operations (cross platform).

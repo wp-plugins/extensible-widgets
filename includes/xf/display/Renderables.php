@@ -1,9 +1,23 @@
-<?php
+<?php if( class_exists('xf_display_Renderables', false) ) return;
+print 'xf_display_Renderables';
+/**
+ * This file defines xf_display_Renderables, a utility for common output elements.
+ * 
+ * PHP version 5
+ * 
+ * @package xf
+ * @subpackage display
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ */
+
 require_once(dirname(__FILE__).'/../errors/Error.php');
 
 /**
  * This class is considered static. It is meant to hold any miscellanious methods that output common elements.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage display
  */

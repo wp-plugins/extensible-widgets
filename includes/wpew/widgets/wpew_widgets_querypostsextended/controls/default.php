@@ -1,4 +1,7 @@
 <?php
+// Require helper class for rendering common elements
+require_once( $GLOBALS['wpew']->includeRoot .'/xf/display/Renderables.php' );
+
 extract( $this->settings['query'] ); 
 if( isset( $post__in ) ) $post__in = implode(',', $post__in);
 if( isset( $post__not_in ) )  $post__not_in = implode(',', $post__not_in);

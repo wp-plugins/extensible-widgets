@@ -1,4 +1,5 @@
-<?php
+<?php if( interface_exists('xf_IException', false) ) return;
+
 /**
  * This function is for versions of PHP older than 5.3
  * Creates an alias named alias based on the defined class original.
@@ -41,6 +42,8 @@ if (!function_exists('class_alias')) {
 /**
  * Simple interface to remember all attributes of the builtin php Exception class.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage errors
  */

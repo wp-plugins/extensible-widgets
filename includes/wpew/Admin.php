@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * This file defines wpew_Admin, the administrative class for the overall plugin.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+ 
 require_once(dirname(__FILE__).'/../xf/wp/AExtension.php');
 require_once(dirname(__FILE__).'/../xf/patterns/ASingleton.php');
 

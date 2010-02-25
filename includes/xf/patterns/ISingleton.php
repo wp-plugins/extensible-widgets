@@ -1,7 +1,21 @@
-<?php			
+<?php if( interface_exists('xf_patterns_ISingleton', false) ) return;
+
+/**
+ * This file defines xf_patterns_ISingleton, an interface to use the singleton pattern.
+ * 
+ * PHP version 5
+ * 
+ * @package xf
+ * @subpackage patterns
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ */
+		
 /**
  * xf_patterns_ISingleton interface
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage patterns
  */

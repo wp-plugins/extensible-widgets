@@ -1,4 +1,5 @@
-<?php
+<?php if( class_exists('xf_Object', false) ) return;
+
 /**
  * This file defines xf_Object, which provides property based getter setter implemtations.
  * 

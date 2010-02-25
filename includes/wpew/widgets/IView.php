@@ -1,5 +1,17 @@
 <?php
 /**
+ * This file defines wpew_widgets_IView, an Extensible Widget interface.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @subpackage widgets
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+
+/**
  * wpew_widgets_IView interface
  *
  * All of this interface is defined in the wpew_widgets_View, but it is 

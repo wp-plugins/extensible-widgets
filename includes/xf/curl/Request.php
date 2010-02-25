@@ -1,4 +1,16 @@
-<?php
+<?php if( class_exists('xf_curl_Request', false) ) return;
+
+/**
+ * This file defines xf_curl_Request, a wrapper around the curl library.
+ * 
+ * PHP version 5
+ * 
+ * @package xf
+ * @subpackage curl
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ */
+
 require_once(dirname(__FILE__).'/../patterns/ASingleton.php');
 
 /**
@@ -6,6 +18,8 @@ require_once(dirname(__FILE__).'/../patterns/ASingleton.php');
  *
  * A wrapper class around the CURL library
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage curl
  */

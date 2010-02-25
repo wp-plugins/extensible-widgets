@@ -1,4 +1,15 @@
-<?php
+<?php if( class_exists('xf_patterns_ASingleton', false) ) return;
+
+/**
+ * This file defines xf_patterns_ASingleton, an abstract class to use the singleton pattern.
+ * 
+ * PHP version 5
+ * 
+ * @package xf
+ * @subpackage patterns
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ */
 
 require_once(dirname(__FILE__).'/../errors/DefinitionError.php');
 require_once(dirname(__FILE__).'/../Object.php');
@@ -16,6 +27,8 @@ require_once('ISingleton.php');
  * For the hierarchy of a class registered as a Singleton...
  * All the parent classes that are also registered reference the same instance of the class that is responsible for registering them.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage patterns
  */

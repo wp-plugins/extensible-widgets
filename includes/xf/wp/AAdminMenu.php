@@ -1,11 +1,27 @@
-<?php
+<?php if( class_exists('xf_wp_AAdminMenu', false) ) return;
+
+/**
+ * This file defines xf_wp_AAdminMenu, an abstract 
+ * controller for WordPress admin menus.
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
 
 require_once('AAdminController.php');
 
 /**
+ * This is an abstract class and is meant to be extended.
  * This is the admin menu manager for the WordPress admin.
  *
- * @package xf 
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @package xf
  * @subpackage wp
  */
 abstract class xf_wp_AAdminMenu extends xf_wp_AAdminController {

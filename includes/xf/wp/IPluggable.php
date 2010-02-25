@@ -1,8 +1,24 @@
-<?php
+<?php if( class_exists('xf_wp_IPluggable', false) ) return;
+
 /**
- * Instances of classes implementing this interface must define these method.
+ * This file defines xf_wp_IPluggable, an interface for objects
+ * that hook into the WordPress filter/action system.
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
+
+/**
+ * Instances of classes implementing this interface must define these methods.
  * They are called from within the xf_wp_APluggable class in the contructor.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage wp
  */

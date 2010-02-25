@@ -1,4 +1,17 @@
-<?php
+<?php if( class_exists('xf_wp_ASingleton', false) ) return;
+
+/**
+ * This file defines xf_wp_ASingleton, a branch of xf/patterns
+ * subpackage that is specific to the xf/wp subpackage
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
 
 require_once(dirname(__FILE__).'/../patterns/ISingleton.php');
 require_once(dirname(__FILE__).'/../patterns/ASingleton.php');
@@ -16,6 +29,8 @@ require_once('APluggable.php');
  * For the hierarchy of a class registered as a Singleton...
  * All the parent classes that are also registered reference the same instance of the class that is responsible for registering them.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage wp
  */

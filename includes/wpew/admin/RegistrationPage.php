@@ -1,4 +1,15 @@
 <?php
+/**
+ * This file defines wpew_admin_RegistrationPage, a controller class a plugin admin page.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @subpackage admin
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
 require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
 require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');
@@ -99,6 +110,9 @@ class wpew_admin_RegistrationPage extends xf_wp_AAdminController {
 							if( !isset($registration[$class]) ) {
 								if( apply_filters( self::joinShortName('onRegister', $class), $widget ) === false ) continue; 
 								$registration[$class] = true;
+								// For now, we are setting the option ourselves 
+								// until I figure out where the rogue widget is orginating from
+								update_option( $widget->option_name, array( '_multiwidget' => 1 ) );
 								$this->noticeUpdates .= '<p>Registered <strong>'.$widget->name.'</strong></p>';
 							}
 						break;
@@ -106,6 +120,8 @@ class wpew_admin_RegistrationPage extends xf_wp_AAdminController {
 							if( isset($registration[$class]) ) {
 								if( apply_filters( self::joinShortName('onUnregister', $class), $widget ) === false ) continue; 
 								unset( $registration[$class] );
+								// Might as well delete the option now too
+								delete_option( $widget->option_name );
 								$this->noticeUpdates .= '<p>Unregistered <strong>'.$widget->name.'</strong></p>';
 							}
 						break;

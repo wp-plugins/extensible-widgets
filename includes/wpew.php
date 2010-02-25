@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines wpew, the application class for WP Extensilble Widgets.
+ * This file defines wpew, the application class for WP Extensible Widgets.
  * 
  * PHP version 5
  * 
@@ -16,7 +16,7 @@ require_once('xf/wp/APluggable.php');
 require_once('xf/wp/APlugin.php');
 
 // Debugging purposes only
-xf_errors_Error::setDebug( true );
+//xf_errors_Error::setDebug( true );
 
 /**
  * Main Application class for the WordPress Plugin Extensible Widgets
@@ -42,7 +42,7 @@ class wpew extends xf_wp_APlugin {
 	/**
 	 * @see xf_wp_APlugin::$version
 	 */
-	public $version = '0.9.1';
+	public $version = '0.9.2';
 	
 	/**
 	 * @see xf_wp_APlugin::$pluginName

@@ -1,4 +1,15 @@
 <?php
+/**
+ * This file defines wpew_widgets_Context, an Extensible Widget class.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @subpackage widgets
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
 require_once(dirname(__FILE__).'/../Widgets.php');
 require_once('Widget.php');

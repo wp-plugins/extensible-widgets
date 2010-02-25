@@ -1,4 +1,16 @@
-<?php
+<?php if( class_exists('xf_source_Loader', false) ) return;
+
+/**
+ * This file defines xf_source_Loader, a utility for loading source files.
+ * 
+ * PHP version 5
+ * 
+ * @package xf
+ * @subpackage source
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ */
+
 require_once(dirname(__FILE__).'/../Object.php');
 require_once(dirname(__FILE__).'/../errors/ArgumentError.php');
 require_once(dirname(__FILE__).'/../errors/DefinitionError.php');
@@ -16,7 +28,10 @@ require_once(dirname(__FILE__).'/../system/Path.php');
  *
  * NOTE: This class is not your standard load anything kind of class. Things loaded must be relative to the current base.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
+ * @subpackage source
  */
 
 // START class

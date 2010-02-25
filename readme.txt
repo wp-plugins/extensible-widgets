@@ -68,6 +68,10 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.9.2 =
+* Slight bug fixes in widget registration
+* Some framework code cleaning
+
 = 0.9.1 =
 * Too many changes in this version to list, all are transparent to the functionality and interface
 * Cleaned up the overall framework to better support the possibility of multiple plugins

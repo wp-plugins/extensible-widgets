@@ -1,10 +1,29 @@
-<?php
+<?php if( class_exists('xf_wp_APlugin', false) ) return;
+
+/**
+ * This file defines xf_wp_APlugin, a wrapper around WordPress plugins.
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
 
 require_once(dirname(__FILE__).'/../source/Loader.php');
 require_once(dirname(__FILE__).'/../system/Path.php');
 require_once('ASingleton.php');
 
 /**
+ * This is an abstract class and is meant to be extended.
+ *
+ * This is the main class to wrap WordPress plugin functionality.
+ * It may be extended by the use of xf_wp_AExtension objects.
+ *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage wp
  */

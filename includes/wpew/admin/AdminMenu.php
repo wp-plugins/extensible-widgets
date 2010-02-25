@@ -1,4 +1,15 @@
 <?php
+/**
+ * This file defines wpew_admin_AdminMenu, a controller class for a plugin admin menu.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @subpackage admin
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
 require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');
 require_once(dirname(__FILE__).'/../../xf/wp/AAdminMenu.php');
@@ -114,7 +125,7 @@ class wpew_admin_AdminMenu extends xf_wp_AAdminMenu {
 				<input type="hidden" name="cmd" value="_s-xclick">
 				<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
 				<p class="alignright">Version <?php echo $this->plugin->version; ?></p>
-				<p>Thank you for using <a href="http://wordpress.org/extend/plugins/extensible-widgets/" target="wpew_window"><?php echo $this->parent->plugin->pluginName; ?></a>. | <a href="<?php echo $this->controllerURI; ?>&state=onDocumentation">Documentation</a> | <a href="http://jidd.jimisaacs.com/archives/863#footer" target="wpew_window">Feedback</a> | Please <input style="vertical-align:middle;" type="image" src="http://jidd.jimisaacs.com/wp-content/uploads/2010/02/donate_button.png" border="0" name="submit" alt="Help Me! Heeeelp Meeee!"> if this plugin has been of any use.<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"></p>
+				<p>Thank you for using <a href="http://wordpress.org/extend/plugins/extensible-widgets/" target="wpew_window"><?php echo $this->parent->plugin->pluginName; ?></a>. | <a href="<?php echo $this->controllerURI; ?>&state=onDocumentation">Documentation</a> | <a href="http://jidd.jimisaacs.com/archives/863#footer" target="wpew_window">Feedback</a> | Please <input style="vertical-align:middle;" type="image" src="http://jidd.jimisaacs.com/files/2010/02/donate_button.png" border="0" name="submit" alt="Help Me! Heeeelp Meeee!"> if this plugin has been of any use.<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"></p>
 			</form>
 		</div>
 	<?php }

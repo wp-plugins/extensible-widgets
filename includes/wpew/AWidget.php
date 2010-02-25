@@ -1,4 +1,14 @@
 <?php
+/**
+ * This file defines wpew_AWidget, the abstract class for Extensible Widgets.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
 require_once(dirname(__FILE__).'/../xf/Object.php');
 require_once(dirname(__FILE__).'/../xf/errors/IOError.php');

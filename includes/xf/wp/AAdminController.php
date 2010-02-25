@@ -1,13 +1,27 @@
-<?php
+<?php if( class_exists('xf_wp_AAdminController', false) ) return;
+
+/**
+ * This file defines xf_wp_AAdminController, an abstract 
+ * controller for WordPress admin pages.
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
 
 require_once('IAdminController.php');
 require_once('AExtension.php');
 
-
 /**
  * This is an abstract class and is meant to be extended
- * Within any child class the abstract methods should be defined (as well as a constructor).
+ * This class is a controller representing WordPress admin pages.
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage wp
  */

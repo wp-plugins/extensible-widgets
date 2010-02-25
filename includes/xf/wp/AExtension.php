@@ -1,9 +1,31 @@
-<?php
+<?php if( class_exists('xf_wp_AAdminMenu', false) ) return;
+
+/**
+ * This file defines xf_wp_AExtension, an abstract 
+ * object to extend other objects.
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage wp
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
 
 require_once('ASingleton.php');
 require_once('APlugin.php');
 
 /**
+ * This is an abstract class and is meant to be extended.
+ *
+ * This class is used specifically to extend other objects.
+ * Within this subpackage it is used to extend xf_wp_APlugin instances.
+ * It is a way for singletons within the plugin singleton to be
+ * aware of eachother methods and properties.
+ *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage wp
  */

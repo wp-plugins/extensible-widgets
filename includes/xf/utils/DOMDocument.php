@@ -1,10 +1,12 @@
-<?php
+<?php if( class_exists('xf_utils_DOMDocument', false) ) return;
+
 /**
  * This file defines xf_utils_DOMDocument, which provides personal (utility) methods to the class DOMDocument.
  * 
  * PHP version 5
  * 
  * @package    xf
+ * @subpackage utils
  * @author     Jim Isaacs <jimpisaacs@gmail.com>
  * @copyright  2009-2010 Jim Isaacs
  * @link       http://jidd.jimisaacs.com
@@ -13,8 +15,9 @@
 /**
  * Extends the DOMDocument to implement personal (utility) methods.
  *
- * @package xf
+ * @since xf 1.0.0
  * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @package xf
  * @subpackage utils
  */
 class xf_utils_DOMDocument extends DOMDocument {

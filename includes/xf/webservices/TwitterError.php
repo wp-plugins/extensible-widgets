@@ -1,4 +1,18 @@
-<?php
+<?php if( class_exists('xf_webservices_TwitterError', false) ) return;
+
+/**
+ * This file defines xf_webservices_TwitterError, a specific error for xf_webservices_Twitter
+ * @TODO This packages uses the older Twitter API and needs updated using AuthRequest
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage webservices
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
+
 require_once(dirname(__FILE__).'/../errors/Error.php');
 
 /**
@@ -6,6 +20,8 @@ require_once(dirname(__FILE__).'/../errors/Error.php');
  *
  * Errors that are thrown by the xf_webservices_Twitter class
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage webservices
  */

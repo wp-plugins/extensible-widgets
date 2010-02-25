@@ -1,5 +1,16 @@
 <?php
 /**
+ * This file defines wpew_IWP_Widget, the interface for WordPress Widgets.
+ * 
+ * PHP version 5
+ * 
+ * @package wpew
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
+ * @link http://jidd.jimisaacs.com
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+
+/**
  * This insterface represents what should be defined for a regular WordPress widget.
  *
  * @package wpew

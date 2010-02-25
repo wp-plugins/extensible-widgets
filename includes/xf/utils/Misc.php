@@ -1,8 +1,24 @@
-<?php
+<?php if( class_exists('xf_utils_Misc', false) ) return;
+
+/**
+ * This file defines xf_utils_Misc, which is used for
+ * system path string operations (cross platform).
+ * 
+ * PHP version 5
+ * 
+ * @package    xf
+ * @subpackage utils
+ * @author     Jim Isaacs <jimpisaacs@gmail.com>
+ * @copyright  2009-2010 Jim Isaacs
+ * @link       http://jidd.jimisaacs.com
+ */
+
 /**
  * This class is a compilation of various functions and methods 
  * that help with miscellaneous tasks that to not have place in their own class (yet).
  *
+ * @since xf 1.0.0
+ * @author Jim Isaacs <jimpisaacs@gmail.com>
  * @package xf
  * @subpackage utils
  */

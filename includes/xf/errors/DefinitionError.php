@@ -1,4 +1,5 @@
-<?php
+<?php if( class_exists('xf_errors_DefinitionError', false) ) return;
+
 /**
  * This file defines xf_errors_DefinitionError, an exception of the errors subpackage.
  * 
