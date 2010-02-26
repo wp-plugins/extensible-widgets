@@ -1,4 +1,4 @@
-<?php if( class_exists('xf_wp_IAdminController', false) ) return;
+<?php if( interface_exists('xf_wp_IAdminController', false) ) return;
 
 /**
  * This file defines xf_wp_IAdminController, an interface 
