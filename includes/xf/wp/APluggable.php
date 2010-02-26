@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_wp_APluggable', false) ) return;
-
+<?php
 /**
  * This file defines xf_wp_APluggable, an abstract class for objects
  * that hook into the WordPress filter/action system.

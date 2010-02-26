@@ -42,7 +42,7 @@ class wpew extends xf_wp_APlugin {
 	/**
 	 * @see xf_wp_APlugin::$version
 	 */
-	public $version = '0.9.2';
+	public $version = '0.9.2.1';
 	
 	/**
 	 * @see xf_wp_APlugin::$pluginName

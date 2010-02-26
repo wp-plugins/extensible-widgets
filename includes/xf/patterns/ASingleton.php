@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_patterns_ASingleton', false) ) return;
-
+<?php
 /**
  * This file defines xf_patterns_ASingleton, an abstract class to use the singleton pattern.
  * 

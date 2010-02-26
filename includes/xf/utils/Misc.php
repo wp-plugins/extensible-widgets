@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_utils_Misc', false) ) return;
-
+<?php
 /**
  * This file defines xf_utils_Misc, which is used for
  * system path string operations (cross platform).

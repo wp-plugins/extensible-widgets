@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_display_Renderables', false) ) return;
-print 'xf_display_Renderables';
+<?php
 /**
  * This file defines xf_display_Renderables, a utility for common output elements.
  * 

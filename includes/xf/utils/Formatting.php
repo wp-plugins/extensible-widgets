@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_utils_Formatting', false) ) return;
-
+<?php
 /**
  * This file defines xf_utils_Formatting, a utility for string formatting.
  * 

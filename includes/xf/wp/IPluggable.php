@@ -1,5 +1,4 @@
-<?php if( interface_exists('xf_wp_IPluggable', false) ) return;
-
+<?php
 /**
  * This file defines xf_wp_IPluggable, an interface for objects
  * that hook into the WordPress filter/action system.

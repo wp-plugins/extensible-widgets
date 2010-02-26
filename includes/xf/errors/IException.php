@@ -1,5 +1,4 @@
-<?php if( interface_exists('xf_IException', false) ) return;
-
+<?php
 /**
  * This function is for versions of PHP older than 5.3
  * Creates an alias named alias based on the defined class original.

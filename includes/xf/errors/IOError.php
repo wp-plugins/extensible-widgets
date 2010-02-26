@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_errors_IOError', false) ) return;
-
+<?php
 /**
  * This file defines xf_errors_IOError, an exception of the errors subpackage.
  * 

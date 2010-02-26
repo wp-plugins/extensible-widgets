@@ -1,5 +1,4 @@
-<?php if( interface_exists('xf_patterns_ISingleton', false) ) return;
-
+<?php
 /**
  * This file defines xf_patterns_ISingleton, an interface to use the singleton pattern.
  * 

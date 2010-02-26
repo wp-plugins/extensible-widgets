@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_webservices_TwitterError', false) ) return;
-
+<?php
 /**
  * This file defines xf_webservices_TwitterError, a specific error for xf_webservices_Twitter
  * @TODO This packages uses the older Twitter API and needs updated using AuthRequest

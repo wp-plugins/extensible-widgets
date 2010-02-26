@@ -68,6 +68,9 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.9.2.1 =
+* Cleaned up some notice errors regarding references within core files.
+
 = 0.9.2 =
 * Slight bug fixes in widget registration
 * Some framework code cleaning

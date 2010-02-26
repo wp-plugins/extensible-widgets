@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_utils_DOMDocument', false) ) return;
-
+<?php
 /**
  * This file defines xf_utils_DOMDocument, which provides personal (utility) methods to the class DOMDocument.
  * 

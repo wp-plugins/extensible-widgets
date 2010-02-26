@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_utils_UUID', false) ) return;
-
+<?php
 /**
  * This file defines xf_utils_UUID, a class used for object Universal Unique Identifiers
  * 
@@ -47,7 +46,8 @@ To determine the version 3 UUID of a given name, the UUID of the namespace, e.g.
 		$nstr = '';
 		// Convert Namespace UUID to bits
 		for($i = 0; $i < strlen($nhex); $i+=2) {
-			$nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+			$n = ( empty($nhex[$i+1]) ) ? '' : $nhex[$i+1];
+			$nstr .= chr(hexdec($nhex[$i].$n));
 		}
 	    // Calculate hash value
 	    $hash = md5($nstr . $name);
@@ -100,7 +100,8 @@ To determine the version 3 UUID of a given name, the UUID of the namespace, e.g.
 		$nstr = '';
 		// Convert Namespace UUID to bits
 		for($i = 0; $i < strlen($nhex); $i+=2) {
-			$nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+			$n = ( empty($nhex[$i+1]) ) ? '' : $nhex[$i+1];
+			$nstr .= chr(hexdec($nhex[$i].$n));
 		}
 		// Calculate hash value
 		$hash = sha1($nstr . $name);

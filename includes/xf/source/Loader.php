@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_source_Loader', false) ) return;
-
+<?php
 /**
  * This file defines xf_source_Loader, a utility for loading source files.
  * 

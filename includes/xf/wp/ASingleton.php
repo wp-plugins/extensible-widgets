@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_wp_ASingleton', false) ) return;
-
+<?php
 /**
  * This file defines xf_wp_ASingleton, a branch of xf/patterns
  * subpackage that is specific to the xf/wp subpackage

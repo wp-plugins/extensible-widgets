@@ -1,5 +1,4 @@
-<?php if( interface_exists('xf_wp_IAdminController', false) ) return;
-
+<?php
 /**
  * This file defines xf_wp_IAdminController, an interface 
  * for WordPress admin page controllers.

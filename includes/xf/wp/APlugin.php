@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_wp_APlugin', false) ) return;
-
+<?php
 /**
  * This file defines xf_wp_APlugin, a wrapper around WordPress plugins.
  * 

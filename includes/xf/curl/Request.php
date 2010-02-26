@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_curl_Request', false) ) return;
-
+<?php
 /**
  * This file defines xf_curl_Request, a wrapper around the curl library.
  * 

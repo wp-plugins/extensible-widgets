@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_Object', false) ) return;
-
+<?php
 /**
  * This file defines xf_Object, which provides property based getter setter implemtations.
  * 
@@ -63,8 +62,8 @@ class xf_Object {
 	 * @return object|null The object by the given ID, or null if it does not exists.
 	 */
 	final public static function &getObjectByUUID( $uuid ) {
-		if( isset( self::$_UUIDRefs[$uuid] ) &&  is_object( self::$_UUIDRefs[$uuid] ) ) return self::$_UUIDRefs[$uuid];
-		return null;
+		$val = ( isset( self::$_UUIDRefs[$uuid] ) &&  is_object( self::$_UUIDRefs[$uuid] ) ) ? self::$_UUIDRefs[$uuid] : null;
+		return $val;
     }
     
     /**
@@ -349,7 +348,8 @@ class xf_Object {
 	 */
 	public function &__get( $n ) {
 		if( $this->hasGetter( $n ) ) {
-			return call_user_func( array( &$this, self::getGetterName( $n ) ) );
+			$val =& call_user_func( array( &$this, self::getGetterName( $n ) ) );
+			return $val;
 		} else if( $this->isReserved( $n ) ) {
 			throw new xf_errors_ReferenceError( 2, $this, $n );
 		} else if( !$this->_dynamic ) {

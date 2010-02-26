@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_webservices_Twitter', false) ) return;
-
+<?php
 /**
  * This file defines xf_webservices_Twitter, a wrapper around the Twitter API
  * @TODO This packages uses the older Twitter API and needs updated using AuthRequest

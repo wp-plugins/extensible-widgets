@@ -1,5 +1,4 @@
-<?php if( class_exists('xf_wp_AAdminMenu', false) ) return;
-
+<?php
 /**
  * This file defines xf_wp_AAdminMenu, an abstract 
  * controller for WordPress admin menus.
