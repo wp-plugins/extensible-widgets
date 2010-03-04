@@ -41,7 +41,7 @@
 				$(this.update).find('.ajax-loader').fadeOut('fast',function(){ $(this).remove() });
 				$(this.update).hide().animate({opacity:'show'},'normal').wpewAdmin();
 			},
-			dataType: 'html',
+			dataType: 'html'
 		};
 		$(this).find('form.ajaxify, a.ajaxify').ajaxify(ajaxOpts);
 		var widget = $('#wpew-wrap .widget').eq(0); initControlTabs( widget ); initFadeOut( widget ); 

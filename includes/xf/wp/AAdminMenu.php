@@ -97,7 +97,8 @@ abstract class xf_wp_AAdminMenu extends xf_wp_AAdminController {
 		if( !$this->hasChildren ) return;
 		reset($this->_children);
 		if( !$this->hasDefaultChild ) {
-			$this->defaultChild = current($this->_children);
+			$first =& current($this->_children);
+			$this->defaultChild = $first;
 		}
 		do {
 			$child = current($this->_children);

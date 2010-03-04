@@ -68,6 +68,10 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.9.2.2 =
+* Fixed a reference warning with admin controllers
+* Fixed minor Javascript error failing in older browsers
+
 = 0.9.2.1 =
 * Cleaned up some notice errors regarding references within core files.
 
