@@ -1,7 +1,6 @@
 <?php
 /**
- * This file defines xf_utils_Misc, which is used for
- * system path string operations (cross platform).
+ * This file defines xf_utils_Misc, a utility of miscellaneous methods.
  * 
  * PHP version 5
  * 
@@ -24,30 +23,8 @@
 class xf_utils_Misc {
 	
 	// notices
-	static $_notices;
-	
-	/**
-	 * Recursively reads a directory to delete all items within it subdirectories and all.
-	 *
-	 * @param string $path The path to the directory to empty
-	 * @return void
-	 */
-	static function emptyDir( $path ) {
-		if ( xf_errors_Error::getDebug() ) echo 'Empty directory <strong>' . $path . '</strong>... <br />';
-		$d = dir($path); 
-		while (false !== ($entry = $d->read())) {
-			$dir = xf_system_Path::join( $path, $entry );
-		    $isdir = is_dir( xf_system_Path::join( $dir, $entry ) ); 
-		    if (!$isdir and $entry!="." and $entry!="..") { 
-		        unlink( $dir ); 
-		    } else if ($isdir  and $entry!="." and $entry!="..") { 
-		        self::emptyDir( $dir ); 
-		        rmdir( $dir ); 
-		    } 
-		} 
-		$d->close(); 
-	}
-	 
+	public static $_notices;
+		 
 	/**
 	 * Retrieves the time the has elapsed from one date to another.
 	 * This actually returns a string that outputs "{time unit} {time until label} ago"
@@ -56,7 +33,7 @@ class xf_utils_Misc {
 	 * @param number $dateTo
 	 * @return string
 	 */
-	static function getTimeAgo( $dateFrom, $dateTo=-1 ) {
+	public static function getTimeAgo( $dateFrom, $dateTo=-1 ) {
 		// Defaults and assume if 0 is passed in that, its an error rather than the epoch
 		if( $dateFrom <= 0 ) return "A long time ago";
 		if( $dateTo == -1 ) $dateTo = time();
@@ -139,25 +116,23 @@ class xf_utils_Misc {
 		return $res;
 	}
 	
-	
 	/**
 	 * Just a quick way to add a string via id to a group of other strings
 	 *
 	 * @return void
 	 */
-	static function addNotice( $notice, $id = '' ) {
+	public static function addNotice( $notice, $id = '' ) {
 		if( empty( $notice ) ) return;
 		if( !isset( self::$_notices[$id] ) ) self::$_notices[$id] = array();
 		self::$_notices[$id][] = $notice;
 	}
-	
 	
 	/**
 	 * Now we can render all strings added via the same id (in the same group)
 	 *
 	 * @return void
 	 */
-	static function renderNotices( $id = '', $before = '<p>', $after = '</p>' ) {
+	public static function renderNotices( $id = '', $before = '<p>', $after = '</p>' ) {
 		if( !isset(self::$_notices[$id]) ) return;
 		foreach( array_filter( self::$_notices[$id] ) as $message ) {
 			echo $before.$message.$after;

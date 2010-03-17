@@ -10,6 +10,10 @@
  * @link http://jidd.jimisaacs.com
  */
 
+/**
+ * This class is a combination of two patterns, Singleton and Factory.
+ * Extending it should turn the extending class into a singleton.
+ */
 require_once(dirname(__FILE__).'/../patterns/ASingleton.php');
 
 /**

@@ -5,7 +5,7 @@ Donate link: http://jidd.jimisaacs.com/donate
 Plugin URI: http://jidd.jimisaacs.com/archives/863
 Tags: widgets, patterns, management, manager, mvc, model, view, controller
 Requires at least: 2.8
-Tested up to: 2.9.2
+Tested up to: 3.0-alpha
 Stable tag: trunk
 
 Includes extremely useful widgets for developers and users alike, and is a system written on a PHP 5 object oriented structure.
@@ -67,6 +67,10 @@ Once you start using this plugin, you will notice that widgets will become a maj
 Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ "Screenshots") of this plugin's administration.
 
 == Changelog ==
+
+= 0.9.2.3 =
+* Very minor fixes with references in core php framework
+* Tested extensively in WordPress 3.0 using new default theme TwentyTen
 
 = 0.9.2.2 =
 * Fixed a reference warning with admin controllers

@@ -27,8 +27,6 @@ require_once('Error.php');
  * @package xf
  * @subpackage errors
  */
-
-// START class
 class xf_errors_ReferenceError extends xf_errors_Error {
 	
 	// STATIC MEMBERS
@@ -57,5 +55,4 @@ class xf_errors_ReferenceError extends xf_errors_Error {
 		parent::__construct( $message, false, $code );
 	}
 }
-// END class
 ?>

@@ -32,8 +32,6 @@ require_once(dirname(__FILE__).'/../system/Path.php');
  * @package xf
  * @subpackage source
  */
-
-// START class
 class xf_source_Loader extends xf_Object {
 		
 	// STATIC MEMBERS
@@ -304,7 +302,7 @@ class xf_source_Loader extends xf_Object {
 	 */
 	public function addPath( $p, $priority = 0 ) {
 		if( ! (int) $priority ) {
-			throw new xf_errors_ArgumentError( 3, 2, $priority, 'Expected Integer' );
+			throw new xf_errors_ArgumentError( 3, 1, $priority, 'Expected Integer' );
 			return false;
 		}
 		if( xf_system_Path::isAbs( $p ) ) {
@@ -356,7 +354,7 @@ class xf_source_Loader extends xf_Object {
 	 */
 	public function addExt( $e, $priority = 0 ) {
 		if( ! (int) $priority ) {
-			throw new xf_errors_ArgumentError( 3, 2, $priority, 'Expected Integer' );
+			throw new xf_errors_ArgumentError( 3, 1, $priority, 'Expected Integer' );
 			return false;
 		}
 		if ( !$this->isExt( $e ) ) $this->removeExt( $p );
@@ -460,4 +458,4 @@ class xf_source_Loader extends xf_Object {
 		return false;
 	}
 }
-// END class
+?>

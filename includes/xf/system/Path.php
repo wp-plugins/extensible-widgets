@@ -14,7 +14,7 @@
 
 /**
  * Static class, it contains string operations specific to a 
- * file system's path This should deals with paths in a 
+ * file system's path. This should deal with paths in a 
  * cross platform environment.
  *
  * @since xf 1.0.0
@@ -109,6 +109,30 @@ class xf_system_Path {
 	 */
 	public static function replace( $p, $remove ) {
 		return trim( str_replace( $remove, '', $p ), self::DS );
+	}
+	
+	/**
+	 * Converts a any given path to an array of path segments.
+	 * This works with Windows style paths also.
+	 *
+	 * @param string $p The path to convert
+	 * @return array Array of path segments
+	 */
+	public static function toArray( $p ) {
+		$p = self::toPOSIX( $p );
+		$a = explode( '/', $p );
+		return array_filter( $a );
+	}
+	
+	/**
+	 * Converts a given array of path segments to a POSIX style path
+	 *
+	 * @param array $a Array of path segments
+	 * @return string The converted path
+	 */
+	public static function fromArray( $a ) {
+		$a = array_filter( $a );
+		return join( '/', $a );
 	}
 }
 ?>

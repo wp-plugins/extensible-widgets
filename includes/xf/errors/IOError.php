@@ -38,7 +38,8 @@ class xf_errors_IOError extends xf_errors_Error {
 		'6' => 'Directory is not readable by the webserver.',
 		'7' => 'Directory is not writable by the webserver.',
 		'8' => 'Not a directory.',
-		'9' => 'Is a directory.'
+		'9' => 'Is a directory.',
+		'10' => 'Directory is not empty.',
 	);
 	
 	// INSTANCE MEMBERS
