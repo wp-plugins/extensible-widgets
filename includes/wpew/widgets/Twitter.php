@@ -11,7 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../../xf/utils/Misc.php');
 require_once('View.php');
 
 /**
@@ -98,7 +97,6 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 		// call parent
 		parent::beforeOutput();
 		// Add the data to the view params added by the parent class, this way you can access the data extracted in the view!
-		require_once(dirname(__FILE__).'/../../xf/webservices/Twitter.php');
 		if( !empty($this->settings['username']) && !empty($this->settings['password']) ) {
 			$twitter = new xf_webservices_Twitter($this->settings['username'], $this->settings['password']);
 			$this->settings['view_params']['twitter'] = $twitter;
@@ -138,7 +136,7 @@ class wpew_widgets_Twitter extends wpew_widgets_View {
 		} else if( is_object($this->settings['view_params']['twitter']) ) {
 			echo $this->settings['view_params']['twitter']->username . ' has no tweets!';
 		} else {
-			echo 'Not even information to access Twitter!';
+			echo 'Cannot access Twitter!';
 		}
 		// END DEFAULT
 	}

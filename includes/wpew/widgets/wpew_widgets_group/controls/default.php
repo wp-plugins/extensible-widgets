@@ -1,7 +1,4 @@
 <?php
-// Require helper class for rendering common elements
-require_once( $GLOBALS['wpew']->includeRoot .'/xf/display/Renderables.php' );
-
 $group_name = esc_attr( $this->settings['group_name'] );
 $before_widget = esc_attr( $this->settings['before_widget'] );
 $after_widget = esc_attr( $this->settings['after_widget'] );

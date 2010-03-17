@@ -11,9 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');
-require_once(dirname(__FILE__).'/../../xf/wp/AAdminMenu.php');
-
 /**
  * wpew_admin_AdminMenu is the admin menu controller class for this plugin
  *

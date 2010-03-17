@@ -9,9 +9,6 @@
  * @link http://jidd.jimisaacs.com
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
- 
-require_once(dirname(__FILE__).'/../xf/wp/AExtension.php');
-require_once(dirname(__FILE__).'/../xf/patterns/ASingleton.php');
 
 /**
  * Adds additional functionality while within the WordPress admin

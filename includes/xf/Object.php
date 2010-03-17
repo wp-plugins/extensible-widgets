@@ -348,7 +348,7 @@ class xf_Object {
 	 */
 	public function &__get( $n ) {
 		if( $this->hasGetter( $n ) ) {
-			$val =& call_user_func( array( &$this, self::getGetterName( $n ) ) );
+			$val = call_user_func( array( &$this, self::getGetterName( $n ) ) );
 			return $val;
 		} else if( $this->isReserved( $n ) ) {
 			throw new xf_errors_ReferenceError( 2, $this, $n );

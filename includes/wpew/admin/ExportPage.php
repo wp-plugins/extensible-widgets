@@ -11,9 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
-require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');
-require_once(dirname(__FILE__).'/../../xf/wp/AAdminController.php');
 require_once(dirname(__FILE__).'/../Widgets.php');
 
 /**
@@ -83,7 +80,6 @@ class wpew_admin_ExportPage extends xf_wp_AAdminController {
 				return json_encode($data);
 			break;
 			case 'xml' :
-				require_once(dirname(__FILE__).'/../../xf/utils/DOMDocument.php');
 				$data = array( 'options' => $data );
 				return xf_utils_DOMDocument::array2Xml( $data );
 			break;

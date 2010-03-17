@@ -11,7 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../../xf/system/Path.php');
 require_once('View.php');
 
 /**
@@ -134,7 +133,7 @@ class wpew_widgets_Group extends wpew_widgets_View {
 	 * @return int The guid of the group passed into this method
 	 */
 	public static function getGuid( &$obj ) {
-		if( !is_admin() ) return '';
+		if( !is_admin() || !isset(self::$manager->plugin->override) ) return '';
 		if( self::$manager->plugin->override->sessionData ) {
 			$guid = xf_system_Path::join( self::$manager->plugin->override->sessionData['guid'], $obj->id );
 		} else {

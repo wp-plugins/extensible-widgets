@@ -10,10 +10,10 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once('xf/errors/Error.php');
-require_once('xf/patterns/ASingleton.php');
-require_once('xf/wp/APluggable.php');
-require_once('xf/wp/APlugin.php');
+// Initiate the X Framework if not already initiated
+if( !class_exists('xf_init', false) ) {
+	require_once('xf/init.php'); xf_init::autoload();
+}
 
 // Debugging purposes only
 //xf_errors_Error::setDebug( true );
@@ -42,7 +42,7 @@ class wpew extends xf_wp_APlugin {
 	/**
 	 * @see xf_wp_APlugin::$version
 	 */
-	public $version = '0.9.2.3';
+	public $version = '0.9.3';
 	
 	/**
 	 * @see xf_wp_APlugin::$pluginName

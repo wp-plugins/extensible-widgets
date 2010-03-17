@@ -11,8 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');
-require_once(dirname(__FILE__).'/../../xf/system/Path.php');
 require_once('WidgetsAjaxOverride.php');
 
 /**

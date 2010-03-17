@@ -11,11 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
-require_once(dirname(__FILE__).'/../../xf/patterns/ASingleton.php');
-require_once(dirname(__FILE__).'/../../xf/system/Path.php');
-require_once(dirname(__FILE__).'/../../xf/wp/AAdminController.php');
-
 /**
  * Use this controller to import data exported from this plugin. In case you are wandering, 
  * yes it also imports any data that can simply be parsed into valid WordPress options 
@@ -191,7 +186,6 @@ class wpew_admin_ImportPage extends xf_wp_AAdminController {
 						$decoded = json_decode( $data, true );
 					break;
 					case 'xml' :
-						require_once(dirname(__FILE__).'/../../xf/utils/DOMDocument.php');
 						$arr = xf_utils_DOMDocument::xml2Array( $data );
 						$decoded = (isset($arr['#document']['options'])) ? $arr['#document']['options'] : false;
 					break;

@@ -1,7 +1,4 @@
 <?php
-// Require helper class for rendering common elements
-require_once( $GLOBALS['wpew']->includeRoot .'/xf/display/Renderables.php' );
-
 // Build form settings
 $context_calls_id = $this->get_field_id('context_calls');
 $context_calls_name = $this->get_field_name('context_calls');

@@ -10,9 +10,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../xf/Object.php');
-require_once(dirname(__FILE__).'/../xf/errors/IOError.php');
-require_once(dirname(__FILE__).'/../xf/system/Path.php');
 require_once('IWidget.php');
 
 /**

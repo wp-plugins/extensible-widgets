@@ -68,6 +68,13 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.9.3 =
+* Added autoload initiation for core php framework for portability
+* Fixed a bug when editing Widget Group defaults
+* Removed one major E_SCRICT notice occurring (yes, I can be anal...)
+* Fixed some grammatical errors in notices here and there
+* Further testing in WordPress 3.0 (Note: The new default widget works great in a Widget Group)
+
 = 0.9.2.3 =
 * Very minor fixes with references in core php framework
 * Tested extensively in WordPress 3.0 using new default theme TwentyTen

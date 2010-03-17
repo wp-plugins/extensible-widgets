@@ -11,9 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../../xf/display/Renderables.php');
-require_once(dirname(__FILE__).'/../../xf/system/Path.php');
-require_once(dirname(__FILE__).'/../../xf/wp/APluggable.php');
 require_once(dirname(__FILE__).'/../Widgets.php');
 require_once('Context.php');
 require_once('IView.php');
