@@ -110,7 +110,7 @@ class wpew_admin_AdminMenu extends xf_wp_AAdminMenu {
 	<?php }
 	
 	/**
-	 * Used internally for a common content header
+	 * Used internally for a common content footer
 	 *
 	 * @return void
 	 */
