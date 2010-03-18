@@ -12,7 +12,7 @@
 
 // Initiate the X Framework if not already initiated
 if( !class_exists('xf_init', false) ) {
-	require_once('xf/init.php'); xf_init::autoload();
+	require_once('xf/init.php'); xf_init::autoload( dirname(__FILE__), array('xf_','wpew_') );
 }
 
 // Debugging purposes only
@@ -42,7 +42,7 @@ class wpew extends xf_wp_APlugin {
 	/**
 	 * @see xf_wp_APlugin::$version
 	 */
-	public $version = '0.9.3';
+	public $version = '0.9.4';
 	
 	/**
 	 * @see xf_wp_APlugin::$pluginName
@@ -70,7 +70,6 @@ class wpew extends xf_wp_APlugin {
 	 */
 	public function init() {
 		// Instantiate extension
-		require_once('wpew/Widgets.php');
 		$this->addExtension( 'widgets', wpew_Widgets::getInstance() );
 		// Add Hooks
 		$this->addLocalAction( 'onInitiated' );
@@ -83,7 +82,6 @@ class wpew extends xf_wp_APlugin {
 	 */
 	public function admin() {
 		// Instantiate the admin extension
-		require_once('wpew/Admin.php');
 		$this->addExtension( 'admin', wpew_Admin::getInstance() );
 	}
 	

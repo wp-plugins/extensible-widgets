@@ -11,8 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once('View.php');
-
 /**
  * This is an example of a widget that used the previous widget's functionality, 
  * but is still higher up in the inheritance tree. A Widget than can create and 

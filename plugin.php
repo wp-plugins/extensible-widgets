@@ -4,7 +4,7 @@ Plugin Name: Extensible Widgets
 Plugin URI: http://jidd.jimisaacs.com/archives/863
 Description: In addition to adding numerous extremely useful widgets for developers and users alike, this plugin is a system written on a PHP 5 object oriented structure. In short, it is built for modification and extension. It wraps the WordPress Widget API to allow for an alternative, and in my opinion more robust method to hook into and use it. Widgets are WordPress's version of user interface modules. They already support an administrative and client-side view. This system simply leverages that with a higher potential in mind.
 Author: Jim Isaacs
-Version: 0.9.3
+Version: 0.9.4
 Author URI: http://jidd.jimisaacs.com/
 */
 
@@ -29,7 +29,7 @@ class wpew_PHP4 {
 	 * @return void
 	 */
 	function plugins_loaded() {
-		if( isset($GLOBALS['wpew']) ) return;
+		if( class_exists('wpew', false) || isset($GLOBALS['wpew']) ) return;
 		// Here starts PHP 5, only load the script within this hook or PHP 5 version checking is moot
 		require_once('includes/wpew.php');
 		// Instantiate the global!!!
@@ -50,7 +50,7 @@ class wpew_PHP4 {
 		if( !empty($message) ) {
 			$instance->activationError( __FILE__, '<ul><li><strong>Sorry, Extensible Widgets failed to activate!</strong><li>'.$message.'</ul>' );
 		}
-		// Make sure we have a singleton
+		// Checks passed, we are good so far, just make sure we have a singleton
 		wpew_PHP4::plugins_loaded();
 		global $wpew;
 		if( empty( $wpew->settings['version'] ) ) {

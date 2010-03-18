@@ -96,7 +96,7 @@ $specific_fields = xf_display_Renderables::buildInputList( $context_calls_id, $c
 		
 		<table width="100%" cellpadding="0" cellspacing="0">
 			<?php if ( count( get_page_templates() ) ) : ?>
-			</tr>
+			<tr>
 				<td valign="top"><?php echo $specific_fields['is_page_template']; ?></td>
 				<td>
 					<p><select rel="<?php echo $context_calls_id; ?>-is_page_template" class="widefat wpew_relcheck" id="<?php echo $context_args_id; ?>-is_page_template" name="<?php echo $context_args_name; ?>[is_page_template]">

@@ -11,8 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../Widgets.php');
-
 /**
  * wpew_admin_WidgetsAjaxOverride
  *

@@ -51,22 +51,13 @@ class wpew_admin_AdminMenu extends xf_wp_AAdminMenu {
 	public function onSetReference() {
 		
 		// Build admin menu
-		require_once('RegistrationPage.php');
 		$this->addChild( wpew_admin_RegistrationPage::getInstance() );
-					
-		require_once('SettingsPage.php');
 		$this->addChild( wpew_admin_SettingsPage::getInstance() );
-		
-		require_once('ExportPage.php');
 		$this->addChild( wpew_admin_ExportPage::getInstance() );
-		
-		require_once('ImportPage.php');
 		$this->addChild( wpew_admin_ImportPage::getInstance() );
-		
-		require_once('UninstallPage.php');
 		$this->addChild( wpew_admin_UninstallPage::getInstance() );
 		
-		// Set all the capabilities
+		// Set the capabilities of the menu to match the plugin
 		$this->setCapabilities( $this->plugin->capability );
 		
 		// Finally build the menu adding to WordPress admin

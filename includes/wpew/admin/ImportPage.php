@@ -97,7 +97,6 @@ class wpew_admin_ImportPage extends xf_wp_AAdminController {
 	 */
 	public function onBeforeRender() {
 		// Set the exporter member to grab data set there
-		require_once('ExportPage.php');
 		$this->_exporter =& wpew_admin_ExportPage::getInstance();
 		// Grav the first format available as the default
 		$this->_format = key($this->_exporter->formats);
@@ -265,7 +264,7 @@ class wpew_admin_ImportPage extends xf_wp_AAdminController {
 			<th scope="row"><h3><label for="upload">Upload File</label></h3></th>
 			<td><form name="uploadForm" enctype="multipart/form-data" method="post" action="<?php echo $this->controllerURI; ?>">
 				<?php $this->doStateField( 'onImport' ); ?>
-				<p><input type="file" id="upload"  name="upload"> <label><input type="checkbox" name="<?php echo $this->getFieldName('auto-run'); ?>"<?php echo $this->_autoRun; ?>> Automatically Run the Import or Checksum</span></label></p>
+				<p><input type="file" id="upload"  name="upload"> <label><input type="checkbox" name="<?php echo $this->getFieldName('auto-run'); ?>"<?php echo $this->_autoRun; ?>> Automatically Run the Import or Checksum</label></p>
 				<p class="description">For the process of uploading, the parsing format is chosen automatically by the file's extension.<br />
 				All supported file types may be downloaded from the export page: <strong><?php echo implode( ', ', array_keys($this->_exporter->formats) ); ?></strong></p>
 				<p><input type="submit" name="<?php echo $this->getFieldName('submit-upload'); ?>" class="button-primary" value="Upload" /></p>

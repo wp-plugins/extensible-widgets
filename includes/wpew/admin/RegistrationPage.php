@@ -532,7 +532,7 @@ class wpew_admin_RegistrationPage extends xf_wp_AAdminController {
 			<input type="submit" name="<?php echo $this->getFieldName('edit-submit'); ?>" class="button-primary" value="Save" />
 			<input type="submit" name="<?php echo $this->getFieldName('edit-close'); ?>" class="button-primary" value="Save &amp; Close" />
 			<a href="<?php echo $this->controllerURI; ?>" class="button-primary">Close</a>
-			<?php endif; ?></p>
+			<?php endif; ?>
 		</form>
 		<?php if( !$this->isAsync ) : ?>		
 		<form onsubmit="return confirm('Are you sure you want to reset the settings back to the registration defaults?');" name="resetForm" method="post" action="<?php echo $this->controllerURI; ?>">

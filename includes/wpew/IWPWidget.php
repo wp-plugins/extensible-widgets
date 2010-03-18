@@ -1,6 +1,6 @@
 <?php
 /**
- * This file defines wpew_IWP_Widget, the interface for WordPress Widgets.
+ * This file defines wpew_IWPWidget, the interface for WordPress Widgets.
  * 
  * PHP version 5
  * 
@@ -15,7 +15,7 @@
  *
  * @package wpew
  */
-interface wpew_IWP_Widget {
+interface wpew_IWPWidget {
 	
 	// INSTANCE MEMBERS
 	

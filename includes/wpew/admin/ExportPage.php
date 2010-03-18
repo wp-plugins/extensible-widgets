@@ -11,8 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../Widgets.php');
-
 /**
  * Use this form to export data associated to this plugin. 
  * You may save it as a backup file, or import into a different blog also using this plugin.
@@ -127,7 +125,7 @@ class wpew_admin_ExportPage extends xf_wp_AAdminController {
 				$string = $this->submitted['data'];
 			}
 			if( empty($string) ) return;
-			$filename = 'wpew_export';
+			$filename = 'wpew_export-'.date("Y-m-d");
 			$ext = $this->submitted['format'];
 			switch( $ext ) {
 				case 'json' :

@@ -11,8 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once('WidgetsAjaxOverride.php');
-
 /**
  * wpew_admin_UninstallPage
  *
@@ -44,9 +42,13 @@ class wpew_admin_UninstallPage extends xf_wp_AAdminController {
 	 *
 	 * return void
 	 */
-	/*public function onBeforeRender() {		
-		if( $this->state == 'onUninstall' ) {}
-	}*/
+	public function onBeforeRender() {		
+		if( $this->state == 'onUninstall' ) {
+			// This object manages the session, therefore it should be set here
+			// Get the singleton, and be sure to set it as the apporiate extension
+			$this->parent->plugin->addExtension( 'override', wpew_admin_WidgetsAjaxOverride::getInstance() );
+		}
+	}
 	
 	// PAGE STATES
 	
@@ -71,8 +73,6 @@ class wpew_admin_UninstallPage extends xf_wp_AAdminController {
 		$this->noticeUpdates .= '<p>Starting Uninstaller...</p>';
 		$output = '';
 		// Is there a session in progress?
-		// Get the apporiate object, and be sure to set it as an extension
-		$this->parent->plugin->addExtension( 'override', wpew_admin_WidgetsAjaxOverride::getInstance() );
 		$inSession = ( $this->parent->plugin->override->inSession || $this->parent->plugin->widgets->backups );
 		// Get the actions as an array
 		$actions = ( is_array($this->submitted['actions']) ) ? $this->submitted['actions'] : array();

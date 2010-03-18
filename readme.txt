@@ -68,6 +68,12 @@ Please view this post for [screenshots](http://jidd.jimisaacs.com/archives/863/ 
 
 == Changelog ==
 
+= 0.9.4 =
+* Fixed major reference errors affecting more recent minor versions of PHP 5
+* Added autoload initiation for entire plugin library
+* Fixed various errors admin markup
+* Added date to export filename
+
 = 0.9.3 =
 * Added autoload initiation for core php framework for portability
 * Fixed a bug when editing Widget Group defaults

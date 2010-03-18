@@ -11,9 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once(dirname(__FILE__).'/../Widgets.php');
-require_once('Widget.php');
-
 /**
  * This is the base wpew Widget. It is not much on its own, but is meant to be extended. 
  * wpew widgets are not available outside of this framework.

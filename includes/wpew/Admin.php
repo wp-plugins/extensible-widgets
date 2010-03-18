@@ -99,7 +99,6 @@ class wpew_Admin extends xf_wp_AExtension {
 	public function admin_ajax_Override() {
 		// Don't need to do anything if no widgets are registered
 		if( !$this->plugin->widgets->registration ) return;
-		require_once('admin/WidgetsAjaxOverride.php');
 		$this->plugin->addExtension( 'override', wpew_admin_WidgetsAjaxOverride::getInstance() );
 	}
 	
@@ -111,7 +110,6 @@ class wpew_Admin extends xf_wp_AExtension {
 	public function widgets_Override() {
 		// Don't need to do anything if no widgets are registered
 		if( !$this->plugin->widgets->registration ) return;
-		require_once('admin/WidgetsOverride.php');
 		$this->plugin->addExtension( 'override', wpew_admin_WidgetsOverride::getInstance() );
 	}
 	
@@ -122,7 +120,6 @@ class wpew_Admin extends xf_wp_AExtension {
 	 */
 	public function admin_menu() {
 		// Build admin menu
-		require_once('admin/AdminMenu.php');
 		$menu = wpew_admin_AdminMenu::getInstance();
 		$this->plugin->addExtension( 'menu', $menu );
 	}

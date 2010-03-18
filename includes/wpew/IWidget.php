@@ -10,14 +10,12 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once('IWP_Widget.php');
-
 /**
  * Most of this and the parent interface is defined in the wpew_AWidget, but not everything.
  *
  * @package wpew
  */
-interface wpew_IWidget extends wpew_IWP_Widget {
+interface wpew_IWidget extends wpew_IWPWidget {
 	
 	// STATIC MEMBERS
 	

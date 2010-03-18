@@ -69,7 +69,7 @@ class xf_Object {
     /**
 	 * Adds an object to the static UUID reference array.
 	 *
-	 * @return string The UUID of the provided object
+	 * @return string The generated UUID of the provided object
 	 */
 	final public static function addUUIDObject( &$object ) {
 		$uuid = array_search( $object, self::$_UUIDRefs, true );
@@ -328,7 +328,9 @@ class xf_Object {
 	 */
 	public function __set( $n, $v ) {
 		if( $this->hasSetter( $n ) ) {
-			call_user_func( array( &$this, self::getSetterName( $n ) ), $v );
+			$n = self::getSetterName($n);
+			$this->$n( $v );
+			//call_user_func( array( &$this, self::getSetterName( $n ) ), $v );
 		} else if( $this->isReserved( $n ) ) {
 			throw new xf_errors_ReferenceError( 3, $this, $n );
 		} else if( !$this->_dynamic ) {
@@ -348,8 +350,10 @@ class xf_Object {
 	 */
 	public function &__get( $n ) {
 		if( $this->hasGetter( $n ) ) {
-			$val = call_user_func( array( &$this, self::getGetterName( $n ) ) );
-			return $val;
+			$n = self::getGetterName($n);
+			$v = $this->$n();
+			//$v = call_user_func( array( &$this, self::getGetterName( $n ) ) );
+			return $v;
 		} else if( $this->isReserved( $n ) ) {
 			throw new xf_errors_ReferenceError( 2, $this, $n );
 		} else if( !$this->_dynamic ) {
@@ -359,12 +363,12 @@ class xf_Object {
 	}
 	
 	/**
-	 * Magic - Define where to retrieve magic properties from
-	 * If property has a getter, call the getter, otherwise 
-	 * try to get a dynamic property.
+	 * Magic - Define how this object is represented as a string
+	 * This function is called only in later minor versions of PHP 5
+	 * Older minor versions of PHP 5 bypass this method with a builtin implementation.
+	 * Regardless, the object is still represented as a unique string when converted.
 	 *
-	 * @param string $n The property name
-	 * @return mixed The property value
+	 * @return string Representation of this object as a string
 	 */
 	public function __toString() {
 		return 'Object#'.uniqid().'('.$this->className.')';

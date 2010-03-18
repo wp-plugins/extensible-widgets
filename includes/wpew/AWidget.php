@@ -10,8 +10,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once('IWidget.php');
-
 /**
  * This is an abstract class and is meant to be extended.
  *

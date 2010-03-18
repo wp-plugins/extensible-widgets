@@ -11,8 +11,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once('WidgetsAjaxOverride.php');
-
 /**
  * This class should be instantiated upon enter the WordPress builtin widgets.php page.
  * This extends the functionality of the ajax page because we don't need to redefine anything other than to render things on this page.
